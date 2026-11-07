@@ -1,6 +1,7 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import pg from "pg";
 import * as schema from "./schema";
+import { postgresOptions } from "./connection";
 
 const { Pool } = pg;
 
@@ -11,7 +12,7 @@ if (!process.env.DATABASE_URL) {
 }
 
 export const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  ...postgresOptions(process.env.DATABASE_URL),
   // Each warm Vercel function has its own pool. Keep its database footprint small.
   max: process.env.VERCEL ? 1 : 10,
   connectionTimeoutMillis: 10_000,

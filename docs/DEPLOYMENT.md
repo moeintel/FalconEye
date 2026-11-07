@@ -8,9 +8,9 @@ emails and anonymous channel events; holdings remain browser-local.
 1. Use a Supabase project dedicated to FalconEye.
 2. In **Connect**, copy the **transaction pooler** connection string for runtime
    (port 6543). Use the actual supplied hostname and username.
-3. Configure TLS: prefer `sslmode=verify-full` and the database's trusted root
-   certificate if required by your project. Never disable certificate verification
-   to work around a connection error.
+3. The API and schema script enforce verified TLS for Supabase database hosts,
+   trusting the system roots and Supabase's published 2021 root CA (expires 2031).
+   Never disable certificate verification to work around a connection error.
 4. Save the connection string securely as `SUPABASE_DATABASE_URL` for schema setup.
    Do not paste it into chat, commit it, or prefix it with `VITE_`.
 5. Run `pnpm --filter @workspace/db schema:apply` through the secure secret executor,
