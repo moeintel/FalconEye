@@ -1,0 +1,127 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+paths:
+  /interest:
+    post:
+      operationId: registerInterest
+      summary: Save consented early access contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/InterestInput"
+      responses:
+        "200":
+          description: Saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Success"
+  /visit:
+    post:
+      operationId: recordVisit
+      summary: Count a landing page open
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VisitInput"
+      responses:
+        "200":
+          description: Counted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Success"
+  /outreach:
+    get:
+      operationId: getOutreach
+      summary: Aggregate counts only, never contact details
+      responses:
+        "200":
+          description: Counts by channel
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Outreach"
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      description: Returns server health status
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+components:
+  schemas:
+    VisitInput:
+      type: object
+      required: [channel]
+      properties:
+        channel:
+          type: string
+          minLength: 1
+          maxLength: 32
+          pattern: '^[a-z0-9_-]+$'
+    InterestInput:
+      type: object
+      required: [email, channel]
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        channel:
+          type: string
+          minLength: 1
+          maxLength: 32
+          pattern: '^[a-z0-9_-]+$'
+    Success:
+      type: object
+      required: [success]
+      properties:
+        success:
+          type: boolean
+    ChannelCount:
+      type: object
+      required: [channel, opened, signedUp]
+      properties:
+        channel:
+          type: string
+        opened:
+          type: integer
+        signedUp:
+          type: integer
+    Outreach:
+      type: object
+      required: [channels]
+      properties:
+        channels:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChannelCount"
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
