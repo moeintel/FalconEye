@@ -65,9 +65,10 @@ PORT=5000 pnpm --filter @workspace/api-server start
 
 Production hosting needs static SPA fallback routing and same-origin `/api` routing
 to the Express service. Vite's development proxy is not part of the static build.
-Vercel deployment and Supabase migration are **not configured in this import**.
-Supabase may be used as PostgreSQL in a later deployment after connection, TLS,
-pooling, and database permissions are reviewed.
+Vercel deployment configuration and Supabase schema setup are included.
+Actual deployment requires your Vercel account and Supabase connection.
+See [deployment instructions](docs/DEPLOYMENT.md); inclusion of configuration
+does not mean a live deployment or Supabase verification has completed.
 
 ## Workspace
 
