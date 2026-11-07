@@ -37,8 +37,12 @@ Keep Framework Preset **Other** and use the committed `vercel.json`:
   string through secure Vercel environment configuration.
 - `BASE_PATH=/` if overriding it; the default is `/`.
 
-Node functions in `api/` export the existing Express app without starting a
-listener. Same-origin routes `/api/interest`, `/api/visit`, `/api/outreach`, and
+JavaScript functions in `api/*.mjs` export the prebuilt Express app without
+starting a listener. `pnpm build` typechecks the TypeScript sources, bundles
+`dist/app.mjs`, and runs native-Node handler smoke tests with no real database.
+This prevents Vercel's separate NodeNext TypeScript compilation from conflicting
+with the workspace's bundler module resolution.
+Same-origin routes `/api/interest`, `/api/visit`, `/api/outreach`, and
 `/api/healthz` preserve the existing contract. API routes are excluded from the SPA
 fallback, so broken API calls cannot silently return frontend HTML.
 

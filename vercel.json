@@ -5,8 +5,9 @@
   "buildCommand": "pnpm build",
   "outputDirectory": "artifacts/falcon-eye/dist/public",
   "functions": {
-    "api/*.ts": {
-      "maxDuration": 30
+    "api/*.mjs": {
+      "maxDuration": 30,
+      "includeFiles": "artifacts/api-server/dist/**"
     }
   },
   "rewrites": [
