@@ -35,7 +35,7 @@ A class-demo MVP that helps self-directed investors consolidate and understand t
 
 ## Product
 
-Onboarding, manual and CSV import, consolidated portfolio analysis, simulated AI insights, CSV/print report export, an interest landing page, and per-channel outreach measurement.
+Onboarding, manual and CSV import, consolidated portfolio analysis, simulated AI insights, CSV/print report export, and an interest registration landing page. The user requested removal of the Outreach reporting UI; `/outreach` redirects to `/welcome`. Existing server-side channel records and Supabase registrations are preserved.
 
 ## User preferences
 

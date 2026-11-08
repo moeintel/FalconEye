@@ -4,7 +4,7 @@ import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import NotFound from '@/pages/not-found';
-import { Route, Switch, useLocation, Router as WouterRouter } from 'wouter';
+import { Redirect, Route, Switch, useLocation, Router as WouterRouter } from 'wouter';
 import { Shell } from '@/components/shell';
 import Overview from '@/pages/overview';
 import Holdings from '@/pages/holdings';
@@ -13,7 +13,6 @@ import Insights from '@/pages/insights';
 import ExportPage from '@/pages/export';
 import Onboarding from '@/pages/onboarding';
 import Welcome from '@/pages/welcome';
-import Outreach from '@/pages/outreach';
 
 const queryClient = new QueryClient();
 
@@ -29,7 +28,7 @@ function Router() {
           <Route path="/insights" component={Insights} />
           <Route path="/export" component={ExportPage} />
           <Route path="/welcome" component={Welcome} />
-          <Route path="/outreach" component={Outreach} />
+          <Route path="/outreach"><Redirect to="/welcome" replace /></Route>
           <Route component={NotFound} />
         </Switch>
       </RoutedErrorBoundary>
