@@ -32,6 +32,7 @@ A class-demo MVP that helps self-directed investors consolidate and understand t
 - Prices are user-entered or sample values, not live quotes.
 - AI insights are explicitly simulated; do not imply a live model or investment advice.
 - Only consented early-access emails and anonymous channel opens are stored server-side. Public outreach endpoints must never expose contact details.
+- Outreach visits and sign-ups are different counting units with no saved linkage: do not display their ratio as visitor conversion or fabricate missing historical visits. Manual reached, pass-line timing, and lesson are browser-local notes; they are not stored in Supabase.
 
 ## Product
 
