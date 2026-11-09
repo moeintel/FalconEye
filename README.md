@@ -11,6 +11,7 @@ Clean source import: the original Replit project is unchanged.
 - Holdings stay in the current browser's local storage: no accounts, cross-device sync, or server portfolio storage.
 - Prices are manual/sample values, not live quotes. Insights are simulated, not live AI or investment advice.
 - Registration and channel events use PostgreSQL via Express and Drizzle. No real outreach results are supplied.
+- Admin reporting shows recorded counts without a conversion percentage: visits are tab sessions, while sign-ups are distinct emails, and no visit-to-sign-up relationship is stored. Reached counts, the target (marked as set before or after reviewing results), and lesson are manual browser-local notes, not Supabase records. No target or lesson is fabricated.
 
 ## Local setup
 
