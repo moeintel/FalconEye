@@ -1,6 +1,6 @@
 import { type ReactNode, useState } from 'react';
 import { Link, useLocation } from 'wouter';
-import { LayoutGrid, ListTree, Upload, Radar, Download, Compass, RotateCcw, Megaphone, Menu, X, HardDrive } from 'lucide-react';
+import { LayoutGrid, ListTree, Upload, Radar, Download, Compass, RotateCcw, Megaphone, BarChart3, Menu, X, HardDrive } from 'lucide-react';
 import { usePortfolio } from '@/lib/portfolio';
 import { DataControls } from '@/components/data-controls';
 import { cn } from '@/lib/utils';
@@ -13,6 +13,7 @@ const NAV = [
   { href: '/export', label: 'Export', icon: Download },
   { href: '/onboarding', label: 'Get started', icon: Compass },
   { href: '/welcome', label: 'Early access', icon: Megaphone },
+  { href: '/admin/outreach', label: 'Admin view (prototype)', icon: BarChart3 },
 ];
 
 export function Logo({ className }: { className?: string }) {

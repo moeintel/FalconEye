@@ -23,3 +23,16 @@ export function recordVisitOnce(channel: string) {
     try { sessionStorage.removeItem(key); } catch { /* ignore */ }
   });
 }
+
+export interface ChannelStat { channel: string; opened: number; signedUp: number }
+
+export async function getOutreach(): Promise<ChannelStat[]> {
+  const res = await fetch('/api/outreach', { credentials: 'include', cache: 'no-store' });
+  if (!res.ok) throw new Error(`Could not load stats (${res.status})`);
+  const data = await res.json();
+  if (!Array.isArray(data?.channels)) throw new Error('Invalid outreach response');
+  return data.channels;
+}
+
+export const landingLink = (channel: string) =>
+  `${window.location.origin}${import.meta.env.BASE_URL.replace(/\/?$/, '/')}welcome?channel=${encodeURIComponent(channel)}`;

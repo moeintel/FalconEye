@@ -13,6 +13,7 @@ import Insights from '@/pages/insights';
 import ExportPage from '@/pages/export';
 import Onboarding from '@/pages/onboarding';
 import Welcome from '@/pages/welcome';
+import AdminOutreach from '@/pages/admin-outreach';
 
 const queryClient = new QueryClient();
 
@@ -28,7 +29,8 @@ function Router() {
           <Route path="/insights" component={Insights} />
           <Route path="/export" component={ExportPage} />
           <Route path="/welcome" component={Welcome} />
-          <Route path="/outreach"><Redirect to="/welcome" replace /></Route>
+          <Route path="/admin/outreach" component={AdminOutreach} />
+          <Route path="/outreach"><Redirect to="/admin/outreach" replace /></Route>
           <Route component={NotFound} />
         </Switch>
       </RoutedErrorBoundary>

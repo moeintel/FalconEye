@@ -35,7 +35,7 @@ A class-demo MVP that helps self-directed investors consolidate and understand t
 
 ## Product
 
-Onboarding, manual and CSV import, consolidated portfolio analysis, simulated AI insights, CSV/print report export, and an interest registration landing page. The user requested removal of the Outreach reporting UI; `/outreach` redirects to `/welcome`. Existing server-side channel records and Supabase registrations are preserved.
+Onboarding, manual and CSV import, consolidated portfolio analysis, simulated AI insights, CSV/print report export, interest registration, and team outreach reporting at `/admin/outreach` labelled “Admin view (prototype)”. `/outreach` redirects there. Visits/sign-ups come from recorded Supabase data; reached is manual browser-local input, never fabricated. The prototype admin label is not authentication; only aggregates are exposed. Existing records are preserved.
 
 ## User preferences
 
