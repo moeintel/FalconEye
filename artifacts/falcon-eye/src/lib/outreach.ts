@@ -1,5 +1,3 @@
-export const CHANNELS = ['whatsapp', 'linkedin', 'email', 'direct'] as const;
-
 export function sanitizeChannel(raw: string | null | undefined): string {
   const c = (raw ?? '').toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 32);
   return c || 'direct';
@@ -25,14 +23,3 @@ export function recordVisitOnce(channel: string) {
     try { sessionStorage.removeItem(key); } catch { /* ignore */ }
   });
 }
-
-export interface ChannelStat { channel: string; opened: number; signedUp: number }
-export async function getOutreach(): Promise<ChannelStat[]> {
-  const res = await fetch('/api/outreach', { credentials: 'include' });
-  if (!res.ok) throw new Error(`Could not load stats (${res.status})`);
-  const d = await res.json();
-  return Array.isArray(d?.channels) ? d.channels : [];
-}
-
-export const landingLink = (channel: string) =>
-  `${window.location.origin}${import.meta.env.BASE_URL.replace(/\/?$/, '/')}welcome?channel=${channel}`;

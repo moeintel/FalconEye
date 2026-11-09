@@ -7,7 +7,7 @@ Clean source import: the original Replit project is unchanged.
 
 - Onboarding, manual holdings entry, CSV import, portfolio allocation and gain/loss analysis.
 - Simulated insights, CSV export, and printable reports.
-- Interest landing page at `/welcome` and aggregate channel counts at `/outreach`.
+- Interest registration at `/welcome`. The retired `/outreach` reporting page redirects to registration; review registrations in Supabase's `public.falcon_interest` table.
 - Holdings stay in the current browser's local storage: no accounts, cross-device sync, or server portfolio storage.
 - Prices are manual/sample values, not live quotes. Insights are simulated, not live AI or investment advice.
 - Registration and channel events use PostgreSQL via Express and Drizzle. No real outreach results are supplied.
