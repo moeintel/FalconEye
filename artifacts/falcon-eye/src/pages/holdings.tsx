@@ -7,6 +7,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { PageHeader } from '@/components/shell';
 import { Gain, TypeChip } from '@/components/allocation';
 import { HoldingDialog } from '@/components/holding-form';
+import { AssetIcon } from '@/components/asset-icon';
 import { ASSET_COLORS, ASSET_TYPES, type AssetType, type Holding, money, pct, qty, store, summarize, usePortfolio } from '@/lib/portfolio';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -93,8 +94,13 @@ export default function Holdings() {
                 {rows.map((h) => (
                   <tr key={h.id} className="group border-b border-border/70 transition-colors last:border-0 hover:bg-secondary/50" data-testid={`row-holding-${h.id}`}>
                     <td className="px-5 py-3">
-                      <div className="font-mono font-semibold">{h.symbol}</div>
-                      <div className="max-w-[240px] truncate text-xs text-muted-foreground">{h.name} · {h.source}</div>
+                      <div className="flex items-center gap-3">
+                        <AssetIcon symbol={h.symbol} assetType={h.assetType} />
+                        <div className="min-w-0">
+                          <div className="font-mono font-semibold">{h.symbol}</div>
+                          <div className="max-w-[240px] truncate text-xs text-muted-foreground">{h.name} · {h.source}</div>
+                        </div>
+                      </div>
                     </td>
                     <td className="px-3 py-3"><TypeChip type={h.assetType} /></td>
                     <td className="num px-3 py-3 text-right">{qty(h.quantity)}</td>

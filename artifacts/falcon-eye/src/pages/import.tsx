@@ -8,6 +8,7 @@ import { TypeChip } from '@/components/allocation';
 import { CSV_COLUMNS, type CsvResult, TEMPLATE_CSV, download, importCsv, money, qty, store } from '@/lib/portfolio';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { AssetIcon } from '@/components/asset-icon';
 
 export default function ImportPage() {
   const [tab, setTab] = useState<'csv' | 'manual'>('csv');
@@ -102,7 +103,7 @@ export default function ImportPage() {
                             {result.valid.map(({ line, value: h }) => (
                               <tr key={line} className="border-b border-border/60 last:border-0">
                                 <td className="num w-14 px-5 py-2 text-xs text-muted-foreground">{line}</td>
-                                <td className="py-2"><span className="font-mono font-semibold">{h.symbol}</span> <span className="text-xs text-muted-foreground">{h.name}</span></td>
+                                <td className="py-2"><span className="inline-flex items-center gap-2"><AssetIcon symbol={h.symbol} assetType={h.assetType} className="h-7 w-7 rounded-lg" /><span><span className="font-mono font-semibold">{h.symbol}</span> <span className="text-xs text-muted-foreground">{h.name}</span></span></span></td>
                                 <td className="px-2 py-2"><TypeChip type={h.assetType} /></td>
                                 <td className="num px-5 py-2 text-right">{qty(h.quantity)} x {money(h.currentPrice)}</td>
                               </tr>

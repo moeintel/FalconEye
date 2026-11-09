@@ -29,6 +29,7 @@ A class-demo MVP that helps self-directed investors consolidate and understand t
 ## Architecture decisions
 
 - Use local browser persistence for this MVP rather than building unnecessary server infrastructure.
+- A one-time `falcon-eye:sample-seed:v1` browser migration populates old empty portfolios with the 11 sample holdings. Never overwrite non-empty portfolios or re-seed deliberate resets after this migration. No separate demo route.
 - Prices are user-entered or sample values, not live quotes.
 - AI insights are explicitly simulated; do not imply a live model or investment advice.
 - Only consented early-access emails and anonymous channel opens are stored server-side. Public outreach endpoints must never expose contact details.
