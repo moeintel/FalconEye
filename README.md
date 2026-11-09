@@ -10,6 +10,7 @@ Clean source import: the original Replit project is unchanged.
 - Interest registration at `/welcome`; team reporting at `/admin/outreach`, labelled **Admin view (prototype)**. `/outreach` redirects to this view. Visits and sign-ups use recorded Supabase counts; reached is entered manually and saved only in this browser. This view is not access-protected and never displays emails. Review registrations privately in Supabase's `public.falcon_interest` table.
 - Holdings stay in the current browser's local storage: no accounts, cross-device sync, or server portfolio storage.
 - Prices are manual/sample values, not live quotes. Insights are simulated, not live AI or investment advice.
+- The regular portfolio starts with 11 labelled sample holdings. This update also populates previously empty browser portfolios once; existing non-empty portfolios are preserved. Subsequent deliberate resets stay empty. Asset marks are bundled locally for known stock/crypto tickers, with category icons for funds, bonds, cash, and unknown assets—no external logo lookups.
 - Registration and channel events use PostgreSQL via Express and Drizzle. No real outreach results are supplied.
 - Admin reporting shows recorded counts without a conversion percentage: visits are tab sessions, while sign-ups are distinct emails, and no visit-to-sign-up relationship is stored. Reached counts, the target (marked as set before or after reviewing results), and lesson are manual browser-local notes, not Supabase records. No target or lesson is fabricated.
 

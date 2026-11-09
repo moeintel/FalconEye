@@ -5,6 +5,7 @@ import { PageHeader, Logo } from '@/components/shell';
 import { buildInsights, download, healthScore, money, pct, qty, summarize, toCsv, usePortfolio } from '@/lib/portfolio';
 import { scoreLabel } from '@/pages/insights';
 import { useToast } from '@/hooks/use-toast';
+import { AssetIcon } from '@/components/asset-icon';
 
 export default function ExportPage() {
   const { holdings, isDemo } = usePortfolio();
@@ -83,7 +84,7 @@ export default function ExportPage() {
                 <tbody>
                   {s.sorted.map((h) => (
                     <tr key={h.id} className="border-b border-border/60 last:border-0">
-                      <td className="py-1.5 font-mono font-semibold">{h.symbol}</td><td>{h.name}</td><td>{h.assetType}</td>
+                      <td className="py-1.5 font-mono font-semibold"><span className="inline-flex items-center gap-2"><AssetIcon symbol={h.symbol} assetType={h.assetType} className="h-7 w-7 rounded-lg" />{h.symbol}</span></td><td>{h.name}</td><td>{h.assetType}</td>
                       <td className="num text-right">{qty(h.quantity)}</td><td className="num text-right">{money(h.currentPrice)}</td><td className="num text-right">{money(h.value)}</td>
                       <td className="num text-right">{h.gain >= 0 ? '+' : '-'}{money(Math.abs(h.gain))}</td><td className="num text-right">{pct(h.pct)}</td>
                     </tr>

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { PageHeader } from '@/components/shell';
 import { AllocationDonut, AllocationLegend, Gain, TypeChip } from '@/components/allocation';
 import { HoldingDialog } from '@/components/holding-form';
+import { AssetIcon } from '@/components/asset-icon';
 import { ASSET_COLORS, buildInsights, healthScore, money, pct, store, summarize, usePortfolio } from '@/lib/portfolio';
 import { useToast } from '@/hooks/use-toast';
 import { ToneDot } from '@/pages/insights';
@@ -112,6 +113,7 @@ export default function Overview() {
               <li key={h.id} className="group grid grid-cols-[1fr_auto] items-center gap-3 py-3" data-testid={`row-top-${h.id}`}>
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
+                    <AssetIcon symbol={h.symbol} assetType={h.assetType} className="h-8 w-8 rounded-lg" />
                     <span className="font-mono text-sm font-semibold">{h.symbol}</span>
                     <TypeChip type={h.assetType} />
                   </div>

@@ -25,6 +25,7 @@ export const ASSET_COLORS: Record<AssetType, string> = {
 };
 
 const KEY = 'falcon-eye:v1';
+const SAMPLE_SEED_KEY = 'falcon-eye:sample-seed:v1';
 
 interface State {
   holdings: Holding[];
@@ -52,16 +53,27 @@ const demo: HoldingInput[] = [
 export const demoHoldings = (): Holding[] => demo.map((d, i) => ({ ...d, id: `demo_${i}` }));
 
 function load(): State {
+  let saved: State | undefined;
   try {
     const raw = localStorage.getItem(KEY);
     if (raw) {
       const p = JSON.parse(raw);
-      if (Array.isArray(p.holdings)) return { holdings: p.holdings, isDemo: !!p.isDemo, onboarded: !!p.onboarded };
+      if (Array.isArray(p.holdings)) saved = { holdings: p.holdings, isDemo: !!p.isDemo, onboarded: !!p.onboarded };
     }
   } catch {
     /* fall through to demo */
   }
-  return { holdings: demoHoldings(), isDemo: true, onboarded: false };
+  let seededBefore = false;
+  try { seededBefore = localStorage.getItem(SAMPLE_SEED_KEY) === '1'; } catch { /* storage unavailable */ }
+  // Restore an old empty browser once, without replacing non-empty portfolios
+  // or undoing a deliberate Reset to empty after this update.
+  const shouldSeed = !saved || (!saved.holdings.length && !seededBefore);
+  const initial = shouldSeed ? { holdings: demoHoldings(), isDemo: true, onboarded: true } : saved;
+  try {
+    localStorage.setItem(SAMPLE_SEED_KEY, '1');
+    if (shouldSeed) localStorage.setItem(KEY, JSON.stringify(initial));
+  } catch { /* in-memory sample data still works when storage is unavailable */ }
+  return initial!;
 }
 
 let state: State = load();
