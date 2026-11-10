@@ -2,10 +2,11 @@
 
 ## Deployment status and prerequisites
 
-This repository contains the implementation and an unapplied SQL migration. No
-production or development database was modified by this change, and the presence
-of credentials in an environment is not evidence that the migration or service
-has been deployed.
+This repository contains the implementation and an explicitly applied SQL
+migration; builds never apply it automatically. Deployment-specific migration
+approvals and verification are tracked in the PR, not inferred from the presence
+of credentials. Creating a table does not establish that authenticated workflows
+are ready for public use.
 
 The existing `/api/outreach` public aggregate is intentionally unchanged in this
 scope. It still serves the prototype reporting contract and is not an
@@ -22,6 +23,12 @@ Configure the API runtime with:
   server configuration and never exposed through a `VITE_` variable.
 - `APP_ORIGIN`: the exact public application origin, including scheme and host,
   for cross-origin same-site deployments and Auth redirect configuration.
+- `AUTH_EMAIL_REDIRECTS_READY=true`: opt in only after configuring and checking
+  the callback allowlist and email templates below.
+- Optional `SUPABASE_SECRET_KEY` (or legacy `SUPABASE_SERVICE_ROLE_KEY`):
+  privileged **server-only** provider key for deleting a verified user's identity.
+  Without it identity deletion is visibly unavailable. Never expose this key to
+  Vite, browser storage, logs, or client responses.
 - Optionally, `OPENAI_API_KEY` and `OPENAI_MODEL` (default `gpt-4o-mini`) to
   enable assistant-generated data-entry drafts. The key stays server-side.
 
@@ -47,21 +54,46 @@ Mutating account, finance, and assistant requests require a same-origin
 disable this check or rely on forwarded host headers. Account request limiting
 is in-memory per process and is not a distributed abuse control.
 
-Secure recovery is **unavailable**: Supabase recovery links can carry credentials
-in browser URLs, and this app has no configured Supabase recovery email template,
-first-party callback page, or PKCE verifier lifecycle that can safely redeem a
-recovery code. A production flow needs reviewed provider mail-template/redirect
-configuration, a server-issued HttpOnly PKCE verifier bound to the recovery
-attempt, and a first-party callback that exchanges the code and clears browser
-history before rendering user content. That frontend callback/configuration is
-not present in this implementation's scope. The API therefore returns an
-explicit 503 and does not request a provider recovery email. The account UI
-surfaces this explicit unavailable status rather than claiming an email was
-sent. Account deletion is also **unavailable**:
-the configured publishable key cannot delete a Supabase Auth user. The API does
-not simulate deletion or delete finance data as a substitute. A future deletion
-implementation needs an approved server-only provider credential and a reviewed
-account/data deletion flow. Password changes require a verified session.
+Signup and recovery use server-side **PKCE**, not implicit tokens in browser
+fragments. A random verifier and state are stored in an HttpOnly cookie for one
+hour. Only the S256 challenge is sent when requesting an email. The callback
+`GET /api/account?callback=1&state=…&code=…` requires the matching same-browser
+cookie and state, exchanges the single-use code server-side, verifies the
+returned session with Supabase, sets HttpOnly cookies, and immediately redirects
+to Settings without the code. Callback responses are no-store/no-referrer.
+Starting a second email flow replaces the first; users must open the latest link
+in the browser where they requested it.
+
+In Supabase **Authentication → URL Configuration**, configure the Site URL to the
+intended production origin and allow the callback query on each approved host.
+For this deployment the narrowly scoped allowlist patterns are:
+
+- `https://falconeye2.vercel.app/api/account*`
+- `https://falconeye--cnvs-08pbdnk8x59agbxrmcn4hmmbc9.sisko.replit.dev/api/account*`
+
+The wildcard permits the callback/state query on this endpoint, not arbitrary
+preview hosts. Add another host only after reviewing it. In **Email Templates**,
+Confirm signup and Reset password links must use Supabase's `{{ .ConfirmationURL }}`
+so verification is completed by the provider and the PKCE callback is preserved.
+Do not substitute an implicit token-fragment link. Only then set
+`AUTH_EMAIL_REDIRECTS_READY=true` in that server environment. Until then, signup
+and recovery are disabled and make no provider email request; existing accounts
+may still sign in. SMTP delivery, provider limits, confirmation, and recovery
+must be verified with explicitly approved real test accounts before release.
+
+Account deletion is implemented but gated by the server-only admin key. It
+requires a verified session, the exact phrase `DELETE MY ACCOUNT`, and successful
+password reauthentication as the **same verified user**, before deleting only
+that provider identity. The finance row is removed by its approved cascading
+foreign key. No local browser copy or early-access registration is erased.
+Deletion without provider privileges returns unavailable, never simulated
+success. Password updates require a verified session and at least 12 characters.
+The Settings UI includes password confirmation and explains these boundaries.
+
+The UI sends `X-Falcon-Account` as an expected-session guard for cloud operations
+and sensitive account changes. A changed session returns 409 before accessing
+storage or changing credentials. This header is never a source of ownership:
+all queries still use the independently verified provider user.
 
 ## Finance API behavior
 
@@ -131,3 +163,16 @@ CSRF rejection, malformed input, unconfigured assistant behavior, and a
 write-shaped anonymous request that must not reach storage. A successful local
 test does not establish that provider credentials, the migration, or a live
 database are configured.
+
+`tests/account-flows.test.mjs` exercises the actual routers with a mock Auth
+provider and isolated in-memory documents: PKCE callbacks, recovery/password
+changes, privileged identity deletion guards, two-session ownership, stale
+writes, account-switch guards, and JSON backup/restore. Browser fixture testing
+also uses mock provider/email delivery and isolated records. These tests do not
+prove live Supabase email delivery, production RLS isolation, or operational
+backup restore. Never create production test users, send email, or write
+financial fixtures without explicit approval.
+
+Provider references:
+[PKCE flow](https://supabase.com/docs/guides/auth/sessions/pkce-flow) and
+[redirect URL configuration](https://supabase.com/docs/guides/auth/redirect-urls).

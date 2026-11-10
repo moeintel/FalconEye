@@ -24,6 +24,8 @@ test('built API security endpoints fail closed without accessing a real database
       configured: false,
       user: null,
       assistantConfigured: false,
+      emailFlowsConfigured: false,
+      deletionConfigured: false,
     });
 
     // A configured provider with no session must not become an empty portfolio.

@@ -21,9 +21,10 @@ mode requires a configured server-side provider key and user opt-in.
 
 The optional account API and private finance persistence implementation are
 included, **not activated or verified against a live Auth setup**. The migration
-is not automatically applied. Recovery, provider identity deletion, protected
-admin access, and operational checks remain release gates—not completed public
-beta features.
+is not automatically applied. PKCE signup/recovery and reauthenticated identity
+deletion are implemented but gated by reviewed callback settings and a server-only
+admin key. Live-provider verification, protected admin access, and operational
+checks remain release gates—not completed public beta features.
 
 See [the complete implementation and UI plan](docs/EVERYDAY_FINANCE_PLAN.md),
 [account operations and blockers](docs/FINANCE_OPERATIONS.md), and the printable

@@ -1,11 +1,26 @@
-import { Router, type IRouter } from "express";
+import { Router, type IRouter, type Request, type Response } from "express";
 import { pool } from "@workspace/db";
 import { hasValidOrigin, rateLimit, resolveAuth } from "../lib/auth";
 import { validateFinanceDocument } from "../lib/finance-validation";
 import { saveFinanceDocument, deleteFinanceDocument } from "../lib/finance-persistence";
 
-const router: IRouter = Router();
 export const MAX_FINANCE_DOCUMENT_BYTES = 512 * 1024;
+type FinanceDatabase = Parameters<typeof saveFinanceDocument>[0] & {
+  query: (text: string, values?: any[]) => Promise<{ rows: Array<Record<string, unknown>> }>;
+};
+type SessionResolver = (req: Request, res: Response) => Promise<
+  | { id: string }
+  | { user: { id: string } | null; configured?: boolean; unavailable?: boolean }
+  | null
+>;
+
+export function createFinanceRouter(options: {
+  database?: FinanceDatabase;
+  resolveSession?: SessionResolver;
+} = {}): IRouter {
+const database = options.database ?? pool;
+const resolveSession = options.resolveSession ?? resolveAuth;
+const router: IRouter = Router();
 
 function sendDatabaseError(req: { log?: { error: (message: string) => void } }, res: {
   status: (status: number) => { json: (body: unknown) => void };
@@ -16,7 +31,10 @@ function sendDatabaseError(req: { log?: { error: (message: string) => void } }, 
 
 async function requireOwner(req: Parameters<typeof resolveAuth>[0], res: Parameters<typeof resolveAuth>[1]) {
   if (!rateLimit(req, res, "auth-check", 120)) return null;
-  const auth = await resolveAuth(req, res);
+  const resolved = await resolveSession(req, res);
+  const auth = resolved && "user" in resolved
+    ? resolved
+    : { configured: true, user: resolved, unavailable: false };
   if (!auth.configured) {
     res.status(503).json({ error: "Account service is not configured." });
     return null;
@@ -27,6 +45,11 @@ async function requireOwner(req: Parameters<typeof resolveAuth>[0], res: Paramet
   }
   if (!auth.user) {
     res.status(401).json({ error: "Authentication is required." });
+    return null;
+  }
+  const expectedAccount = req.get("x-falcon-account");
+  if (expectedAccount !== undefined && expectedAccount !== auth.user.id) {
+    res.status(409).json({ error: "The signed-in account changed.", accountChanged: true });
     return null;
   }
   return auth.user;
@@ -41,7 +64,7 @@ router.get("/finance", async (req, res): Promise<void> => {
   try {
     const user = await requireOwner(req, res);
     if (!user) return;
-    const result = await pool.query(
+    const result = await database.query(
       "SELECT document, revision FROM falcon_finance_documents WHERE user_id = $1",
       [user.id],
     );
@@ -79,7 +102,7 @@ router.put("/finance", async (req, res): Promise<void> => {
   try {
     const user = await requireOwner(req, res);
     if (!user) return;
-    const saved = await saveFinanceDocument(pool, user.id, req.body.document, req.body.revision);
+    const saved = await saveFinanceDocument(database, user.id, req.body.document, req.body.revision);
     if (saved.kind === "conflict") {
       res.status(409).json({
         error: "Finance data changed in another session.",
@@ -110,7 +133,7 @@ router.delete("/finance", async (req, res): Promise<void> => {
   try {
     const user = await requireOwner(req, res);
     if (!user) return;
-    const deleted = await deleteFinanceDocument(pool, user.id, body.revision);
+    const deleted = await deleteFinanceDocument(database, user.id, body.revision);
     if (deleted.kind === "deleted") {
       res.json({ success: true });
       return;
@@ -124,4 +147,8 @@ router.delete("/finance", async (req, res): Promise<void> => {
   }
 });
 
+return router;
+}
+
+const router = createFinanceRouter();
 export default router;

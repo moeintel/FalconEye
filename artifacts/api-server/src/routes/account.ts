@@ -1,21 +1,26 @@
 import { Router, type IRouter } from "express";
 import {
-  accountAction, assistantIsConfigured, authIsConfigured, rateLimit, resolveAuth,
+  accountAction, assistantIsConfigured, authIsConfigured, deletionConfigured, emailFlowsConfigured, finishEmailFlow, rateLimit, resolveAuth,
 } from "../lib/auth";
 
 const router: IRouter = Router();
 
 router.get("/account", async (req, res): Promise<void> => {
   res.set("Cache-Control", "no-store");
+  if (req.query.callback === "1") {
+    try { await finishEmailFlow(req, res); }
+    catch { if (!res.headersSent) res.redirect(303, "/settings?account=callback_failed#_"); }
+    return;
+  }
   if (!rateLimit(req, res, "account-read", 60)) return;
   const configured = authIsConfigured();
   if (!configured) {
-    res.json({ configured: false, user: null, assistantConfigured: assistantIsConfigured() });
+    res.json({ configured: false, user: null, assistantConfigured: assistantIsConfigured(), emailFlowsConfigured: false, deletionConfigured: false });
     return;
   }
   const session = await resolveAuth(req, res);
   if (!session.configured) {
-    res.json({ configured: false, user: null, assistantConfigured: assistantIsConfigured() });
+    res.json({ configured: false, user: null, assistantConfigured: assistantIsConfigured(), emailFlowsConfigured: false, deletionConfigured: false });
     return;
   }
   if (session.unavailable) {
@@ -26,6 +31,8 @@ router.get("/account", async (req, res): Promise<void> => {
     configured: true,
     user: session.user,
     assistantConfigured: assistantIsConfigured(),
+    emailFlowsConfigured: emailFlowsConfigured(),
+    deletionConfigured: deletionConfigured(),
   });
 });
 

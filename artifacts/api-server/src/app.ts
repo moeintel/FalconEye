@@ -3,6 +3,10 @@ import cors from "cors";
 import pinoHttp from "pino-http";
 import router from "./routes";
 import { logger } from "./lib/logger";
+import accountRouter from "./routes/account";
+import { createFinanceRouter } from "./routes/finance";
+
+export { accountRouter, createFinanceRouter };
 
 const app: Express = express();
 

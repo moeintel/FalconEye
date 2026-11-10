@@ -41,7 +41,9 @@ An everyday-finance prototype that helps people understand what they own and owe
 
 Everyday overview, guided asset/debt entry, search/filter, dated manual currency conversion, activity, CSV/JSON/print reports, backups, optional private accounts, and Falc conversational entry. Categories include gold, IPOs, private investments, money lent, property, and debt alongside the original assets. Gifts are excluded from wealth; IPO refunds and ownership shares are applied once. Received income is history-only, not assumed reinvested.
 
-The original investment screens remain under `/legacy/*`. Interest registration and team outreach reporting remain at `/welcome` and `/admin/outreach`; `/outreach` redirects there. Visits/sign-ups come from recorded Supabase data; reached is manual browser-local input, never fabricated. The prototype admin label is not authentication; only aggregates are exposed. This admin route, account recovery/deletion, distributed abuse protection, and operational restore verification remain public-beta release gates.
+The original investment screens remain under `/legacy/*`. Interest registration and team outreach reporting remain at `/welcome` and `/admin/outreach`; `/outreach` redirects there. Visits/sign-ups come from recorded Supabase data; reached is manual browser-local input, never fabricated. The prototype admin label is not authentication; only aggregates are exposed. Protected admin access, live account-flow verification, distributed abuse protection, and operational restore verification remain public-beta release gates.
+
+Signup/recovery use an HttpOnly PKCE verifier/state and a server callback on `/api/account?callback=1`. They remain gated until `AUTH_EMAIL_REDIRECTS_READY=true` after configuring Supabase callback URLs and mail templates. Identity deletion requires a server-only admin key, exact confirmation, and password reauthentication as the same user. Never substitute deleting records for deleting an identity or treat fixture tests as live-provider verification. `X-Falcon-Account` is an expected-session guard, never the owner source.
 
 ## User preferences
 
