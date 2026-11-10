@@ -31,9 +31,9 @@ export default function Welcome() {
         <div className="contour absolute inset-0" />
         <div className="relative grid gap-12 lg:grid-cols-[1.2fr_1fr] lg:items-center">
           <div className="rise">
-            <div className="mb-6 flex items-center gap-3"><Logo className="h-10 w-10" /><span className="font-mono text-[11px] uppercase tracking-[0.2em] text-sidebar-primary">For self-directed investors</span></div>
-            <h1 className="text-4xl font-extrabold leading-[1.02] tracking-tight md:text-6xl">You picked every investment yourself. <span className="text-sidebar-primary">Now see them all at once.</span></h1>
-            <p className="mt-6 max-w-xl text-lg text-sidebar-foreground/75">If you hold stocks at one broker, crypto in a wallet and funds in a retirement account, Falcon Eye promises one clear view: your true total, your real split across asset classes, and where you're quietly over-concentrated. In under five minutes, without connecting a single account.</p>
+            <div className="mb-6 flex items-center gap-3"><Logo className="h-10 w-10" /><span className="font-mono text-[11px] uppercase tracking-[0.2em] text-sidebar-primary">Everyday finances, made clearer</span></div>
+            <h1 className="text-4xl font-extrabold leading-[1.02] tracking-tight md:text-6xl">Your money, wherever it is. <span className="text-sidebar-primary">One clear picture.</span></h1>
+            <p className="mt-6 max-w-xl text-lg text-sidebar-foreground/75">Gold you bought. Shares from an IPO. Money invested with family. Bring what you own and owe into one simple overview, without needing financial expertise. Start with what you know—no bank connection required.</p>
           </div>
           <div className="rise rounded-2xl bg-card p-6 text-card-foreground md:p-8" style={{ animationDelay: '120ms' }}>
             {state === 'done' ? (
@@ -64,9 +64,9 @@ export default function Welcome() {
 
       <section className="grid gap-6 md:grid-cols-[1fr_1.2fr_1fr]">
         {[
-          [Layers, 'One total, finally', 'Add positions by hand or CSV from any account. Value, cost and gain computed from what you actually own.'],
-          [PieChart, 'Your real mix', 'Stocks, crypto, funds, bonds and cash in one allocation view, so a lopsided portfolio is obvious at a glance.'],
-          [ShieldCheck, 'Private by design', 'No broker logins, no trading. Holdings stay in your browser.'],
+          [Layers, 'Everything you own and owe', 'Record savings, gold, stocks, private investments, and debts using simple, relevant questions.'],
+          [PieChart, 'Understand the whole picture', 'See recorded assets, outstanding debts, and estimated net worth. Missing values stay visible—not quietly counted as zero.'],
+          [ShieldCheck, 'You stay in control', 'No broker logins or trading. Browser records stay local unless you explicitly save to a configured private account.'],
         ].map(([I, t, d], i) => {
           const Icon = I as typeof Layers;
           return (
@@ -80,7 +80,7 @@ export default function Welcome() {
       </section>
 
       <section className="flex flex-col items-start justify-between gap-4 rounded-2xl border border-dashed border-input p-8 md:flex-row md:items-center">
-        <div><h2 className="text-xl font-bold">Curious? The prototype is live.</h2><p className="text-sm text-muted-foreground">Explore a sample portfolio with illustrative prices. Not investment advice.</p></div>
+        <div><h2 className="text-xl font-bold">Start with a clearer view.</h2><p className="text-sm text-muted-foreground">Explore the prototype, or begin your own records. Values are manually entered or illustrative, not live quotes. Not financial advice.</p></div>
         <Button asChild><Link href="/" data-testid="link-open-prototype">Open the dashboard <ArrowRight className="ml-1 h-4 w-4" /></Link></Button>
       </section>
     </div>
