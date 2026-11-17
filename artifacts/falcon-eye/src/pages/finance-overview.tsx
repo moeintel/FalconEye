@@ -4,6 +4,7 @@ import { ArrowRight, ArrowUpRight, CircleAlert, Plus, Sparkles, WalletCards } fr
 import { Button } from '@/components/ui/button';
 import { FinanceEditor } from '@/components/finance-editor';
 import { FinanceShell } from '@/components/finance-shell';
+import { LanguageSwitcher } from '@/components/language-switcher';
 import { CATEGORIES, summarizeFinance } from '@/lib/finance-model';
 import { formatMoney, formatNumber, formatDate } from '@/lib/locale';
 import { useTranslation } from 'react-i18next';
@@ -101,6 +102,7 @@ export default function FinanceOverview({ accountStatus }: { accountStatus?: Rea
   );
 
   return <FinanceShell accountStatus={accountStatus}>
+    <LanguageSwitcher expanded />
     <div className="fe-page-intro"><div><div className="fe-breadcrumb">{t('breadcrumb')} <span>/</span> {t('overview')}</div></div>{doc.isSample && <span className="fe-sample-badge">{t('sampleBadge')}</span>}</div>
     {doc.isSample && <div className="fe-sample-start"><span>{t('sampleSeparation')}</span><button onClick={() => { if (window.confirm(t('startConfirmation'))) financeStore.startEmpty(); }}>{t('startOwn')} <ArrowRight size={15} /></button></div>}
     {content}
