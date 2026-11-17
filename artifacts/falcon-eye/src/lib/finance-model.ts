@@ -351,11 +351,11 @@ export function summarizeFinance(document: FinanceDocument): FinanceSummary {
   };
 }
 
-export function formatMoney(value: number, currency: string): string {
+export function formatMoney(value: number, currency: string, locale = 'en-US'): string {
   if (!Number.isFinite(value)) throw new Error('Money amount must be finite');
   currencyCode(currency, 'Currency');
   const precision = currencyMinorUnits(currency);
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency }).format(roundMoney(value, precision));
+  return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(roundMoney(value, precision));
 }
 
 function convertCurrency(value: number, from: string, to: string, document: FinanceDocument): number {

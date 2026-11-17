@@ -4,6 +4,10 @@ import { Button } from '@/components/ui/button';
 import { FinanceShell } from '@/components/finance-shell';
 import { financeStore, useFinance } from '@/lib/finance-store';
 import { SUPPORTED_CURRENCIES } from '@/lib/finance-model';
+import { useTranslation } from 'react-i18next';
+import { localizedError } from '@/lib/i18n';
+import { formatDate, formatNumber } from '@/lib/locale';
+import { LanguageSwitcher } from '@/components/language-switcher';
 
 const CURRENCIES = SUPPORTED_CURRENCIES;
 function saveJson() {
@@ -15,24 +19,26 @@ function saveJson() {
 }
 
 export default function FinanceSettings({ accountPanel }: { accountPanel?: ReactNode }) {
+  const { t } = useTranslation('settings');
+  const { t: common } = useTranslation('common');
   const doc = useFinance();
   const fileRef = useRef<HTMLInputElement>(null);
   const [base, setBase] = useState(doc.baseCurrency);
   const [rateCurrency, setRateCurrency] = useState(CURRENCIES.find((code) => code !== doc.baseCurrency) || 'USD');
   const [rate, setRate] = useState('');
   const [rateDate, setRateDate] = useState(new Date().toISOString().slice(0, 10));
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState<{ key: string; values?: Record<string, string | number> } | null>(null);
   const [error, setError] = useState('');
   useEffect(() => { setBase(doc.baseCurrency); }, [doc.baseCurrency]);
-  function clearFeedback() { setMessage(''); setError(''); }
-  function fail(reason: unknown) { setError(reason instanceof Error ? reason.message : 'That change could not be saved.'); setMessage(''); }
+  function clearFeedback() { setMessage(null); setError(''); }
+  function fail(reason: unknown) { setError(reason instanceof Error ? reason.message : 'That change could not be saved.'); setMessage(null); }
   function changeBase() {
     clearFeedback();
     try {
       const wasSample = financeStore.getSnapshot().isSample;
       financeStore.setBaseCurrency(base);
       if (wasSample) financeStore.replace({ ...financeStore.getSnapshot(), isSample: true });
-      setMessage(`Base currency set to ${base}.`);
+      setMessage({ key: 'baseSaved', values: { currency: base } });
     }
     catch (reason) { fail(reason); }
   }
@@ -42,93 +48,96 @@ export default function FinanceSettings({ accountPanel }: { accountPanel?: React
       const wasSample = financeStore.getSnapshot().isSample;
       financeStore.setRate(rateCurrency, Number(rate), rateDate);
       if (wasSample) financeStore.replace({ ...financeStore.getSnapshot(), isSample: true });
-      setRate(''); setMessage(`Your ${rateCurrency} rate was saved.`);
+      setRate(''); setMessage({ key: 'rateSaved', values: { currency: rateCurrency } });
     } catch (reason) { fail(reason); }
   }
   function startEmpty() {
-    if (!window.confirm('Clear the current financial picture from this browser? Download a backup first if you want one. This cannot be undone.')) return;
+    if (!window.confirm(t('clearConfirmation'))) return;
     clearFeedback();
-    try { financeStore.startEmpty(); setMessage('Your picture is now empty. Your older portfolio data, if any, is preserved.'); }
+    try { financeStore.startEmpty(); setMessage({ key: 'cleared' }); }
     catch (reason) { fail(reason); }
   }
   function loadSample() {
-    if (doc.records.length && !window.confirm('Replace your current financial picture with the clearly marked sample? Export a backup first if you want to keep these records.')) return;
+    if (doc.records.length && !window.confirm(t('sampleConfirmation'))) return;
     clearFeedback();
-    try { financeStore.loadSample(); setMessage('Illustrative sample data loaded.'); }
+    try { financeStore.loadSample(); setMessage({ key: 'sampleLoaded' }); }
     catch (reason) { fail(reason); }
   }
   function importLegacy() {
     clearFeedback();
     try {
       const count = financeStore.importLegacy();
-      setMessage(count ? `${count} older record${count === 1 ? '' : 's'} imported. Your original data remains untouched.` : 'No older portfolio was available to import. Your current records were not changed.');
+      setMessage({ key: count ? 'legacyImported' : 'noLegacy', values: { count } });
     } catch (reason) { fail(reason); }
   }
   async function readFile(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     event.target.value = '';
     if (!file) return;
-    if (!window.confirm('Replace the current picture with the data in this file? Export a backup first if you need these records.')) return;
+    if (!window.confirm(t('restoreConfirmation'))) return;
     clearFeedback();
     try {
       const data: unknown = JSON.parse(await file.text());
       financeStore.replace(data as Parameters<typeof financeStore.replace>[0]);
       setBase(financeStore.getSnapshot().baseCurrency);
-      setMessage('Backup restored successfully.');
+      setMessage({ key: 'restored' });
     } catch (reason) { fail(reason); }
   }
   const storageError = financeStore.getStorageError();
   return <FinanceShell>
-    <div className="fe-breadcrumb">MY FINANCES <span>/</span> SETTINGS</div>
-    <div className="fe-assets-title-row"><div><div className="fe-eyebrow">MAKE IT WORK FOR YOU</div><h1>Settings</h1><p>Choose a currency, manage your data, and decide what stays in this browser.</p></div></div>
-    {(message || error || storageError) && <div className={`fe-data-alert ${error || storageError ? 'is-error' : 'is-success'}`} role={error || storageError ? 'alert' : 'status'}>{error || storageError ? <CircleAlert /> : <Check />}<div><b>{error || storageError ? 'A note about your data' : 'All set'}</b><span>{error || storageError || message}</span></div>{!error && message && !storageError && <button onClick={clearFeedback}>Dismiss</button>}</div>}
+    <div className="fe-breadcrumb">{t('breadcrumb')} <span>/</span> {common('navigation.settings')}</div>
+    <div className="fe-assets-title-row"><div><div className="fe-eyebrow">{t('eyebrow')}</div><h1>{common('navigation.settings')}</h1><p>{t('description')}</p></div></div>
+    {(message || error || storageError) && <div className={`fe-data-alert ${error || storageError ? 'is-error' : 'is-success'}`} role={error || storageError ? 'alert' : 'status'}>{error || storageError ? <CircleAlert /> : <Check />}<div><b>{t(error || storageError ? 'dataNote' : 'allSet')}</b><span>{error || storageError ? localizedError(error || storageError) : message ? t(message.key, message.values ?? {}) : ''}</span></div>{!error && message && !storageError && <button onClick={clearFeedback}>{t('dismiss')}</button>}</div>}
     <section className="fe-settings-section">
-      <div className="fe-settings-section-head"><span className="fe-settings-icon"><ArrowRightLeft /></span><div><h2>Currency</h2><p>Values in other currencies need a rate you enter. We never refresh or guess them.</p></div></div>
+      <div className="fe-settings-card"><h2>{common('language')}</h2><p>{common('languageHelp')}</p><LanguageSwitcher /></div>
+    </section>
+    <section className="fe-settings-section">
+      <div className="fe-settings-section-head"><span className="fe-settings-icon"><ArrowRightLeft /></span><div><h2>{t('currency')}</h2><p>{t('currencyHelp')}</p></div></div>
       <div className="fe-settings-card">
-        <div className="fe-settings-card-title"><div><b>Base currency</b><span>Your totals and reports are shown in this currency.</span></div></div>
+        <div className="fe-settings-card-title"><div><b>{t('base')}</b><span>{t('baseHelp')}</span></div></div>
         <div className="fe-settings-inline-form">
-          <select className="fe-select fe-settings-select" aria-label="Base currency" value={base} onChange={(e) => setBase(e.target.value)}>{Array.from(new Set([...CURRENCIES, doc.baseCurrency])).sort().map((code) => <option key={code}>{code}</option>)}</select>
-          <Button onClick={changeBase} disabled={base === doc.baseCurrency}>Save base currency</Button>
+          <select className="fe-select fe-settings-select" aria-label={t('base')} value={base} onChange={(e) => setBase(e.target.value)}>{Array.from(new Set([...CURRENCIES, doc.baseCurrency])).sort().map((code) => <option key={code}>{code}</option>)}</select>
+          <Button onClick={changeBase} disabled={base === doc.baseCurrency}>{t('saveBase')}</Button>
         </div>
-        {base !== doc.baseCurrency && !doc.rates[base] && doc.records.length > 0 && <p className="fe-field-note">To switch to {base}, first add a rate below. It must be stated as {doc.baseCurrency} per 1 {base}.</p>}
+        {base !== doc.baseCurrency && !doc.rates[base] && doc.records.length > 0 && <p className="fe-field-note">{t('switchHelp', { currency: base, base: doc.baseCurrency })}</p>}
       </div>
       <div className="fe-settings-card">
-        <div className="fe-settings-card-title"><div><b>Manual exchange rates</b><span>Use a statement or your own rate. Rates are shown as base currency per 1 unit of foreign currency.</span></div><span className="fe-settings-tag">YOUR ENTRIES</span></div>
+        <div className="fe-settings-card-title"><div><b>{t('rates')}</b><span>{t('ratesHelp')}</span></div><span className="fe-settings-tag">{t('yourEntries')}</span></div>
         <form onSubmit={saveRate} className="fe-rate-form">
-          <label className="fe-field"><span>Currency</span><select className="fe-select" value={rateCurrency} onChange={(e) => setRateCurrency(e.target.value)}>{Array.from(new Set([...CURRENCIES, ...Object.keys(doc.rates)])).filter((code) => code !== doc.baseCurrency).sort().map((code) => <option key={code}>{code}</option>)}</select></label>
-          <label className="fe-field"><span>1 {rateCurrency} equals ({doc.baseCurrency})</span><input className="fe-input" inputMode="decimal" type="number" min="0.00000001" step="any" required value={rate} onChange={(e) => setRate(e.target.value)} placeholder="e.g. 0.85" /></label>
-          <label className="fe-field"><span>Rate date</span><input className="fe-input" type="date" required value={rateDate} onChange={(e) => setRateDate(e.target.value)} /></label>
-          <Button type="submit"><Check />Save rate</Button>
+          <label className="fe-field"><span>{t('currency')}</span><select className="fe-select" value={rateCurrency} onChange={(e) => setRateCurrency(e.target.value)}>{Array.from(new Set([...CURRENCIES, ...Object.keys(doc.rates)])).filter((code) => code !== doc.baseCurrency).sort().map((code) => <option key={code}>{code}</option>)}</select></label>
+          <label className="fe-field"><span>{t('rateEquals', { currency: rateCurrency, base: doc.baseCurrency })}</span><input className="fe-input" inputMode="decimal" type="number" min="0.00000001" step="any" required value={rate} onChange={(e) => setRate(e.target.value)} placeholder={t('ratePlaceholder')} /></label>
+          <label className="fe-field"><span>{t('rateDate')}</span><input className="fe-input" type="date" required value={rateDate} onChange={(e) => setRateDate(e.target.value)} /></label>
+          <Button type="submit"><Check />{t('saveRate')}</Button>
         </form>
-        {Object.entries(doc.rates).length ? <div className="fe-rate-table"><div><span>FOREIGN CURRENCY</span><span>YOUR RATE</span><span>AS OF</span></div>{Object.entries(doc.rates).sort(([a], [b]) => a.localeCompare(b)).map(([currency, item]) => <div key={currency}><b>{currency}</b><span>{item.rate} {doc.baseCurrency} / 1 {currency}</span><span>{new Date(`${item.date}T00:00:00`).toLocaleDateString()}</span></div>)}</div> : <p className="fe-field-note">No exchange rates entered. Foreign currency values will be left out of your totals until you add a rate.</p>}
+        {Object.entries(doc.rates).length ? <div className="fe-rate-table"><div><span>{t('foreignCurrency')}</span><span>{t('yourRate')}</span><span>{t('asOf')}</span></div>{Object.entries(doc.rates).sort(([a], [b]) => a.localeCompare(b)).map(([currency, item]) => <div key={currency}><b><bdi>{currency}</bdi></b><span><bdi>{formatNumber(item.rate, { maximumFractionDigits: 8 })} {doc.baseCurrency} / 1 {currency}</bdi></span><span>{formatDate(item.date)}</span></div>)}</div> : <p className="fe-field-note">{t('noRates')}</p>}
       </div>
     </section>
 
     <section className="fe-settings-section">
-      <div className="fe-settings-section-head"><span className="fe-settings-icon"><ShieldCheck /></span><div><h2>Your data stays yours</h2><p>Your financial records are stored in this browser only. No accounts or connections are required.</p></div></div>
-      <div className="fe-settings-card fe-storage-status"><span className="fe-storage-status-icon"><HardDrive /></span><div><b>Saved in this browser</b><span>{doc.records.length} records · {doc.activities.length} activity entries</span></div><span className="fe-settings-tag"><i />LOCAL STORAGE</span></div>
+      <div className="fe-settings-section-head"><span className="fe-settings-icon"><ShieldCheck /></span><div><h2>{t('dataYours')}</h2><p>{t('localHelp')}</p></div></div>
+      <div className="fe-settings-card fe-storage-status"><span className="fe-storage-status-icon"><HardDrive /></span><div><b>{t('savedLocally')}</b><span>{t('recordCounts', { records: doc.records.length, activities: doc.activities.length })}</span></div><span className="fe-settings-tag"><i />{t('localStorage')}</span></div>
       {accountPanel}
       <div className="fe-settings-card fe-data-actions">
-        <div className="fe-settings-card-title"><div><b>Back up or restore</b><span>Keep your own copy, or restore from a Falcon Eye JSON backup.</span></div></div>
-        <div className="fe-data-action-buttons"><Button variant="outline" onClick={saveJson}><ArrowDownToLine />Download a backup</Button><Button variant="outline" onClick={() => fileRef.current?.click()}><FileUp />Restore a JSON backup</Button><input ref={fileRef} type="file" accept=".json,application/json" hidden onChange={readFile} /></div>
+        <div className="fe-settings-card-title"><div><b>{t('backup')}</b><span>{t('backupHelp')}</span></div></div>
+        <div className="fe-data-action-buttons"><Button variant="outline" onClick={saveJson}><ArrowDownToLine />{t('downloadBackup')}</Button><Button variant="outline" onClick={() => fileRef.current?.click()}><FileUp />{t('restoreBackup')}</Button><input ref={fileRef} type="file" accept=".json,application/json" hidden onChange={readFile} /></div>
       </div>
       <div className="fe-settings-card fe-data-actions">
-        <div className="fe-settings-card-title"><div><b>Older portfolio data</b><span>Import records from the earlier Falcon Eye portfolio, if available.</span></div></div>
-        <div className="fe-data-action-buttons"><Button variant="outline" onClick={importLegacy} disabled={doc.legacyImported || doc.records.length > 0}><Database />{doc.legacyImported ? 'Already imported' : doc.records.length ? 'Only available on an empty picture' : 'Import older records'}</Button><span className="fe-settings-help">The original data is never removed or overwritten.</span></div>
+        <div className="fe-settings-card-title"><div><b>{t('olderData')}</b><span>{t('olderHelp')}</span></div></div>
+        <div className="fe-data-action-buttons"><Button variant="outline" onClick={importLegacy} disabled={doc.legacyImported || doc.records.length > 0}><Database />{t(doc.legacyImported ? 'alreadyImported' : doc.records.length ? 'emptyOnly' : 'importOlder')}</Button><span className="fe-settings-help">{t('originalPreserved')}</span></div>
       </div>
     </section>
 
     <section className="fe-settings-section fe-settings-prototype">
-      <div className="fe-settings-section-head"><span className="fe-settings-icon"><RotateCcw /></span><div><h2>Try a sample or start fresh</h2><p>Samples are clearly marked and illustrative. Choose carefully—replacing records cannot be undone.</p></div></div>
+      <div className="fe-settings-section-head"><span className="fe-settings-icon"><RotateCcw /></span><div><h2>{t('trySample')}</h2><p>{t('sampleWarning')}</p></div></div>
       <div className="fe-settings-card fe-data-actions">
-        <div className="fe-settings-card-title"><div><b>Illustrative sample data</b><span>Explore a populated view with example records and clearly labeled non-live values.</span></div></div>
-        <div className="fe-data-action-buttons"><Button variant="outline" onClick={loadSample}><Cloud />Load sample picture</Button></div>
+        <div className="fe-settings-card-title"><div><b>{t('sampleTitle')}</b><span>{t('sampleHelp')}</span></div></div>
+        <div className="fe-data-action-buttons"><Button variant="outline" onClick={loadSample}><Cloud />{t('loadSample')}</Button></div>
       </div>
       <div className="fe-settings-card fe-data-actions fe-danger-zone">
-        <div className="fe-settings-card-title"><div><b>Clear this picture</b><span>Remove your records and activities from this browser. Download a backup first if needed.</span></div></div>
-        <div className="fe-data-action-buttons"><Button variant="outline" onClick={startEmpty}><Trash2 />Start with an empty picture</Button></div>
+        <div className="fe-settings-card-title"><div><b>{t('clearTitle')}</b><span>{t('clearHelp')}</span></div></div>
+        <div className="fe-data-action-buttons"><Button variant="outline" onClick={startEmpty}><Trash2 />{t('startEmpty')}</Button></div>
       </div>
     </section>
-    <p className="fe-settings-footnote"><HardDrive /> Changes stay in this browser, not in a cloud account. Clearing your browser storage may remove your data; use the backup option to keep a copy.</p>
+    <p className="fe-settings-footnote"><HardDrive /> {t('footnote')}</p>
   </FinanceShell>;
 }

@@ -1,0 +1,64 @@
+{
+  "language": "Language",
+  "languageHelp": "Language changes the display only—not your currency or records.",
+  "navigation": {
+    "home": "Home",
+    "assets": "Assets",
+    "debts": "Debts",
+    "activity": "Activity",
+    "reports": "Reports",
+    "settings": "Settings",
+    "yourMoney": "YOUR MONEY",
+    "main": "Main navigation",
+    "quick": "Quick navigation",
+    "more": "More links",
+    "open": "Open menu",
+    "close": "Close menu",
+    "homeLabel": "Falcon Eye home",
+    "earlyAccess": "Early access",
+    "admin": "Admin view (prototype)",
+    "design": "Design guide"
+  },
+  "brand": "Falcon Eye",
+  "tagline": "Everyday money, in view",
+  "help": "A little help?",
+  "helpText": "Ask Falc to explain your view.",
+  "askFalc": "Ask Falc",
+  "sampleNote": "Sample picture · illustrative values, not live",
+  "personalNote": "Your financial picture, all in one place",
+  "localNote": "Saved in this browser · Not financial advice",
+  "footer": "Falcon Eye keeps your money picture simple. Values are entered by you and may not be current.",
+  "storageHeading": "Your browser storage needs attention",
+  "storageBackup": "Download a backup from Reports before closing this page.",
+  "close": "Close",
+  "errors": {
+    "checkDetails": "This request could not be completed. Check the fields, amounts, dates, and connection, then try again."
+  },
+  "categories": {
+    "cash": "Cash", "gold": "Gold", "stocks": "Stocks", "funds": "Funds", "crypto": "Crypto",
+    "ipo": "IPO", "private": "Private investment", "lent": "Money lent", "bonds": "Bonds",
+    "property": "Property", "debt": "Debt"
+  },
+  "categoryDescriptions": {
+    "cash": "Cash, savings, and deposit accounts.",
+    "gold": "Physical or allocated gold holdings.",
+    "stocks": "Publicly traded shares.",
+    "funds": "Mutual funds and exchange-traded funds.",
+    "crypto": "Cryptocurrency and digital assets.",
+    "ipo": "IPO applications or allocated shares; record one exposure only.",
+    "private": "Private equity, loans, or gifts.",
+    "lent": "Outstanding principal owed to you.",
+    "bonds": "Government and corporate bonds.",
+    "property": "Your ownership share of real estate.",
+    "debt": "Outstanding liabilities, stored as a positive balance."
+  },
+  "activityTypes": {
+    "contribution": "Contribution", "withdrawal": "Withdrawal", "income": "Income",
+    "repayment": "Repayment", "fee": "Fee", "valuation": "Valuation"
+  },
+  "records_zero": "No records",
+  "records_one": "{{count}} record",
+  "records_other": "{{count}} records",
+  "documentTitle": "Falcon Eye — Your financial picture",
+  "documentDescription": "Understand what you own and owe in one place. Financial values are entered by you, not live quotes."
+}
