@@ -5,9 +5,11 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { store } from '@/lib/portfolio';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 
 export function DataControls({ dark }: { dark?: boolean }) {
   const [mode, setMode] = useState<null | 'demo' | 'empty'>(null);
+  const { t } = useTranslation('legacy');
   const { toast } = useToast();
   const [, navigate] = useLocation();
   const btn = cn(
@@ -18,40 +20,40 @@ export function DataControls({ dark }: { dark?: boolean }) {
     <>
       <div className="space-y-2">
         <button className={btn} onClick={() => setMode('demo')} data-testid="button-load-demo">
-          <Database className="h-4 w-4" /> Load demo portfolio
+          <Database className="h-4 w-4" /> {t('dataControls.loadDemo')}
         </button>
         <button className={btn} onClick={() => setMode('empty')} data-testid="button-reset-empty">
-          <Eraser className="h-4 w-4" /> Reset to empty
+          <Eraser className="h-4 w-4" /> {t('dataControls.resetEmpty')}
         </button>
       </div>
       <AlertDialog open={mode !== null} onOpenChange={(o) => !o && setMode(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>{mode === 'demo' ? 'Replace with the demo portfolio?' : 'Clear every holding?'}</AlertDialogTitle>
+            <AlertDialogTitle>{mode === 'demo' ? t('dataControls.confirmDemo') : t('dataControls.confirmEmpty')}</AlertDialogTitle>
             <AlertDialogDescription>
               {mode === 'demo'
-                ? 'All current holdings in this browser will be replaced by 11 sample holdings with illustrative, non-live prices.'
-                : 'All holdings stored in this browser will be removed. This cannot be undone.'}
+                ? t('dataControls.descriptionDemo')
+                : t('dataControls.descriptionEmpty')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel data-testid="button-cancel-reset">Cancel</AlertDialogCancel>
+            <AlertDialogCancel data-testid="button-cancel-reset">{t('dataControls.cancel')}</AlertDialogCancel>
             <AlertDialogAction
               data-testid="button-confirm-reset"
               className={mode === 'empty' ? 'bg-destructive text-destructive-foreground hover:bg-destructive/90' : ''}
               onClick={() => {
                 if (mode === 'demo') {
                   store.loadDemo();
-                  toast({ title: 'Demo portfolio loaded', description: 'Sample data with illustrative prices.' });
+                  toast({ title: t('onboarding.toast.demoTitle'), description: t('onboarding.toast.demoDescription') });
                   navigate('/');
                 } else {
                   store.startEmpty();
-                  toast({ title: 'Portfolio cleared', description: 'Start adding holdings or import a CSV.' });
+                  toast({ title: t('dataControls.clearedTitle'), description: t('dataControls.clearedDescription') });
                 }
                 setMode(null);
               }}
             >
-              {mode === 'demo' ? 'Load demo' : 'Clear all'}
+              {mode === 'demo' ? t('dataControls.loadConfirm') : t('dataControls.clearConfirm')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

@@ -3,7 +3,10 @@ import { Link } from 'wouter';
 import { ArrowDownToLine, ArrowUpRight, CircleAlert, Printer, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { FinanceShell } from '@/components/finance-shell';
-import { CATEGORIES, formatMoney, summarizeFinance } from '@/lib/finance-model';
+import { summarizeFinance } from '@/lib/finance-model';
+import { formatMoney, formatNumber } from '@/lib/locale';
+import i18n from '@/lib/i18n';
+import { Trans, useTranslation } from 'react-i18next';
 import { financeStore, useFinance } from '@/lib/finance-store';
 
 function download(filename: string, content: string, type: string) {
@@ -20,56 +23,55 @@ function csvCell(value: unknown) {
 }
 function exportCsv() {
   const doc = financeStore.getSnapshot();
-  const columns = ['Name', 'Category', 'Currency', 'What you paid', 'Recorded value', 'Valuation date', 'Source', 'Access', 'Location', 'Notes'];
-  const rows = doc.records.map((item) => [item.name, CATEGORIES.find((cat) => cat.id === item.category)?.label, item.currency, item.cost, item.value, item.valuationDate, item.valuationSource, item.access, item.location, item.notes]);
-  download('falcon-eye-financial-records.csv', [columns, ...rows].map((row) => row.map(csvCell).join(',')).join('\r\n'), 'text/csv;charset=utf-8');
+  const columns = ['name', 'category', 'currency', 'cost', 'value', 'date', 'source', 'access', 'location', 'notes'].map((key) => i18n.t(`reports:csv.${key}`));
+  const rows = doc.records.map((item) => [item.name, i18n.t(`common:categories.${item.category}`), item.currency, item.cost, item.value, item.valuationDate === '1970-01-01' ? i18n.t('reports:unknownDate') : item.valuationDate, i18n.t(`reports:sources.${item.valuationSource}`), i18n.t(`reports:access.${item.access}`), item.location, item.notes]);
+  download('falcon-eye-financial-records.csv', '\uFEFF' + [columns, ...rows].map((row) => row.map(csvCell).join(',')).join('\r\n'), 'text/csv;charset=utf-8');
 }
 function exportJson() {
   download('falcon-eye-financial-picture.json', JSON.stringify(financeStore.getSnapshot(), null, 2), 'application/json');
 }
 
 export default function FinanceReports({ accountStatus }: { accountStatus?: ReactNode }) {
+  const { t } = useTranslation('reports');
+  const { t: common } = useTranslation('common');
   const doc = useFinance();
   const summary = useMemo(() => summarizeFinance(doc), [doc]);
   const assets = summary.byCategory.filter((item) => item.category !== 'debt' && item.value > 0).sort((a, b) => b.value - a.value);
   const max = Math.max(1, ...assets.map((item) => item.value));
   const hasMissing = summary.missingValues + summary.missingRates > 0 || summary.staleValues > 0;
   return <FinanceShell accountStatus={accountStatus}>
-    <div className="fe-breadcrumb">MY FINANCES <span>/</span> REPORTS</div>
+    <div className="fe-breadcrumb">{t('breadcrumb')} <span>/</span> {common('navigation.reports')}</div>
     <div className="fe-assets-title-row fe-report-heading">
-      <div><div className="fe-eyebrow">A CLEAR, PRINTABLE SNAPSHOT</div><h1>Your report</h1><p>See the numbers behind your picture. All totals use your base currency, {doc.baseCurrency}.</p></div>
-      <div className="fe-report-actions"><Button variant="outline" onClick={() => window.print()}><Printer />Print / Save PDF</Button><Button onClick={exportCsv}><ArrowDownToLine />Download CSV</Button></div>
+      <div><div className="fe-eyebrow">{t('eyebrow')}</div><h1>{t('title')}</h1><p>{t('description', { currency: doc.baseCurrency })}</p></div>
+      <div className="fe-report-actions"><Button variant="outline" onClick={() => window.print()}><Printer />{t('print')}</Button><Button onClick={exportCsv}><ArrowDownToLine />{t('downloadCsv')}</Button></div>
     </div>
-    {doc.isSample && <div className="fe-sample-inline"><span className="fe-sample-dot" />Sample report · values are illustrative and not live market prices.</div>}
-    {hasMissing && <div className="fe-data-alert"><CircleAlert /><div><b>This picture has gaps</b><span>{summary.missingValues ? `${summary.missingValues} items without values. ` : ''}{summary.missingRates ? `${summary.missingRates} values missing currency rates. ` : ''}{summary.staleValues ? `${summary.staleValues} values last updated over 90 days ago.` : ''}Incomplete values are not included in totals.</span></div><Link href="/settings">Check settings <ArrowUpRight /></Link></div>}
+    {doc.isSample && <div className="fe-sample-inline"><span className="fe-sample-dot" />{t('sample')}</div>}
+    {hasMissing && <div className="fe-data-alert"><CircleAlert /><div><b>{t('gaps')}</b><span>{summary.missingValues ? t('missingValues', { count: summary.missingValues }) : ''}{summary.missingRates ? t('missingRates', { count: summary.missingRates }) : ''}{summary.staleValues ? t('staleValues', { count: summary.staleValues }) : ''} {t('incomplete')}</span></div><Link href="/settings">{t('checkSettings')} <ArrowUpRight /></Link></div>}
     <section className="fe-report-kpis">
-      <div><span>ASSETS</span><b>{formatMoney(summary.assets, doc.baseCurrency)}</b><small>Known values converted to {doc.baseCurrency}</small></div>
-      <div><span>DEBTS</span><b>{formatMoney(summary.debts, doc.baseCurrency)}</b><small>Outstanding balances</small></div>
-      <div className="fe-kpi-emphasis"><span>NET WORTH</span><b>{formatMoney(summary.netWorth, doc.baseCurrency)}</b><small>Assets minus debts</small></div>
+      <div><span>{common('navigation.assets')}</span><b>{formatMoney(summary.assets, doc.baseCurrency)}</b><small>{t('converted', { currency: doc.baseCurrency })}</small></div>
+      <div><span>{common('navigation.debts')}</span><b>{formatMoney(summary.debts, doc.baseCurrency)}</b><small>{t('outstanding')}</small></div>
+      <div className="fe-kpi-emphasis"><span>{t('netWorth')}</span><b>{formatMoney(summary.netWorth, doc.baseCurrency)}</b><small>{t('assetsLessDebts')}</small></div>
     </section>
     <div className="fe-report-grid">
       <section className="fe-panel fe-report-allocation">
-        <div className="fe-section-heading"><div><div className="fe-eyebrow">ASSETS ONLY</div><h2>By type</h2></div><span className="fe-report-unit">{doc.baseCurrency}</span></div>
+        <div className="fe-section-heading"><div><div className="fe-eyebrow">{t('assetsOnly')}</div><h2>{t('byType')}</h2></div><span className="fe-report-unit"><bdi>{doc.baseCurrency}</bdi></span></div>
         {assets.length ? <div className="fe-report-bars">{assets.map((entry, index) => <div className="fe-report-bar-row" key={entry.category}>
-          <div className="fe-report-bar-label"><span><i className={`fe-category-mark tone-${index % 5}`} />{entry.label}</span><b>{formatMoney(entry.value, doc.baseCurrency)}</b></div>
-          <div className="fe-report-bar"><i style={{ width: `${entry.value / max * 100}%` }} /></div><small>{summary.assets ? `${(entry.value / summary.assets * 100).toFixed(1)}% of known assets` : 'No known value'}</small>
-        </div>)}</div> : <div className="fe-report-empty">Add records with known values to see a breakdown.</div>}
+          <div className="fe-report-bar-label"><span><i className={`fe-category-mark tone-${index % 5}`} />{common(`categories.${entry.category}`)}</span><b>{formatMoney(entry.value, doc.baseCurrency)}</b></div>
+          <div className="fe-report-bar"><i style={{ width: `${entry.value / max * 100}%` }} /></div><small>{summary.assets ? t('knownShare', { percent: formatNumber(entry.value / summary.assets * 100, { maximumFractionDigits: 1 }) }) : t('noKnownValue')}</small>
+        </div>)}</div> : <div className="fe-report-empty">{t('empty')}</div>}
       </section>
       <section className="fe-panel fe-report-notes">
-        <div className="fe-section-heading"><div><div className="fe-eyebrow">A NOTE ON THE TOTALS</div><h2>What’s included</h2></div><ShieldCheck /></div>
+        <div className="fe-section-heading"><div><div className="fe-eyebrow">{t('totalsNote')}</div><h2>{t('included')}</h2></div><ShieldCheck /></div>
         <ul className="fe-report-rules">
-          <li><span>01</span><p><b>Only known values</b> are added. Unknown values stay unknown—not zero.</p></li>
-          <li><span>02</span><p><b>Rates are yours to enter.</b> Foreign currencies need your own conversion rate.</p></li>
-          <li><span>03</span><p><b>Dates matter.</b> A value older than 90 days is marked for review.</p></li>
-          <li><span>04</span><p><b>Your ownership share only.</b> Property is not multiplied again by its share.</p></li>
+          {['known', 'rates', 'dates', 'ownership'].map((rule, index) => <li key={rule}><span>0{index + 1}</span><p><Trans t={t} i18nKey={`rules.${rule}`} components={{ bold: <b /> }} /></p></li>)}
         </ul>
-        <Link className="fe-inline-link fe-settings-report-link" href="/settings">Currency and storage settings <ArrowUpRight /></Link>
+        <Link className="fe-inline-link fe-settings-report-link" href="/settings">{t('currencySettings')} <ArrowUpRight /></Link>
       </section>
     </div>
     <section className="fe-report-export">
-      <div><div className="fe-eyebrow">TAKE YOUR DATA WITH YOU</div><h2>Your data is yours</h2><p>Download your full financial picture as JSON, or a spreadsheet-ready CSV of your records.</p></div>
-      <div><Button variant="outline" onClick={exportCsv}><ArrowDownToLine />Export CSV</Button><Button variant="outline" onClick={exportJson}><ArrowDownToLine />Export JSON</Button></div>
+      <div><div className="fe-eyebrow">{t('takeData')}</div><h2>{t('yourData')}</h2><p>{t('exportDescription')}</p></div>
+      <div><Button variant="outline" onClick={exportCsv}><ArrowDownToLine />{t('exportCsv')}</Button><Button variant="outline" onClick={exportJson}><ArrowDownToLine />{t('exportJson')}</Button></div>
     </section>
-    <p className="fe-report-disclaimer">Falcon Eye is an organizer, not a bank, broker, tax tool, or financial adviser. This report reflects only what you entered.</p>
+    <p className="fe-report-disclaimer">{t('disclaimer')}</p>
   </FinanceShell>;
 }

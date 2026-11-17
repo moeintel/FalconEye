@@ -4,16 +4,18 @@ import { LayoutGrid, ListTree, Upload, Radar, Download, Compass, RotateCcw, Mega
 import { usePortfolio } from '@/lib/portfolio';
 import { DataControls } from '@/components/data-controls';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from '@/components/language-switcher';
 
 const NAV = [
-  { href: '/', label: 'Overview', icon: LayoutGrid },
-  { href: '/holdings', label: 'Holdings', icon: ListTree },
-  { href: '/import', label: 'Import', icon: Upload },
-  { href: '/insights', label: 'Insights', icon: Radar },
-  { href: '/export', label: 'Export', icon: Download },
-  { href: '/onboarding', label: 'Get started', icon: Compass },
-  { href: '/welcome', label: 'Early access', icon: Megaphone },
-  { href: '/admin/outreach', label: 'Admin view (prototype)', icon: BarChart3 },
+  { href: '/', key: 'overview', icon: LayoutGrid },
+  { href: '/holdings', key: 'holdings', icon: ListTree },
+  { href: '/import', key: 'import', icon: Upload },
+  { href: '/insights', key: 'insights', icon: Radar },
+  { href: '/export', key: 'export', icon: Download },
+  { href: '/onboarding', key: 'getStarted', icon: Compass },
+  { href: '/welcome', key: 'earlyAccess', icon: Megaphone },
+  { href: '/admin/outreach', key: 'admin', icon: BarChart3 },
 ];
 
 export function Logo({ className }: { className?: string }) {
@@ -27,9 +29,10 @@ export function Logo({ className }: { className?: string }) {
 
 function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
   const [loc] = useLocation();
+  const { t } = useTranslation('legacy');
   return (
     <nav className="flex flex-col gap-1">
-      {NAV.map(({ href, label, icon: Icon }) => {
+      {NAV.map(({ href, key, icon: Icon }) => {
         const active = href === '/' ? loc === '/' : loc.startsWith(href);
         return (
           <Link
@@ -42,9 +45,9 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
               active ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/60',
             )}
           >
-            <span className={cn('absolute left-0 top-2 bottom-2 w-[3px] rounded-r bg-sidebar-primary transition-transform origin-left', active ? 'scale-x-100' : 'scale-x-0')} />
+            <span className={cn('legacy-nav-marker absolute start-0 top-2 bottom-2 w-[3px] rounded-s bg-sidebar-primary transition-transform origin-left', active ? 'scale-x-100' : 'scale-x-0')} />
             <Icon className={cn('h-4 w-4 transition-transform group-hover:scale-110', active && 'text-sidebar-primary')} />
-            {label}
+            {t(`shell.navigation.${key}`)}
           </Link>
         );
       })}
@@ -54,18 +57,20 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
 
 export function Shell({ children }: { children: ReactNode }) {
   const { isDemo, holdings } = usePortfolio();
+  const { t } = useTranslation('legacy');
   const [open, setOpen] = useState(false);
   return (
-    <div className="grain min-h-[100dvh] bg-background lg:pl-64">
-      <aside className="no-print fixed inset-y-0 left-0 z-40 hidden w-64 flex-col bg-sidebar text-sidebar-foreground lg:flex">
+    <div className="grain min-h-[100dvh] bg-background lg:ps-64">
+      <aside className="no-print fixed inset-y-0 start-0 z-40 hidden w-64 flex-col bg-sidebar text-sidebar-foreground lg:flex">
         <SidebarBody />
       </aside>
 
       <header className="no-print sticky top-0 z-40 flex items-center justify-between bg-sidebar px-4 py-3 text-sidebar-foreground lg:hidden">
         <Link href="/" className="flex items-center gap-2 font-bold" data-testid="link-home-mobile">
-          <Logo className="h-7 w-7" /> Falcon Eye
+          <Logo className="h-7 w-7" /> {t('shell.brand')}
         </Link>
-        <button onClick={() => setOpen(!open)} className="rounded-md p-2 hover:bg-sidebar-accent" data-testid="button-menu" aria-label="Menu">
+        <div className="ms-auto me-2"><LanguageSwitcher /></div>
+        <button onClick={() => setOpen(!open)} className="rounded-md p-2 hover:bg-sidebar-accent" data-testid="button-menu" aria-label={open ? t('shell.closeMenu') : t('shell.openMenu')}>
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </header>
@@ -77,43 +82,45 @@ export function Shell({ children }: { children: ReactNode }) {
       )}
 
       <div className="no-print flex flex-wrap items-center gap-x-4 gap-y-1 border-b border-border bg-secondary/70 px-5 py-2 text-[12px] text-muted-foreground md:px-10">
-        <span className="rounded-sm bg-primary px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">Prototype</span>
+        <span className="rounded-sm bg-primary px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">{t('shell.prototype')}</span>
         {isDemo ? (
-          <span data-testid="status-demo">Showing <b className="text-foreground">sample data</b>. Prices are illustrative and not live.</span>
+          <span data-testid="status-demo">{t('shell.demoStatus')}</span>
         ) : (
-          <span data-testid="status-own">Your {holdings.length} holding{holdings.length === 1 ? '' : 's'}. Prices are whatever you entered, not live quotes.</span>
+          <span data-testid="status-own">{t('shell.ownStatus', { count: holdings.length })}</span>
         )}
-        <span className="inline-flex items-center gap-1"><HardDrive className="h-3 w-3" /> Saved only in this browser</span>
-        <span>Not investment advice.</span>
-        <Link href="/welcome" className="ml-auto font-semibold text-foreground underline-offset-4 hover:underline" data-testid="link-banner-welcome">Get early access</Link>
+        <span className="inline-flex items-center gap-1"><HardDrive className="h-3 w-3" /> {t('shell.localStorage')}</span>
+        <span>{t('shell.disclaimer')}</span>
+        <Link href="/welcome" className="ms-auto font-semibold text-foreground underline-offset-4 hover:underline" data-testid="link-banner-welcome">{t('shell.earlyAccess')}</Link>
       </div>
 
       <main className="print-area mx-auto max-w-[1280px] px-5 py-8 md:px-10 md:py-10">{children}</main>
 
       <footer className="no-print mx-auto max-w-[1280px] px-5 pb-10 text-xs text-muted-foreground md:px-10">
-        Falcon Eye is a class demo prototype. It does not connect to brokers or wallets, execute trades, or fetch market prices. Data lives in your browser's local storage.
+        {t('shell.footer')}
       </footer>
     </div>
   );
 }
 
 function SidebarBody() {
+  const { t } = useTranslation('legacy');
   return (
     <div className="relative flex h-full flex-col overflow-hidden px-4 py-6">
       <div className="contour pointer-events-none absolute inset-0 opacity-60" />
       <Link href="/" className="relative mb-8 flex items-center gap-2.5 px-2" data-testid="link-home">
         <Logo className="h-9 w-9 text-sidebar-foreground" />
         <div>
-          <div className="text-lg font-extrabold leading-none tracking-tight">Falcon Eye</div>
-          <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-sidebar-foreground/50">one clear view</div>
+          <div className="text-lg font-extrabold leading-none tracking-tight">{t('shell.brand')}</div>
+          <div className="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-sidebar-foreground/50">{t('shell.tagline')}</div>
         </div>
       </Link>
       <div className="relative"><NavLinks /></div>
       <div className="relative mt-auto space-y-3">
         <div className="flex items-center gap-2 px-2 font-mono text-[10px] uppercase tracking-[0.18em] text-sidebar-foreground/40">
-          <RotateCcw className="h-3 w-3" /> Presentation tools
+          <RotateCcw className="h-3 w-3" /> {t('shell.presentationTools')}
         </div>
         <DataControls dark />
+        <LanguageSwitcher />
       </div>
     </div>
   );

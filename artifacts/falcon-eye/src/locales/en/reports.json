@@ -1,0 +1,27 @@
+{
+  "breadcrumb":"MY FINANCES","eyebrow":"A CLEAR, PRINTABLE SNAPSHOT","title":"Your report",
+  "description":"See the numbers behind your picture. All totals use your base currency, {{currency}}.",
+  "print":"Print / Save PDF","downloadCsv":"Download CSV",
+  "sample":"Sample report · values are illustrative and not live market prices.",
+  "gaps":"This picture has gaps","missingValues":"Items without values: {{count}}. ",
+  "missingRates":"Values missing exchange rates: {{count}}. ","staleValues":"Values over 90 days old: {{count}}. ",
+  "incomplete":"Incomplete values are not included in totals.","checkSettings":"Check settings",
+  "converted":"Known values converted to {{currency}}","outstanding":"Outstanding balances",
+  "netWorth":"NET WORTH","assetsLessDebts":"Assets minus debts","assetsOnly":"ASSETS ONLY","byType":"By type",
+  "knownShare":"{{percent}}% of known assets","noKnownValue":"No known value",
+  "empty":"Add records with known values to see a breakdown.","totalsNote":"A NOTE ON THE TOTALS","included":"What’s included",
+  "rules":{
+    "known":"<bold>Only known values</bold> are added. Unknown values stay unknown—not zero.",
+    "rates":"<bold>Rates are yours to enter.</bold> Foreign currencies need your own conversion rate.",
+    "dates":"<bold>Dates matter.</bold> A value older than 90 days is marked for review.",
+    "ownership":"<bold>Your ownership share only.</bold> Property is not multiplied again by its share."
+  },
+  "currencySettings":"Currency and storage settings","takeData":"TAKE YOUR DATA WITH YOU","yourData":"Your data is yours",
+  "exportDescription":"Download your full financial picture as JSON, or a spreadsheet-ready CSV of your records.",
+  "exportCsv":"Export CSV","exportJson":"Export JSON",
+  "disclaimer":"Falcon Eye is an organizer, not a bank, broker, tax tool, or financial adviser. This report reflects only what you entered.",
+  "csv":{"name":"Name","category":"Category","currency":"Currency","cost":"What you paid","value":"Recorded value","date":"Valuation date","source":"Source","access":"Access","location":"Location","notes":"Notes"},
+  "unknownDate":"Unknown",
+  "sources":{"manual":"Your entry","statement":"Statement","estimate":"Estimate"},
+  "access":{"available":"Available","restricted":"Restricted","unknown":"Unknown"}
+}

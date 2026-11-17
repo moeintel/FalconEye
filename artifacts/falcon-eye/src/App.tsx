@@ -1,4 +1,6 @@
-import { type ReactNode } from 'react';
+import { type ReactNode, useEffect } from 'react';
+import { DirectionProvider } from '@radix-ui/react-direction';
+import { useTranslation } from 'react-i18next';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ErrorBoundary } from '@/components/error-boundary';
 import { Toaster } from '@/components/ui/toaster';
@@ -25,6 +27,7 @@ import { AccountStatus, FinanceAccount } from '@/components/finance-account';
 import { FalcAssistant } from '@/components/falc-assistant';
 import './finance.css';
 import './assistant.css';
+import './localization.css';
 
 const queryClient = new QueryClient();
 
@@ -68,15 +71,23 @@ function RoutedErrorBoundary({ children }: { children: ReactNode }) {
 }
 
 function App() {
+  const { t, i18n } = useTranslation('common');
+  const dir = i18n.resolvedLanguage === 'ar' ? 'rtl' : 'ltr';
+  useEffect(() => {
+    document.title = t('documentTitle');
+    document.querySelector('meta[name="description"]')?.setAttribute('content', t('documentDescription'));
+  }, [t, i18n.resolvedLanguage]);
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
-          <Router />
-        </WouterRouter>
-        <Toaster />
-      </TooltipProvider>
-    </QueryClientProvider>
+    <DirectionProvider dir={dir}>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+            <Router />
+          </WouterRouter>
+          <Toaster />
+        </TooltipProvider>
+      </QueryClientProvider>
+    </DirectionProvider>
   );
 }
 

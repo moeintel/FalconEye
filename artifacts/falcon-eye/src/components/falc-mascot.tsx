@@ -1,6 +1,9 @@
+import { useTranslation } from 'react-i18next';
+
 export function FalcMascot({ className = '', speaking = false }: { className?: string; speaking?: boolean }) {
+  const { t } = useTranslation('assistant');
   return (
-    <svg viewBox="0 0 120 120" role="img" aria-label="Falc, your financial-record assistant" className={className}>
+    <svg viewBox="0 0 120 120" role="img" aria-label={t('mascot')} className={className}>
       <circle cx="60" cy="60" r="58" fill="#FFF1CF" />
       <path d="M27 61 12 45q1 33 23 43m58-27 15-16q-1 33-23 43" fill="#315F65" />
       <path d="M30 35 26 15l24 13q10-3 20 0l24-13-4 20q11 13 10 35-2 35-40 36-38-1-40-36-1-22 10-35" fill="#173D46" />

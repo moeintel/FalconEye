@@ -212,21 +212,22 @@
 .fe-search > button { border: 0; background: none; color: #777; font-size: 19px; }
 .fe-filter-select { display: flex; align-items: center; gap: 7px; min-height: 37px; padding: 0 9px; border: 1px solid #e6e1d7; border-radius: 7px; background: #fffefa; }
 .fe-filter-select select { max-width: 160px; border: 0; outline: none; background: transparent; color: #606c6d; font-size: 10px; }
-.fe-list-count { margin-left: auto; color: #929891; font-size: 10px; }
+.fe-list-count { margin-inline-start: auto; color: #929891; font-size: 10px; }
 .fe-record-list-head, .fe-record-row { display: grid; grid-template-columns: minmax(250px,1.8fr) minmax(130px,.8fr) minmax(115px,.7fr) 34px; align-items: center; gap: 13px; }
 .fe-record-list-head { min-height: 37px; padding: 0 20px 0 25px; background: #faf8f2; color: #969a91; font-family: var(--app-font-mono), monospace; font-size: 8px; letter-spacing: .15em; }
-.fe-record-list-head span:nth-child(2), .fe-record-list-head span:nth-child(3) { text-align: right; }
+.fe-record-list-head span:nth-child(2), .fe-record-list-head span:nth-child(3) { text-align: end; }
 .fe-record-row { position: relative; min-height: 74px; padding: 11px 19px 11px 20px; border-top: 1px solid #f0ece4; }
 .fe-record-row:first-child { border-top: 0; }
 .fe-record-symbol { display: grid; place-items: center; grid-column: 1; grid-row: 1; width: 35px; height: 35px; border-radius: 10px; background: #ebeeea; color: #62766d; }
 .fe-record-symbol svg { width: 17px; }
+.fe-record-symbol > [data-asset-icon] { max-width: 100%; max-height: 100%; }
 .fe-record-symbol.tone-1 { background: #f6edda; color: #a38441; }.fe-record-symbol.tone-2 { background: #e8edf0; color: #617888; }.fe-record-symbol.tone-3 { background: #f3e9e4; color: #a66e61; }.fe-record-symbol.tone-4 { background: #edebf0; color: #7a7188; }
-.fe-record-main { grid-column: 1; grid-row: 1; min-width: 0; padding-left: 47px; }
-.fe-record-name { display: block; max-width: 100%; overflow: hidden; padding: 0; border: 0; background: transparent; color: var(--fe-navy); font-size: 12px; font-weight: 700; text-align: left; text-overflow: ellipsis; white-space: nowrap; }
+.fe-record-main { grid-column: 1; grid-row: 1; min-width: 0; padding-inline-start: 47px; }
+.fe-record-name { display: block; max-width: 100%; overflow: hidden; padding: 0; border: 0; background: transparent; color: var(--fe-navy); font-size: 12px; font-weight: 700; text-align: start; text-overflow: ellipsis; white-space: nowrap; }
 .fe-record-name:hover { text-decoration: underline; }
 .fe-record-main > span { display: block; overflow: hidden; margin-top: 4px; color: #929993; font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
-.fe-locked-chip { margin-left: 7px; padding: 2px 5px; border-radius: 4px; background: #f4eee1; color: #927644; font-style: normal; font-size: 8px; }
-.fe-record-value, .fe-record-date { color: #33454e; font-size: 11px; font-variant-numeric: tabular-nums; text-align: right; }
+.fe-locked-chip { margin-inline-start: 7px; padding: 2px 5px; border-radius: 4px; background: #f4eee1; color: #927644; font-style: normal; font-size: 8px; }
+.fe-record-value, .fe-record-date { color: #33454e; font-size: 11px; font-variant-numeric: tabular-nums; text-align: end; }
 .fe-record-value { font-weight: 700; }
 .fe-record-value small, .fe-record-date small { display: block; margin-top: 4px; color: #969d97; font-size: 9px; font-weight: 450; }
 .fe-value-unknown { color: #a1793b; font-size: 10px; font-style: italic; font-weight: 500; }
@@ -235,8 +236,8 @@
 .fe-record-menu summary::-webkit-details-marker { display: none; }
 .fe-record-menu summary:hover { background: #f1eee7; color: #344953; }
 .fe-record-menu summary svg { width: 17px; }
-.fe-record-menu > div { position: absolute; z-index: 15; top: 31px; right: 0; width: 145px; padding: 5px; border: 1px solid #e6e0d6; border-radius: 8px; background: #fffefa; box-shadow: 0 9px 24px #28343a18; }
-.fe-record-menu > div button { display: flex; align-items: center; gap: 7px; width: 100%; padding: 8px; border: 0; border-radius: 5px; background: transparent; color: #5d6869; font-size: 10px; text-align: left; }
+.fe-record-menu > div { position: absolute; z-index: 15; top: 31px; inset-inline-end: 0; width: 145px; padding: 5px; border: 1px solid #e6e0d6; border-radius: 8px; background: #fffefa; box-shadow: 0 9px 24px #28343a18; }
+.fe-record-menu > div button { display: flex; align-items: center; gap: 7px; width: 100%; padding: 8px; border: 0; border-radius: 5px; background: transparent; color: #5d6869; font-size: 10px; text-align: start; }
 .fe-record-menu > div button:hover { background: #f3f0e8; }
 .fe-record-menu > div button.danger { color: #a65c53; }
 .fe-record-menu > div button svg { width: 14px; height: 14px; }
@@ -502,7 +503,7 @@
   .fe-record-list-head { display: none; }
   .fe-record-row { grid-template-columns: 34px minmax(0,1fr) auto 28px; gap: 8px; min-height: 69px; padding: 10px 9px; }
   .fe-record-symbol { grid-column: 1; width: 32px; height: 32px; }
-  .fe-record-main { grid-column: 2; padding-left: 0; }
+  .fe-record-main { grid-column: 2; padding-inline-start: 0; }
   .fe-record-name { font-size: 10px; }
   .fe-record-main > span { max-width: 155px; font-size: 8px; }
   .fe-record-value { grid-column: 3; font-size: 9px; }

@@ -1,0 +1,21 @@
+{
+  "breadcrumb":"MY FINANCES",
+  "eyebrow":"A HELPFUL RECORD, NOT ANOTHER TASK",
+  "description":"Keep a lightweight history of deposits, payments, income, and updates.",
+  "record":"Record an activity",
+  "sample":"Sample activity is illustrative—not your personal financial history.",
+  "trail":"YOUR PAPER TRAIL",
+  "entries":"Number of entries: {{count}}",
+  "days":"Days with updates: {{count}} · stored locally",
+  "filter":"Filter activity type",
+  "all":"All activity",
+  "removed":"Removed record",
+  "noMatching":"No activity of this type",
+  "freshStart":"A fresh start",
+  "emptyWithRecords":"Whenever something changes, add a note here. It helps you remember why your numbers changed.",
+  "emptyWithoutRecords":"Add an asset or debt first. You can then record a deposit, payment, or other update.",
+  "recordFirst":"Record your first activity",
+  "adjustValues":"Some activity types also adjust a saved value when one is already known.",
+  "local":"Stored in this browser",
+  "guidance":"An entry is a record of what happened, not a bank transaction. Nothing is connected, transferred, or invested."
+}

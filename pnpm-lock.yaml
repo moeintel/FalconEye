@@ -225,6 +225,19 @@ importers:
         version: 3.1.0
 
   artifacts/falcon-eye:
+    dependencies:
+      '@fontsource/noto-sans-arabic':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@radix-ui/react-direction':
+        specifier: ^1.2.0
+        version: 1.2.0(@types/react@19.3.0)(react@19.1.0)
+      i18next:
+        specifier: ^27.1.2
+        version: 27.1.2(typescript@5.9.3)
+      react-i18next:
+        specifier: ^18.0.1
+        version: 18.0.1(@types/react@19.3.0)(i18next@27.1.2(typescript@5.9.3))(react@19.1.0)(typescript@5.9.3)
     devDependencies:
       '@hookform/resolvers':
         specifier: ^3.10.0
@@ -589,6 +602,9 @@ packages:
   '@floating-ui/utils@0.2.12':
     resolution: {integrity: sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww==}
 
+  '@fontsource/noto-sans-arabic@5.3.0':
+    resolution: {integrity: sha512-i3t6GR0LOReyJVEk+YfYCnxv53wuIelg7Y9NGNvOq4Diq/EP0YszaGXkQwfQNigLjfO4POrLaPGM0sNliGYk7A==}
+
   '@hookform/resolvers@3.10.0':
     resolution: {integrity: sha512-79Dv+3mDF7i+2ajj7SkypSKHhl1cbln1OGavqrsF7p6mbUv11xpqpacPsGDCTRvCSjEEIez2ef1NveSVL3b0Ag==}
     peerDependencies:
@@ -875,6 +891,15 @@ packages:
 
   '@radix-ui/react-direction@1.1.5':
     resolution: {integrity: sha512-/NlO/rOqQabmg+GGr86vCmbJVhqTv85NfM9g6Gknf/JVygXeZ6e6HM/RW1omerW9HsFtecwNqgEAKV6UqDsvpA==}
+    peerDependencies:
+      '@types/react': '*'
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+
+  '@radix-ui/react-direction@1.2.0':
+    resolution: {integrity: sha512-FtRA52a/r+LKStFT+neLUm+8vSe7wbzkbQGGeU8ixFiwC8NU14Evoq9ATECqL3eGbcUzJR4fyfA4KkK/q6dfqg==}
     peerDependencies:
       '@types/react': '*'
       react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
@@ -2054,6 +2079,9 @@ packages:
   help-me@5.0.0:
     resolution: {integrity: sha512-7xgomUX6ADmcYzFik0HzAxh/73YlKR9bmFzf51CZwR+b6YtzU2m0u49hQCqV6SvlqIqsaxovfwdvbnsw3b/zpg==}
 
+  html-parse-stringify@4.0.1:
+    resolution: {integrity: sha512-0zHsZJrK7S3K2aucXWL6ycoYJ/iNtIcFHC/nYQgFklPtrv5LpJctIiSCroWZWeuoXvuyFdzp6KzjJQ+OT5MfFw==}
+
   http-errors@2.0.1:
     resolution: {integrity: sha512-4FbRdAX+bSdmo4AUFuS0WNiPz8NgFt+r8ThgNWmlrjQjt1Q7ZR9+zTlce2859x4KSXrwIsaeTqDoKQmtP8pLmQ==}
     engines: {node: '>= 0.8'}
@@ -2061,6 +2089,15 @@ packages:
   human-signals@8.0.1:
     resolution: {integrity: sha512-eKCa6bwnJhvxj14kZk5NCPc6Hb6BdsU9DZcOnmQKSnO1VKrfV0zCvtttPZUsBvjmNDn8rpcJfpwSYnHBjc95MQ==}
     engines: {node: '>=18.18.0'}
+
+  i18next@27.1.2:
+    resolution: {integrity: sha512-851D6dY9vuhn9hF0p5KpY7FPeYnm3P73tqyX2nxfsjeEYVg7Du0Fflw0rJtv7nFnZcDQS0+Hqn0UP6+SPx8mew==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      typescript: ^5 || ^6 || ^7
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   iconv-lite@0.7.3:
     resolution: {integrity: sha512-IKXpvIzjnC9XTAUbVBcMfGS0EPaIXtW6v+zr+RRp+hqULEpo0owZax6wyRwPOJbWbzjYspQwusTsfVr0ifh4uQ==}
@@ -2419,6 +2456,20 @@ packages:
       react: ^16.8.0 || ^17 || ^18 || ^19
     peerDependenciesMeta:
       '@types/react':
+        optional: true
+
+  react-i18next@18.0.1:
+    resolution: {integrity: sha512-kPWXI0E/lrPj3+/umcKNzYZVnWmEedLiamMzDIHfbs+5ANf6yzvlZsjKou8f7kaGkfMMDLIZBejV+4aSN1CyBw==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      '@types/react': '*'
+      i18next: '>= 27.0.1'
+      react: '>= 18.0.0'
+      typescript: ^5 || ^6 || ^7
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      typescript:
         optional: true
 
   react-icons@5.7.0:
@@ -2956,6 +3007,8 @@ snapshots:
 
   '@floating-ui/utils@0.2.12': {}
 
+  '@fontsource/noto-sans-arabic@5.3.0': {}
+
   '@hookform/resolvers@3.10.0(react-hook-form@7.90.0(@types/react@19.3.0)(react@19.1.0))':
     dependencies:
       react-hook-form: 7.90.0(@types/react@19.3.0)(react@19.1.0)
@@ -3239,6 +3292,12 @@ snapshots:
       '@types/react-dom': 19.3.0(@types/react@19.3.0)
 
   '@radix-ui/react-direction@1.1.5(@types/react@19.3.0)(react@19.1.0)':
+    dependencies:
+      react: 19.1.0
+    optionalDependencies:
+      '@types/react': 19.3.0
+
+  '@radix-ui/react-direction@1.2.0(@types/react@19.3.0)(react@19.1.0)':
     dependencies:
       react: 19.1.0
     optionalDependencies:
@@ -4400,6 +4459,8 @@ snapshots:
 
   help-me@5.0.0: {}
 
+  html-parse-stringify@4.0.1: {}
+
   http-errors@2.0.1:
     dependencies:
       depd: 2.0.0
@@ -4409,6 +4470,10 @@ snapshots:
       toidentifier: 1.0.1
 
   human-signals@8.0.1: {}
+
+  i18next@27.1.2(typescript@5.9.3):
+    optionalDependencies:
+      typescript: 5.9.3
 
   iconv-lite@0.7.3:
     dependencies:
@@ -4757,6 +4822,15 @@ snapshots:
       react: 19.1.0
     optionalDependencies:
       '@types/react': 19.3.0
+
+  react-i18next@18.0.1(@types/react@19.3.0)(i18next@27.1.2(typescript@5.9.3))(react@19.1.0)(typescript@5.9.3):
+    dependencies:
+      html-parse-stringify: 4.0.1
+      i18next: 27.1.2(typescript@5.9.3)
+      react: 19.1.0
+    optionalDependencies:
+      '@types/react': 19.3.0
+      typescript: 5.9.3
 
   react-icons@5.7.0(react@19.1.0):
     dependencies:
