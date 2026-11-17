@@ -14,27 +14,51 @@ import ExportPage from '@/pages/export';
 import Onboarding from '@/pages/onboarding';
 import Welcome from '@/pages/welcome';
 import AdminOutreach from '@/pages/admin-outreach';
+import FinanceOverview from '@/pages/finance-overview';
+import FinanceAssets from '@/pages/finance-assets';
+import FinanceActivity from '@/pages/finance-activity';
+import FinanceReports from '@/pages/finance-reports';
+import FinanceSettings from '@/pages/finance-settings';
+import DesignGuide from '@/pages/design-guide';
+import { FinanceShell } from '@/components/finance-shell';
+import { AccountStatus, FinanceAccount } from '@/components/finance-account';
+import { FalcAssistant } from '@/components/falc-assistant';
+import './finance.css';
+import './assistant.css';
 
 const queryClient = new QueryClient();
 
 function Router() {
   return (
-    <Shell>
+    <>
       <RoutedErrorBoundary>
         <Switch>
-          <Route path="/" component={Overview} />
-          <Route path="/onboarding" component={Onboarding} />
-          <Route path="/holdings" component={Holdings} />
-          <Route path="/import" component={ImportPage} />
-          <Route path="/insights" component={Insights} />
-          <Route path="/export" component={ExportPage} />
-          <Route path="/welcome" component={Welcome} />
-          <Route path="/admin/outreach" component={AdminOutreach} />
+          <Route path="/"><FinanceOverview accountStatus={<AccountStatus />} /></Route>
+          <Route path="/assets"><FinanceAssets accountStatus={<AccountStatus />} /></Route>
+          <Route path="/debts"><FinanceAssets debtOnly accountStatus={<AccountStatus />} /></Route>
+          <Route path="/activity"><FinanceActivity accountStatus={<AccountStatus />} /></Route>
+          <Route path="/reports"><FinanceReports accountStatus={<AccountStatus />} /></Route>
+          <Route path="/settings"><FinanceSettings accountPanel={<FinanceAccount />} /></Route>
+          <Route path="/design-guide"><FinanceShell><DesignGuide /></FinanceShell></Route>
+          <Route path="/holdings"><Redirect to="/assets" replace /></Route>
+          <Route path="/export"><Redirect to="/reports" replace /></Route>
+          <Route path="/insights"><Redirect to="/" replace /></Route>
+          <Route path="/onboarding"><Redirect to="/assets" replace /></Route>
+          <Route path="/import"><Redirect to="/assets" replace /></Route>
+          <Route path="/welcome"><FinanceShell><Welcome /></FinanceShell></Route>
+          <Route path="/admin/outreach"><FinanceShell><AdminOutreach /></FinanceShell></Route>
           <Route path="/outreach"><Redirect to="/admin/outreach" replace /></Route>
+          <Route path="/legacy/holdings"><Shell><Holdings /></Shell></Route>
+          <Route path="/legacy/import"><Shell><ImportPage /></Shell></Route>
+          <Route path="/legacy/overview"><Shell><Overview /></Shell></Route>
+          <Route path="/legacy/onboarding"><Shell><Onboarding /></Shell></Route>
+          <Route path="/legacy/insights"><Shell><Insights /></Shell></Route>
+          <Route path="/legacy/export"><Shell><ExportPage /></Shell></Route>
           <Route component={NotFound} />
         </Switch>
       </RoutedErrorBoundary>
-    </Shell>
+      <FalcAssistant />
+    </>
   );
 }
 

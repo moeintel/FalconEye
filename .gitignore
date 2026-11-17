@@ -41,6 +41,7 @@ node_modules
 *.mp3
 *.tar.gz
 /.sass-cache
+/exports/
 /connect.lock
 /coverage
 /libpeerconnection.log

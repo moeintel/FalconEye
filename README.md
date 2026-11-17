@@ -5,6 +5,38 @@ Clean source import: the original Replit project is unchanged.
 
 ## Features and limits
 
+### Everyday-finance improvement branch
+
+The new primary experience is an everyday financial picture: assets, debts,
+estimated net worth, accessible money, and missing/stale valuation warnings.
+It supports guided records for gold, stocks, funds, crypto, IPOs, private
+investments, money lent, bonds/sukuk, property, cash, and debts; activity,
+manual dated FX, CSV/JSON/print reports, backups, and preserved legacy data.
+
+Falc is a falcon mascot with a local guided conversational-entry mode.
+It prepares editable drafts and saves only after explicit confirmation by
+button or the exact chat message `confirm and save`. Browser dictation is
+optional and may use the browser provider's speech service. Authenticated AI
+mode requires a configured server-side provider key and user opt-in.
+
+The optional account API and private finance persistence implementation are
+included, **not activated or verified against a live Auth setup**. The migration
+is not automatically applied. PKCE signup/recovery and reauthenticated identity
+deletion are implemented but gated by reviewed callback settings and a server-only
+admin key. Live-provider verification, protected admin access, and operational
+checks remain release gates—not completed public beta features.
+
+See [the complete implementation and UI plan](docs/EVERYDAY_FINANCE_PLAN.md),
+[account operations and blockers](docs/FINANCE_OPERATIONS.md), and the printable
+visual guide at `/design-guide`. After a frontend build,
+`node scripts/export-ui-blueprint.mjs` exports a self-contained HTML guide.
+
+### Original investment prototype
+
+The original investment screens remain available under `/legacy/*`. The
+following describes that earlier browser-only prototype, not activated cloud
+account behavior:
+
 - Onboarding, manual holdings entry, CSV import, portfolio allocation and gain/loss analysis.
 - Simulated insights, CSV export, and printable reports.
 - Interest registration at `/welcome`; team reporting at `/admin/outreach`, labelled **Admin view (prototype)**. `/outreach` redirects to this view. Visits and sign-ups use recorded Supabase counts; reached is entered manually and saved only in this browser. This view is not access-protected and never displays emails. Review registrations privately in Supabase's `public.falcon_interest` table.
