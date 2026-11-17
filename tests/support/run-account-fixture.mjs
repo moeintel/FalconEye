@@ -14,6 +14,7 @@ const fixture = await createAccountFixture({
   appOrigin,
   emailFlowsReady: true,
   adminConfigured: true,
+  outreach: process.argv.includes('--localization'),
 });
 console.log(`Isolated account fixture listening at ${fixture.baseUrl}; callback origin is ${appOrigin}.`);
 console.log(`Fixture-only confirmation links: ${fixture.baseUrl}/fixture/latest-link`);

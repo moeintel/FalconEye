@@ -8,12 +8,12 @@ The completed implementation must include the everyday-finance workspace, record
 
 ## Current implementation checkpoint
 
-This is an unfinished refactor, not a release-ready Arabic version.
+The bilingual implementation is in a draft PR. It has not been merged or published.
 
-- Implemented: language infrastructure, paired catalogs, Arabic font, root direction, navigation, common dialogs, and core Home/Assets/Debts/Activity/Reports/Settings copy. A language switch is available inside dialogs so an unsaved form can retain its values.
-- Implemented guards: catalog/parameter parity, literal missing-key checks, uncatalogued literal-copy detection in migrated components, category coverage, actual Arabic plural selection, unchanged financial precision/documents, and language preference precedence. These guards are not a claim that the still-untranslated screens are covered.
-- Remaining: record/activity editor copy, account controls, Falc UI and bounded Arabic conversations, public registration/admin, design guide, legacy routes, remaining error notices/accessibility labels, and the final cross-feature browser pass.
-- No merge or production deployment is authorized by this checkpoint. Existing public account/email/AI configuration is unchanged.
+- Implemented: shared language infrastructure and paired catalogs; Arabic font and RTL; every everyday-finance page; record/activity editors; private-account controls; Falc UI and bounded Arabic entry; registration/outreach; design guide; legacy routes; shared dialogs and notification accessibility labels. A language switch is available inside dialogs so an unsaved form can retain its values.
+- Automated guards cover namespace/key/interpolation/rich-text-slot parity, Arabic plural categories, literal missing keys, uncatalogued JSX text in migrated files, required page/component participation, category metadata, financial precision/document invariants, language precedence, Arabic draft extraction, and exact confirmation commands.
+- The full build and regression suite must pass on the final source. Cross-feature browser verification uses sample records and isolated provider/outreach fixtures, never production data. See the PR's current verification section for actual completed checks and remaining gaps.
+- Existing public account/email/AI configuration is unchanged. Mock-account checks never prove a live Supabase email flow or configured production AI. Release still requires the user's approval.
 
 ### 1. Shared foundation
 
@@ -39,6 +39,7 @@ This is an unfinished refactor, not a release-ready Arabic version.
 - Use the selected display locale with `Intl`. Keep Gregorian dates explicit for financial comparisons and ISO dates in storage.
 - Keep Latin financial digits in this first bilingual release and explain numeric entry. Currency codes remain unmodified and displayed currency units must stay unambiguous. Accept Arabic text for names/notes and normalized Arabic digits in conversational input. Changing the UI language never changes the base currency or exchange rate.
 - Localize printed reports and human-facing CSV headings. Keep JSON backup field names, IDs, values, and schema language-neutral and interoperable.
+- The modern financial-records CSV has translated headings and a UTF-8 BOM for Arabic spreadsheet support; unknown migrated dates display as unknown, not 1970. The legacy import/export CSV is a round-trip machine format: preserve its original English field names and enum tokens, and translate its surrounding UI instead.
 
 ### 4. Verification
 
@@ -57,6 +58,15 @@ This is an unfinished refactor, not a release-ready Arabic version.
 4. Add coverage tests for new namespaces and new count-dependent messages. Do not add English fallback text as a substitute for an Arabic translation.
 5. Include desktop/mobile English and RTL checks when changing shared layout, forms, charts, or financial display.
 6. Keep a small terminology glossary. Prefer everyday language: الأصول (assets), الديون (debts), صافي الثروة (net worth), القيمة التقديرية (estimated value), الأموال المُقرضة (money lent), اكتتاب عام (IPO), حفظ في السحابة (save to cloud). Do not imply a live price, guaranteed value, or investment recommendation.
+
+### Adding or reviewing a change
+
+- Add complete sentences to the appropriate paired feature namespace, use them through `useTranslation`, and run `node --test tests/localization.test.mjs`. Keep identifiers stable even when wording changes.
+- Keep transient notices/errors as message IDs or canonical recognized service messages, then translate when rendering. Do not store translated UI feedback in financial records. Historical chat text remains as originally written; switching languages does not rewrite the conversation.
+- Falc's pure guide imports the same assistant JSON catalogs with Node-compatible JSON attributes. Its guide responses, examples, generated notes, and command instructions live there, not in a second translation dictionary. The runtime excludes that namespace from the attribute-free glob to keep bundler imports consistent.
+- Supported Arabic guided input includes category keywords, Arabic/Persian digits, ISO dates or «اليوم», stated cost/current value, selected currency names/codes, gold weight/karat, IPO status, and private agreement types. It is deliberately bounded, not a claim of unrestricted natural-language understanding. «نعم» alone never saves. Exact confirmation phrases are tested against the catalogs; changing them requires a matching parser/test review.
+- Review both languages at desktop/mobile widths after layout changes, including portal menus and unsaved forms. Run `pnpm build` before committing. For isolated browser tests, start `node tests/support/run-account-fixture.mjs <allowed-origin> --localization` and route only that test endpoint's `/api` to its fixture port; its outreach totals are explicitly synthetic test data.
+- Unknown technical failures receive safe localized guidance; recognized warnings retain recovery/backup instructions. Do not translate raw server output, user-entered data, database values, or secret values. Supabase email templates remain a separate provider configuration.
 
 ## Deployment boundary
 

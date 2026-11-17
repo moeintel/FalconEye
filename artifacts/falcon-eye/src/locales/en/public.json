@@ -1,0 +1,135 @@
+{
+  "hero": {
+    "eyebrow": "Everyday finances, made clearer",
+    "title": "Your money, wherever it is.",
+    "titleAccent": "One clear picture.",
+    "description": "Gold you bought. Shares from an IPO. Money invested with family. Bring what you own and owe into one simple overview, without needing financial expertise. Start with what you know—no bank connection required."
+  },
+  "registration": {
+    "title": "Get early access",
+    "description": "Register interest. This is not an account signup.",
+    "emailPlaceholder": "you@example.com",
+    "emailLabel": "Email",
+    "consent": "I agree that the Falcon Eye student team may store my email and contact me about this project. I can ask to be removed at any time.",
+    "saving": "Saving...",
+    "submit": "Notify me",
+    "errors": {
+      "invalidEmail": "Please enter a valid email address.",
+      "consentRequired": "Please tick the consent box so we may email you.",
+      "saveFailed": "We could not save your interest just now. Please try again in a moment."
+    },
+    "success": {
+      "title": "You're on the list.",
+      "description": "We'll email {{email}} when Falcon Eye opens to early users. No account was created.",
+      "tryPrototype": "Try the prototype now"
+    }
+  },
+  "features": {
+    "records": {
+      "title": "Everything you own and owe",
+      "description": "Record savings, gold, stocks, private investments, and debts using simple, relevant questions."
+    },
+    "overview": {
+      "title": "Understand the whole picture",
+      "description": "See recorded assets, outstanding debts, and estimated net worth. Missing values stay visible—not quietly counted as zero."
+    },
+    "control": {
+      "title": "You stay in control",
+      "description": "No broker logins or trading. Browser records stay local unless you explicitly save to a configured private account."
+    }
+  },
+  "closing": {
+    "title": "Start with a clearer view.",
+    "description": "Explore the prototype, or begin your own records. Values are manually entered or illustrative, not live quotes. Not financial advice.",
+    "openDashboard": "Open the dashboard"
+  },
+  "admin": {
+    "kicker": "Admin view (prototype)",
+    "title": "Outreach by channel",
+    "refresh": "Refresh",
+    "intro": "Real recorded visits and sign-ups from Supabase. Enter your actual outreach reach per channel; no sample results are generated.",
+    "teamNoticeTitle": "Team reporting only.",
+    "teamNotice": "This is a prototype admin view, not a protected admin area. Anyone with the link can see aggregate counts. Email addresses are never displayed.",
+    "channels": {
+      "direct": "Direct",
+      "whatsapp": "WhatsApp",
+      "linkedin": "LinkedIn",
+      "email": "Email"
+    },
+    "channelLink": "<bdi>{{channel}}</bdi> link",
+    "copyLink": "Copy {{channel}} link",
+    "linkCopied": "{{channel}} link copied",
+    "copyFailed": "Copy failed",
+    "copyManually": "Select the link and copy manually.",
+    "retry": "Retry",
+    "tableCaption": "Recorded outreach results by channel",
+    "columns": {
+      "channel": "Channel",
+      "reached": "Reached (manual)",
+      "visits": "Visits",
+      "signups": "Sign-ups"
+    },
+    "notEntered": "Not entered",
+    "reachedLabel": "{{channel}} people reached",
+    "total": "Total",
+    "partial": "partial",
+    "reachedTotal": "{{total}}{{partial}}",
+    "refreshedAt": "Recorded totals refreshed at {{time}}.",
+    "errors": {
+      "load": "Could not load recorded outreach data. Please refresh or try again later.",
+      "saveReached": "Could not save reached counts",
+      "saveNotes": "Could not save presentation notes",
+      "storageUnavailable": "Browser storage is unavailable. Keep a separate record."
+    },
+    "sources": {
+      "title": "Source:",
+      "description": "Visits are counted from <visits>falcon_visits</visits> and sign-ups from <signups>falcon_interest</signups>, grouped by their saved channel. These are all-time recorded totals, not a verified count of unique people reached."
+    },
+    "reached": {
+      "title": "Reached:",
+      "description": "Enter only people your team actually contacted. These entries stay in this browser, not Supabase. Blank means unknown, not zero; a partial total excludes missing entries."
+    },
+    "visits": {
+      "title": "Visits:",
+      "description": "Recorded landing-page opens, once per channel per browser tab session, not unique people. Test or repeat sessions may be included."
+    },
+    "signups": {
+      "title": "Sign-ups:",
+      "description": "Unique saved interest emails, attributed to their first registration channel. Use the channel links above for future outreach; untagged links are counted as direct. Past direct traffic cannot be reliably reassigned."
+    },
+    "noConversion": {
+      "title": "Why no conversion percentage?",
+      "description": "Visits count tab sessions; sign-ups count distinct emails. Several emails can register within one session, or visit tracking can fail. There is no saved link between a sign-up and a visit, so these totals cannot establish a visitor conversion rate. Historical missing visits cannot be reconstructed reliably."
+    },
+    "coverage": {
+      "title": "Tracking coverage note.",
+      "row": "{{signups}} sign-ups, {{visits}} recorded visits",
+      "description": "The saved counts are shown unchanged. This difference does not prove how many visits or people are missing; do not report it as a conversion percentage."
+    },
+    "evidence": {
+      "title": "Pass line and lesson",
+      "description": "Presentation notes, saved only in this browser—not Supabase. Enter your actual target and what you learned; nothing is prefilled or treated as a passed rubric.",
+      "targetLabel": "Total sign-up pass line (all-time)",
+      "targetPlaceholder": "Your actual target, at least 1",
+      "timingLabel": "When was this target set?",
+      "timingUnknown": "Not specified",
+      "timingBefore": "Before reviewing results",
+      "timingAfter": "After reviewing results (retrospective)",
+      "comparisonUnavailable": "Comparison unavailable until recorded totals load successfully.",
+      "enterTarget": "Recorded sign-ups: {{total}}. Enter a positive target and when it was set to compare; no pass result has been assumed.",
+      "comparison": "{{total}} recorded sign-ups / {{target}} target: {{result}}. {{timing}}",
+      "targetMet": "target met",
+      "moreNeeded_zero": "no more needed",
+      "moreNeeded_one": "{{number}} more needed",
+      "moreNeeded_two": "{{number}} more needed",
+      "moreNeeded_few": "{{number}} more needed",
+      "moreNeeded_many": "{{number}} more needed",
+      "moreNeeded_other": "{{number}} more needed",
+      "retrospective": "Retrospective target—not a pre-set pass line.",
+      "preSet": "Target marked by you as set before reviewing results.",
+      "lessonLabel": "One lesson learned",
+      "lessonPlaceholder": "Write one observation supported by these results and what you will change next.",
+      "evidenceNote": "For green outreach evidence: actual reached counts per channel, recorded visits and sign-ups, your honestly described pass line, and one supported lesson. Unknown values remain unknown."
+    }
+  }
+}

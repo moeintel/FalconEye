@@ -7,12 +7,14 @@ import {
   ToastViewport,
 } from '@/components/ui/toast';
 import { useToast } from '@/hooks/use-toast';
+import { useTranslation } from 'react-i18next';
 
 export function Toaster() {
   const { toasts } = useToast();
+  const { t } = useTranslation('common');
 
   return (
-    <ToastProvider>
+    <ToastProvider label={t('notification')}>
       {toasts.map(function ({ id, title, description, action, ...props }) {
         return (
           <Toast key={id} {...props}>
@@ -23,11 +25,11 @@ export function Toaster() {
               )}
             </div>
             {action}
-            <ToastClose />
+            <ToastClose aria-label={t('close')} />
           </Toast>
         );
       })}
-      <ToastViewport />
+      <ToastViewport label={t('notifications')} />
     </ToastProvider>
   );
 }

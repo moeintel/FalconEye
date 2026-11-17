@@ -19,6 +19,7 @@ function flatten(value, prefix = '', result = {}) {
 }
 const plural = /_(zero|one|two|few|many|other)$/;
 const parameters = (value) => [...value.matchAll(/{{\s*([\w]+)(?:,[^}]*)?\s*}}/g)].map((match) => match[1]).sort();
+const slots = (value) => [...value.matchAll(/<\/?([A-Za-z][\w]*)\s*\/?>/g)].map((match) => match[0]).sort();
 
 test('every namespace has complete English and Arabic messages and matching parameters', () => {
   const englishFiles = readdirSync(new URL('en/', root)).filter((name) => name.endsWith('.json')).sort();
@@ -37,6 +38,7 @@ test('every namespace has complete English and Arabic messages and matching para
       const actual = parameters(value).filter((parameter) => !(plural.test(key) && parameter === 'count'));
       const expected = parameters(counterpart).filter((parameter) => !(plural.test(key) && parameter === 'count'));
       assert.deepEqual(actual, expected, `Interpolation mismatch ${name}:${key}`);
+      assert.deepEqual(slots(value), slots(counterpart), `Rich-text slot mismatch ${name}:${key}`);
       if (plural.test(key)) for (const suffix of ['zero', 'one', 'two', 'few', 'many', 'other']) {
         assert.ok(`${key.replace(plural, '')}_${suffix}` in ar, `Missing Arabic plural ${name}:${key}:${suffix}`);
       }
@@ -140,6 +142,11 @@ test('translated screens have valid message keys and no uncatalogued literal UI 
         assert.ok(!/\p{L}/u.test(node.initializer.text),
           `${file.pathname}: literal ${node.name.getText(source)} must use a message ID: ${node.initializer.text}`);
       }
+      if (aliases.size && ts.isJsxExpression(node) && node.expression && !ts.isJsxAttribute(node.parent) && !isVerbatim(node)) {
+        for (const text of literalKeys(node.expression)) {
+          assert.ok(!/\p{L}/u.test(text), `${file.pathname}: literal UI expression must use a message ID: ${text}`);
+        }
+      }
       if (ts.isCallExpression(node) && node.arguments[0]) {
         const expression = node.expression.getText(source);
         const namespace = aliases.get(expression);
@@ -164,4 +171,14 @@ test('translated screens have valid message keys and no uncatalogued literal UI 
     }
   }
   walk(sourceRoot);
+});
+
+test('all app pages and shared feature components participate in localization', () => {
+  const sourceRoot = new URL('../artifacts/falcon-eye/src/', import.meta.url);
+  const pages = readdirSync(new URL('pages/', sourceRoot)).filter((name) => name.endsWith('.tsx')).map((name) => `pages/${name}`);
+  const components = ['allocation', 'data-controls', 'error-boundary', 'falc-assistant', 'falc-mascot',
+    'finance-account', 'finance-editor', 'finance-shell', 'holding-form', 'shell'].map((name) => `components/${name}.tsx`);
+  for (const path of [...pages, ...components]) {
+    assert.match(readFileSync(new URL(path, sourceRoot), 'utf8'), /useTranslation\(/, `Unmigrated screen: ${path}`);
+  }
 });

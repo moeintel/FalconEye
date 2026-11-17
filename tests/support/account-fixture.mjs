@@ -234,6 +234,24 @@ export async function createAccountFixture(options = {}) {
   app.use(express.urlencoded({ extended: true }));
   app.use('/api', accountRouter);
   app.use('/api', createFinanceRouter({ database }));
+  if (options.outreach) {
+    app.get('/api/outreach', (_req, res) => res.json({
+      channels: [
+        { channel: 'whatsapp', opened: 14, signedUp: 5 },
+        { channel: 'linkedin', opened: 9, signedUp: 3 },
+        { channel: 'email', opened: 1, signedUp: 5 },
+        { channel: 'direct', opened: 52, signedUp: 13 },
+      ],
+    }));
+    app.post('/api/visit', (_req, res) => res.json({ success: true }));
+    app.post('/api/interest', (req, res) => {
+      if (!isFixtureEmail(req.body?.email)) {
+        res.status(400).json({ error: 'Only isolated fixture credentials are accepted.' });
+        return;
+      }
+      res.json({ success: true });
+    });
+  }
   app.get('/fixture/latest-link', (_req, res) => {
     const item = provider.links.at(-1);
     res.set('Cache-Control', 'no-store');

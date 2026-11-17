@@ -1,11 +1,14 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import enAssistant from '../locales/en/assistant.json' with { type: 'json' };
+import arAssistant from '../locales/ar/assistant.json' with { type: 'json' };
 import {
   direction, LANGUAGE_STORAGE_KEY, resolveLanguage, setActiveLanguage, supportedLanguage, type Language,
 } from './locale';
 
-const files = import.meta.glob('../locales/*/*.json', { eager: true, import: 'default' });
-const resources: Record<string, Record<string, object>> = { en: {}, ar: {} };
+// The Node-tested guide imports these same catalogs with JSON attributes.
+const files = import.meta.glob(['../locales/*/*.json', '!../locales/*/assistant.json'], { eager: true, import: 'default' });
+const resources: Record<string, Record<string, object>> = { en: { assistant: enAssistant }, ar: { assistant: arAssistant } };
 for (const [path, messages] of Object.entries(files)) {
   const [, language, namespace] = path.match(/\/locales\/(en|ar)\/([^/]+)\.json$/) ?? [];
   if (language && namespace) resources[language][namespace] = messages as object;
@@ -49,6 +52,12 @@ export async function changeLanguage(language: Language) {
 export function localizedError(error: unknown): string {
   const message = error instanceof Error ? error.message : typeof error === 'string' ? error : '';
   const current = i18n.resolvedLanguage ?? 'en';
+  if (current === 'ar') {
+    if (/^Saved financial data (?:could not be read and was preserved:|is corrupt and was preserved\.)/.test(message)) return String(i18n.t('errors:corruptStorage'));
+    if (/^(Could not read the older portfolio|Older portfolio data was preserved but could not be imported)/.test(message)) return String(i18n.t('errors:legacyStorage'));
+    if (message.startsWith('Could not read financial data from this browser:')) return String(i18n.t('errors:readStorage'));
+    if (/^(?:Browser storage is unavailable\.|Could not save financial data in this browser:)/.test(message)) return String(i18n.t('errors:sessionStorage'));
+  }
   const english = i18n.getDataByLanguage('en') ?? {};
   function find(value: object, prefix: string): string | null {
     for (const [key, item] of Object.entries(value)) {

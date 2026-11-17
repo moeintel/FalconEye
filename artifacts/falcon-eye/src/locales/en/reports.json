@@ -21,6 +21,7 @@
   "exportCsv":"Export CSV","exportJson":"Export JSON",
   "disclaimer":"Falcon Eye is an organizer, not a bank, broker, tax tool, or financial adviser. This report reflects only what you entered.",
   "csv":{"name":"Name","category":"Category","currency":"Currency","cost":"What you paid","value":"Recorded value","date":"Valuation date","source":"Source","access":"Access","location":"Location","notes":"Notes"},
+  "unknownDate":"Unknown",
   "sources":{"manual":"Your entry","statement":"Statement","estimate":"Estimate"},
   "access":{"available":"Available","restricted":"Restricted","unknown":"Unknown"}
 }

@@ -1,0 +1,20 @@
+{
+  "sample": "Start with an empty picture or replace the sample before adding personal records",
+  "gold": "Gold details require weightGrams and purity",
+  "private": "Private investment details require agreementType",
+  "ipo": "IPO details require status",
+  "refund": "IPO refundedAmount cannot exceed the application value",
+  "repaymentType": "Repayment activities require a debt, lent-money, or private-loan record",
+  "repaymentAmount": "Repayment cannot exceed the known outstanding balance",
+  "debtContribution": "Contributions cannot be applied to a debt record",
+  "debtWithdrawal": "Withdrawals cannot be applied to a debt record",
+  "withdrawalAmount": "Withdrawal cannot exceed the known available value",
+  "feeAmount": "Fee cannot exceed the known asset value",
+  "storageUnavailable": "Browser storage is unavailable; the older portfolio cannot be imported.",
+  "corruptStorage": "Saved data could not be read. The original was preserved for recovery. Download a backup before making further changes.",
+  "legacyStorage": "The older portfolio could not be read or imported. Its original data was preserved.",
+  "sessionStorage": "Browser storage could not save your changes. They may last only for this session. Download a backup before closing the page.",
+  "readStorage": "This browser's saved records could not be read. Check storage permissions and download any available backup before making changes.",
+  "schema": "Unsupported finance document schema version",
+  "recordLimit": "Finance document exceeds the supported number of records or activities"
+}

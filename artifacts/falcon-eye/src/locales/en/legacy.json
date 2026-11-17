@@ -1,0 +1,405 @@
+{
+  "notFound": {
+    "title": "404 Page Not Found",
+    "description": "Did you forget to add the page to the router?"
+  },
+  "error": {
+    "title": "Something went wrong",
+    "description": "This part of the app hit an error. The rest of the app is still running.",
+    "retry": "Try again"
+  },
+  "onboarding": {
+    "welcome": "Welcome to Falcon Eye",
+    "title": "Your money lives in five places.",
+    "titleAccent": "See it from one.",
+    "description": "Stocks at one broker, crypto in a wallet, funds in a retirement account. Falcon Eye pulls them into a single picture so you know what you own, how it's split, and where it's concentrated.",
+    "benefits": [
+      { "title": "Consolidate", "detail": "Enter positions by hand or import a CSV from any account." },
+      { "title": "Understand", "detail": "Totals, gains, allocation and a plain-language concentration check." },
+      { "title": "Stay private", "detail": "No logins, no broker connections. Everything stays in this browser." }
+    ],
+    "demo": {
+      "label": "Explore the demo",
+      "detail": "11 sample holdings, 5 asset classes"
+    },
+    "empty": {
+      "label": "Start empty",
+      "detail": "Add your own positions"
+    },
+    "disclaimer": "Prototype for demonstration. No real accounts, trades or live prices. Not investment advice.",
+    "sources": [
+      { "title": "Brokerage", "detail": "AAPL · MSFT · NVDA" },
+      { "title": "Crypto wallet", "detail": "BTC · ETH" },
+      { "title": "Retirement", "detail": "VTI · FXAIX · AGG" },
+      { "title": "Bank", "detail": "Savings" }
+    ],
+    "toast": {
+      "demoTitle": "Demo portfolio loaded",
+      "demoDescription": "Sample data, illustrative prices.",
+      "emptyTitle": "Fresh start",
+      "emptyDescription": "Add your first holding."
+    },
+    "confirm": {
+      "replace_zero": "Replace your current {{count}} holdings?",
+      "replace_one": "Replace your current {{count}} holding?",
+      "replace_two": "Replace your current {{count}} holdings?",
+      "replace_few": "Replace your current {{count}} holdings?",
+      "replace_many": "Replace your current {{count}} holdings?",
+      "replace_other": "Replace your current {{count}} holdings?",
+      "demoDescription": "They will be replaced by the sample portfolio.",
+      "emptyDescription": "They will be cleared so you can start fresh.",
+      "cannotUndo": "This cannot be undone.",
+      "cancel": "Cancel",
+      "continue": "Continue"
+    }
+  },
+  "assetTypes": {
+    "stocks": "Stocks",
+    "crypto": "Crypto",
+    "funds": "Funds",
+    "bonds": "Bonds",
+    "cash": "Cash"
+  },
+  "allocation": {
+    "total": "Total"
+  },
+  "form": {
+    "labels": {
+      "name": "Name",
+      "symbol": "Symbol",
+      "assetType": "Asset type",
+      "quantity": "Quantity",
+      "purchasePrice": "Buy price (USD)",
+      "currentPrice": "Current price (USD)",
+      "source": "Source (optional)"
+    },
+    "placeholders": {
+      "name": "Investment name",
+      "symbol": "VTI",
+      "source": "Retirement account"
+    },
+    "errors": {
+      "name": "Name is required.",
+      "symbol": "Symbol is required.",
+      "assetType": "Choose one of the listed asset types.",
+      "quantity": "Quantity must be a finite number greater than 0.",
+      "purchasePrice": "Buy price must be a number of 0 or more.",
+      "currentPrice": "Current price must be a number of 0 or more."
+    },
+    "marketValue": "Market value",
+    "gain": "gain",
+    "previewHint": "Enter a quantity and price to preview value",
+    "cancel": "Cancel",
+    "submit": {
+      "addToPortfolio": "Add to portfolio",
+      "saveChanges": "Save changes",
+      "addHolding": "Add holding"
+    },
+    "editTitle": "Edit {{symbol}}",
+    "addTitle": "Add a holding",
+    "description": "All amounts in USD. Prices are entered by you; Falcon Eye does not fetch quotes."
+  },
+  "dataControls": {
+    "loadDemo": "Load demo portfolio",
+    "resetEmpty": "Reset to empty",
+    "confirmDemo": "Replace with the demo portfolio?",
+    "confirmEmpty": "Clear every holding?",
+    "descriptionDemo": "All current holdings in this browser will be replaced by 11 sample holdings with illustrative, non-live prices.",
+    "descriptionEmpty": "All holdings stored in this browser will be removed. This cannot be undone.",
+    "cancel": "Cancel",
+    "clearedTitle": "Portfolio cleared",
+    "clearedDescription": "Start adding holdings or import a CSV.",
+    "loadConfirm": "Load demo",
+    "clearConfirm": "Clear all"
+  },
+  "shell": {
+    "brand": "Falcon Eye",
+    "tagline": "one clear view",
+    "navigation": {
+      "overview": "Overview",
+      "holdings": "Holdings",
+      "import": "Import",
+      "insights": "Insights",
+      "export": "Export",
+      "getStarted": "Get started",
+      "earlyAccess": "Early access",
+      "admin": "Admin view (prototype)"
+    },
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "prototype": "Prototype",
+    "demoStatus": "Showing sample data. Prices are illustrative and not live.",
+    "ownStatus_zero": "Your {{count}} holdings. Prices are whatever you entered, not live quotes.",
+    "ownStatus_one": "Your {{count}} holding. Prices are whatever you entered, not live quotes.",
+    "ownStatus_two": "Your {{count}} holdings. Prices are whatever you entered, not live quotes.",
+    "ownStatus_few": "Your {{count}} holdings. Prices are whatever you entered, not live quotes.",
+    "ownStatus_many": "Your {{count}} holdings. Prices are whatever you entered, not live quotes.",
+    "ownStatus_other": "Your {{count}} holdings. Prices are whatever you entered, not live quotes.",
+    "localStorage": "Saved only in this browser",
+    "disclaimer": "Not investment advice.",
+    "earlyAccess": "Get early access",
+    "footer": "Falcon Eye is a class demo prototype. It does not connect to brokers or wallets, execute trades, or fetch market prices. Data lives in your browser's local storage.",
+    "presentationTools": "Presentation tools"
+  },
+  "import": {
+    "kicker": "Import",
+    "title": "Bring it all in.",
+    "template": "CSV template",
+    "description": "Upload a CSV exported from anywhere, or enter positions by hand. Nothing is sent anywhere; imports append to the holdings stored in this browser.",
+    "tabs": {
+      "csv": "CSV upload",
+      "manual": "Manual entry"
+    },
+    "newHolding": "New holding",
+    "added": "{{symbol}} added",
+    "formCleared": "Form cleared for the next one.",
+    "dropzone": {
+      "title": "Drop a .csv here or click to browse",
+      "description": "You'll preview every row before anything is saved."
+    },
+    "validCount_zero": "{{total}} valid",
+    "validCount_one": "{{total}} valid",
+    "validCount_two": "{{total}} valid",
+    "validCount_few": "{{total}} valid",
+    "validCount_many": "{{total}} valid",
+    "validCount_other": "{{total}} valid",
+    "errorCount_zero": "{{total}} with errors",
+    "errorCount_one": "{{total}} with errors",
+    "errorCount_two": "{{total}} with errors",
+    "errorCount_few": "{{total}} with errors",
+    "errorCount_many": "{{total}} with errors",
+    "errorCount_other": "{{total}} with errors",
+    "clearFile": "Clear file",
+    "row": "Row {{row}}",
+    "disabled": "Import disabled until every row is valid.",
+    "fixRows": "Fix these rows and re-upload. Nothing is imported while errors remain.",
+    "valueAdded": "Adds {{value}} of value.",
+    "imported_zero": "Imported {{total}} holdings",
+    "imported_one": "Imported {{total}} holding",
+    "imported_two": "Imported {{total}} holdings",
+    "imported_few": "Imported {{total}} holdings",
+    "imported_many": "Imported {{total}} holdings",
+    "imported_other": "Imported {{total}} holdings",
+    "appended": "Appended to your portfolio.",
+    "importRows_zero": "Import {{total}} rows",
+    "importRows_one": "Import {{total}} row",
+    "importRows_two": "Import {{total}} rows",
+    "importRows_few": "Import {{total}} rows",
+    "importRows_many": "Import {{total}} rows",
+    "importRows_other": "Import {{total}} rows",
+    "errors": {
+      "notCsv": "That file is not a .csv file.",
+      "unreadable": "The file could not be read.",
+      "empty": "The file is empty.",
+      "noRows": "The file has a header but no data rows.",
+      "missingColumns": "Missing required columns: {{columns}}.",
+      "invalidRow": "This row contains invalid data. Check the values and try again."
+    },
+    "tips": {
+      "title": "CSV schema",
+      "fields": {
+        "nameSymbol": "Required text. Wrap values containing commas in double quotes.",
+        "assetType": "One of Stocks, Crypto, Funds, Bonds, Cash.",
+        "quantity": "Required, finite, greater than 0.",
+        "prices": "USD per unit, 0 or more. $ and thousands commas are tolerated inside quotes.",
+        "source": "Optional label, e.g. which account it lives in."
+      },
+      "disclaimer": "Imports are all-or-nothing: if any row fails validation, nothing is added. Rows append to existing holdings; nothing is overwritten."
+    }
+  },
+  "insights": {
+    "kicker": "Simulated AI insights · demo",
+    "title": "How balanced is it, really?",
+    "description": "A rules-based read of your actual holdings: concentration, mix and exposure. No model, no market data, and not financial advice.",
+    "emptyTitle": "Insights need holdings to look at",
+    "emptyDescription": "Add or import a few positions and the assessment appears here.",
+    "addHoldings": "Add holdings",
+    "score": "Diversification score",
+    "outOf100": "/ 100",
+    "scoreLabels": {
+      "wellSpread": "Well spread",
+      "moderate": "Moderately concentrated",
+      "high": "Highly concentrated"
+    },
+    "scoreExplanation": "Starts at 100 and deducts for position concentration (Herfindahl index), a largest holding above 20%, crypto above 15%, and fewer than four asset classes.",
+    "whereValueSits": "Where the value sits",
+    "gainByType": "Unrealized gain by asset class",
+    "footer": "Simulated AI insights · demo. Generated by fixed rules from the quantities and prices you entered. Educational only; not investment, tax or financial advice.",
+    "tones": {
+      "good": "Healthy",
+      "watch": "Watch",
+      "risk": "Concentrated"
+    },
+    "items": {
+      "top": {
+        "title": {
+          "risk": "{{symbol}} dominates the portfolio",
+          "watch": "{{symbol}} is your largest position",
+          "good": "No single position dominates"
+        },
+        "detail": {
+          "risk": "A single position holds {{percent}} of total value. A sharp move in {{name}} would swing the whole portfolio.",
+          "watch": "At {{percent}} it is meaningful but not overwhelming. Keep an eye on it if it keeps growing.",
+          "good": "Your largest holding, {{symbol}}, is {{percent}} of value."
+        }
+      },
+      "top3": {
+        "title": "Top three concentration",
+        "detail": "{{symbols}} together make up {{percent}} of the portfolio."
+      },
+      "mix": {
+        "title": {
+          "broad": "Broad asset-class mix",
+          "narrow": "Narrow asset-class mix"
+        },
+        "detail": "Holdings span {{count}} of 5 tracked asset classes ({{types}})."
+      },
+      "crypto": {
+        "title": "Crypto exposure",
+        "detail": "Crypto is {{percent}} of value. It is typically the most volatile slice of a portfolio."
+      },
+      "cash": {
+        "title": {
+          "thin": "Thin cash buffer",
+          "large": "Large idle cash position",
+          "inRange": "Cash buffer in range"
+        },
+        "detail": "Cash is {{percent}} of tracked value."
+      },
+      "losers": {
+        "title_zero": "{{total}} positions below cost",
+        "title_one": "{{total}} position below cost",
+        "title_two": "{{total}} positions below cost",
+        "title_few": "{{total}} positions below cost",
+        "title_many": "{{total}} positions below cost",
+        "title_other": "{{total}} positions below cost",
+        "detail": "Largest relative drawdown: {{symbol}} at {{percent}} versus purchase price."
+      },
+      "sources": {
+        "title": "Consolidated view",
+        "detail": "You are seeing {{count}} holdings from {{sources}} sources in one place."
+      }
+    }
+  },
+  "overview": {
+    "added": "{{symbol}} added",
+    "updated": "Dashboard and insights updated.",
+    "emptyTitle": "Nothing in sight yet.",
+    "emptyHeading": "Bring your scattered accounts into one view",
+    "emptyDescription": "Add a holding by hand, drop in a CSV, or load the sample portfolio to see what Falcon Eye does.",
+    "addHolding": "Add holding",
+    "importCsv": "Import CSV",
+    "sampleKicker": "Overview · sample portfolio",
+    "title": "Everything you own,",
+    "titleAccent": "seen from above.",
+    "totalValue": "Total value",
+    "sampleBadge": "Sample · not live",
+    "gainDescription": "unrealized, versus cost basis",
+    "costBasis": "Cost basis",
+    "holdings": "Holdings",
+    "sources": "Sources",
+    "allocation": "Asset allocation",
+    "byMarketValue": "by market value",
+    "largest": "Largest positions",
+    "allHoldings_zero": "All {{count}}",
+    "allHoldings_one": "All {{count}}",
+    "allHoldings_two": "All {{count}}",
+    "allHoldings_few": "All {{count}}",
+    "allHoldings_many": "All {{count}}",
+    "allHoldings_other": "All {{count}}",
+    "healthCheck": "Health check",
+    "diversificationScore": "/ 100 diversification score",
+    "fullAssessment": "Full assessment",
+    "healthDisclaimer": "Rules-based calculations on your holdings. Not financial advice.",
+    "ofTotal": "{{percent}} of total"
+  },
+  "holdings": {
+    "title": "Every position, one ledger.",
+    "description": "Search, filter, edit or remove. Changes save to this browser instantly and flow through to the dashboard and insights.",
+    "search": "Search name, symbol or source",
+    "allTypes": "All",
+    "sort": "Sort: {{sort}}",
+    "sortOptions": {
+      "value": "Value",
+      "gain": "Return",
+      "name": "Name"
+    },
+    "emptyTitle": "No holdings yet",
+    "emptyDescription": "Add your first position or import a CSV from your brokerage exports.",
+    "noMatches": "No matches",
+    "noMatchesPlain": "Nothing fits \"{{query}}\".",
+    "noMatchesWithType": "Nothing fits \"{{query}}\" in {{type}}.",
+    "clearFilters": "Clear filters",
+    "columns": {
+      "holding": "Holding",
+      "type": "Type",
+      "quantity": "Qty",
+      "buyNow": "Buy / Now",
+      "value": "Value",
+      "gain": "Gain",
+      "weight": "Weight",
+      "actions": "Actions"
+    },
+    "edit": "Edit {{symbol}}",
+    "delete": "Delete {{symbol}}",
+    "shown": "{{shown}} of {{total}} shown",
+    "updated": "{{symbol}} updated",
+    "confirmDelete": "Delete {{symbol}}?",
+    "deleteDescription": "{{name}} will be removed from this browser's portfolio. Totals and insights recalculate immediately.",
+    "keep": "Keep it",
+    "deleted": "{{symbol}} deleted",
+    "deleteButton": "Delete"
+  },
+  "export": {
+    "title": "Take it with you.",
+    "description": "Download your holdings as a spreadsheet-safe CSV, or print the report below (choose \"Save as PDF\" in the print dialog for a file).",
+    "csv": {
+      "title": "Holdings CSV",
+      "description": "Same schema as import, plus market value, cost basis and gain. Re-importable.",
+      "safety": "Values are quoted and escaped; cells starting with = + - @ are neutralised against spreadsheet formula injection.",
+      "downloaded": "CSV downloaded",
+      "exported_zero": "No holdings exported.",
+      "exported_one": "{{count}} holding exported.",
+      "exported_two": "{{count}} holdings exported.",
+      "exported_few": "{{count}} holdings exported.",
+      "exported_many": "{{count}} holdings exported.",
+      "exported_other": "{{count}} holdings exported.",
+      "download": "Download CSV"
+    },
+    "print": {
+      "title": "Print report",
+      "description": "Totals, allocation, every holding and the insight summary on clean paper. Navigation and banners are hidden when printing.",
+      "button": "Print or save as PDF"
+    },
+    "preview": "Report preview",
+    "empty": "No holdings to report. Add or import some first.",
+    "report": {
+      "title": "Falcon Eye portfolio report",
+      "generated": "Generated {{date}}",
+      "sample": "Sample data",
+      "personal": "User-entered data",
+      "gain": "Unrealized gain",
+      "diversification": "Diversification",
+      "allocation": "Allocation",
+      "allocationCount_zero": "{{count}} holdings",
+      "allocationCount_one": "{{count}} holding",
+      "allocationCount_two": "{{count}} holdings",
+      "allocationCount_few": "{{count}} holdings",
+      "allocationCount_many": "{{count}} holdings",
+      "allocationCount_other": "{{count}} holdings",
+      "columns": {
+        "symbol": "Symbol",
+        "name": "Name",
+        "type": "Type",
+        "quantity": "Qty",
+        "price": "Price",
+        "value": "Value",
+        "gain": "Gain",
+        "weight": "Weight"
+      },
+      "samplePrices": "illustrative sample values",
+      "userPrices": "values entered by the user",
+      "disclaimer": "Prototype report. Prices are {{priceSource}} and are not live market data. Data is stored only in the browser's local storage. Nothing in this report is investment, tax or financial advice."
+    }
+  }
+}

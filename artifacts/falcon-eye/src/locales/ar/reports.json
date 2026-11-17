@@ -21,6 +21,7 @@
   "exportCsv":"تصدير CSV","exportJson":"تصدير JSON",
   "disclaimer":"عين الصقر أداة للتنظيم، وليس بنكًا أو وسيطًا أو أداة ضريبية أو مستشارًا ماليًا. يعكس هذا التقرير ما أدخلته فقط.",
   "csv":{"name":"الاسم","category":"الفئة","currency":"العملة","cost":"المبلغ المدفوع","value":"القيمة المسجّلة","date":"تاريخ التقييم","source":"المصدر","access":"الإتاحة","location":"مكان الحفظ","notes":"ملاحظات"},
+  "unknownDate":"غير معروف",
   "sources":{"manual":"إدخالك","statement":"كشف حساب","estimate":"تقدير"},
   "access":{"available":"متاح","restricted":"غير متاح بسهولة","unknown":"غير معروف"}
 }

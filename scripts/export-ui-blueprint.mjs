@@ -16,7 +16,7 @@ const css = (await Promise.all(names.filter((name) => name.endsWith('.css')).map
 const renderer = path.join(output, 'render-blueprint.cjs');
 await build({
   stdin: {
-    contents: `import React from 'react'; import {renderToStaticMarkup} from 'react-dom/server'; import {Router} from 'wouter'; import Guide from './src/pages/design-guide.tsx'; console.log(renderToStaticMarkup(React.createElement(Router,{ssrPath:'/design-guide'},React.createElement(Guide))));`,
+    contents: `import React from 'react'; import {renderToStaticMarkup} from 'react-dom/server'; import {Router} from 'wouter'; import {I18nextProvider} from 'react-i18next'; import {createInstance} from 'i18next'; import enDesign from './src/locales/en/design.json'; import enAssistant from './src/locales/en/assistant.json'; import Guide from './src/pages/design-guide.tsx'; (async()=>{const i18n=createInstance(); await i18n.init({resources:{en:{design:enDesign,assistant:enAssistant}},lng:'en',fallbackLng:'en',initAsync:false}); console.log(renderToStaticMarkup(React.createElement(I18nextProvider,{i18n},React.createElement(Router,{ssrPath:'/design-guide'},React.createElement(Guide)))));})().catch((error)=>{console.error(error);process.exitCode=1;});`,
     resolveDir: frontend, loader: 'tsx',
   },
   bundle: true, platform: 'node', format: 'cjs', jsx: 'automatic', outfile: renderer,

@@ -1,0 +1,101 @@
+{
+  "mascot": "Falc, your financial-record assistant",
+  "launch": "Talk to Falc",
+  "launchAsk": "Ask Falc",
+  "heading": "A little help from Falc",
+  "aiStatus": "AI drafts · review required",
+  "localStatus": "Local guided assistant · no AI provider",
+  "close": "Close assistant",
+  "welcome": "Hi, I’m Falc. Tell me about something you own or owe. I’ll prepare a record for you to review—nothing is saved without your confirmation.",
+  "preparing": "Preparing your draft…",
+  "examples": {
+    "gold": "I bought 20g of 22k gold for AED 5,000",
+    "private": "I invested with a relative",
+    "summary": "What do I own?"
+  },
+  "messageLabel": "Message Falc",
+  "messagePlaceholder": "Tell me what you own or owe…",
+  "stopDictation": "Stop dictation",
+  "dictate": "Dictate a message",
+  "send": "Send message",
+  "aiOptIn": "Use AI mode: send this conversation to the configured AI provider. Optional; requires server setup.",
+  "safety": "No trades. No bank access. No saving without confirmation.",
+  "reviewTitle": "Review before saving",
+  "reviewHelp": "Draft only. Unknown values are not treated as zero. You can also type “{{saveCommand}}” in chat.",
+  "guide": {
+    "fieldSeparator": ", ",
+    "advice": "I can help record and explain your finances, but I cannot recommend what to buy or sell. Tell me about something you already own or owe.",
+    "help": "Tell me the kind of item: gold, cash, stocks, an IPO, crypto, a private investment, money lent, or a debt. For example: “I bought 20g of 22k gold for AED 5,000.” I only prepare a draft; you review and save it.",
+    "missing": "I have started a draft. Please add {{fields}}. You can reply here or edit the review card below. Nothing has been saved.",
+    "ready": "Your draft is ready to review below. Check the category, currency, amount, and date, then choose “Confirm and save”. Nothing is saved until you confirm.",
+    "fields": {
+      "name": "a name",
+      "value": "a current value (or mark it unknown)",
+      "valuationDate": "the valuation date",
+      "agreementType": "whether this is ownership, a loan, or a gift"
+    }
+  },
+  "draftNotes": "Prepared in guided chat. Confirm the details before saving.",
+  "draftNames": {
+    "gold": "Physical gold"
+  },
+  "fields": {
+    "name": "Name",
+    "category": "Category",
+    "currency": "Currency",
+    "cost": "What you paid",
+    "currentValue": "Current value",
+    "outstanding": "Outstanding balance",
+    "valueDate": "Value as of",
+    "agreement": "What kind of agreement?",
+    "goldWeight": "Gold weight (grams)",
+    "goldPurity": "Purity (karat)",
+    "ipoStatus": "IPO status"
+  },
+  "choose": "Choose…",
+  "unknown": "Unknown",
+  "agreementTypes": {
+    "equity": "Ownership in a business",
+    "loan": "Money expected to be repaid",
+    "gift": "Gift · excluded from assets"
+  },
+  "goldNote": "Value is your estimate, not a live gold quote. Jewellery making charges may not be recoverable.",
+  "goldKarat": "{{count}}k",
+  "ipoStatuses": {
+    "applied": "Applied · awaiting allocation",
+    "allocated": "Shares allocated"
+  },
+  "confirmSave": "Confirm and save",
+  "discard": "Discard draft",
+  "commands": {
+    "save": "confirm and save",
+    "start": "start my own records",
+    "confirmStart": "confirm start my own records"
+  },
+  "messages": {
+    "savedSession": "Added for this session only. Browser storage could not save it. Download a backup from Reports before closing the page.",
+    "saved": "Saved in this browser. You can find it in Assets or Debts. Cloud saving is a separate, explicit action in Settings.",
+    "sampleStart": "This will replace this browser’s labelled sample picture with empty personal records. Your older portfolio remains preserved. To confirm, type “{{confirmStartCommand}}”. Your draft will stay here.",
+    "alreadyPersonal": "You are already using personal records. I will not clear them through chat.",
+    "personalStarted": "Your empty personal picture is ready. Review your draft, then type “{{saveCommand}}” when the details are right.",
+    "summary": "Your recorded assets: {{assets}}. Debts: {{debts}}. Estimated net worth: {{netWorth}}. {{qualification}} {{sampleNote}}",
+    "incomplete": "This is incomplete: some values or currency rates are missing.",
+    "estimateOnly": "These totals use the values you recorded, not guaranteed sale prices.",
+    "sampleNote": "You are viewing sample data, not your personal finances."
+  },
+  "errors": {
+    "unableSave": "Unable to save this draft.",
+    "unablePrepare": "Unable to prepare a draft. Please try again.",
+    "unavailableAI": "AI is unavailable. Turn off AI mode to use the local guided assistant.",
+    "invalidDraft": "Unable to prepare a draft. Please try again.",
+    "unsupportedVoice": "Voice input is not supported in this browser. You can type instead.",
+    "voiceConsent": "Voice dictation uses your browser’s speech service, which may send audio to its provider. FalconEye does not store audio. Continue?",
+    "microphone": "Microphone unavailable or permission denied. You can type instead.",
+    "startDictation": "Unable to start dictation. You can type instead.",
+    "sampleRecords": "These are sample records. Start your own records first. You can type “{{startCommand}}” in chat; your draft will stay here.",
+    "chooseNameCategory": "Choose a category and give this record a name.",
+    "chooseDate": "Choose the date for this value, or mark the value unknown.",
+    "chooseAgreement": "Choose whether this is ownership, a loan, or a gift.",
+    "unableSaveRecord": "Unable to save this record."
+  }
+}

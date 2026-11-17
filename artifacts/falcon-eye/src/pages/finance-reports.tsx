@@ -24,7 +24,7 @@ function csvCell(value: unknown) {
 function exportCsv() {
   const doc = financeStore.getSnapshot();
   const columns = ['name', 'category', 'currency', 'cost', 'value', 'date', 'source', 'access', 'location', 'notes'].map((key) => i18n.t(`reports:csv.${key}`));
-  const rows = doc.records.map((item) => [item.name, i18n.t(`common:categories.${item.category}`), item.currency, item.cost, item.value, item.valuationDate, i18n.t(`reports:sources.${item.valuationSource}`), i18n.t(`reports:access.${item.access}`), item.location, item.notes]);
+  const rows = doc.records.map((item) => [item.name, i18n.t(`common:categories.${item.category}`), item.currency, item.cost, item.value, item.valuationDate === '1970-01-01' ? i18n.t('reports:unknownDate') : item.valuationDate, i18n.t(`reports:sources.${item.valuationSource}`), i18n.t(`reports:access.${item.access}`), item.location, item.notes]);
   download('falcon-eye-financial-records.csv', '\uFEFF' + [columns, ...rows].map((row) => row.map(csvCell).join(',')).join('\r\n'), 'text/csv;charset=utf-8');
 }
 function exportJson() {

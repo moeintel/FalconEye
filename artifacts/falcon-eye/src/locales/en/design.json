@@ -1,0 +1,99 @@
+{
+  "actions": {
+    "back": "Back to my overview",
+    "print": "Print / save as PDF"
+  },
+  "hero": {
+    "kicker": "FalconEye · experience blueprint",
+    "title": "Your money.",
+    "titleAccent": "One clear picture.",
+    "description": "A friendlier financial home for everyday people—from physical gold to money invested with family.",
+    "promise": "Built for confidence, not financial expertise."
+  },
+  "principles": [
+    { "title": "Understand at a glance", "detail": "What you own. What you owe. What you can access. Clear totals, with missing information called out." },
+    { "title": "One obvious next step", "detail": "Add an asset or debt, or ask Falc. Relevant questions only—no finance vocabulary test." },
+    { "title": "Trust before automation", "detail": "Dated values. Estimates labelled. Samples kept separate. Review every assistant draft before saving." }
+  ],
+  "sections": {
+    "navigation": {
+      "kicker": "01 · Easy to find your way",
+      "title": "Every destination has a clear job.",
+      "note": "Reports and settings stay easy to reach. Team outreach stays separate from personal finances. On mobile, primary actions stay within reach."
+    },
+    "steps": {
+      "kicker": "02 · Add something without getting lost",
+      "title": "A short, guided path—not a spreadsheet."
+    },
+    "falc": {
+      "kicker": "03 · A helper, not another menu",
+      "title": "Meet Falc.",
+      "description": "Type naturally. Dictate if your browser supports it. Falc prepares the details; you stay in control.",
+      "exampleUser": "“I bought 20g of 22k gold for AED 5,000.”",
+      "exampleAssistant": "“I’ve started a draft. What is its current value—or should we leave it unknown?”",
+      "talk": "Talk",
+      "review": "Review",
+      "confirm": "Confirm",
+      "disclaimer": "Local guided mode works without an AI provider. Optional AI mode requires configuration and consent to share the conversation. Falc never trades, connects a wallet, or silently saves."
+    },
+    "assets": {
+      "kicker": "04 · Design the meaning, not just the numbers",
+      "title": "Different assets need different questions.",
+      "items": [
+        { "title": "Physical gold", "text": "Weight + purity + purchase cost. Estimated resale value, not the original jewellery bill." },
+        { "title": "Family investments", "text": "Ownership, loan, or gift. Record the arrangement before interpreting the amount." },
+        { "title": "Money owed", "text": "Outstanding balance + repayment history. Never confuse borrowed money with wealth." }
+      ],
+      "types": ["Cash", "Stocks", "Funds", "Crypto", "IPOs", "Money lent", "Bonds / sukuk", "Property"]
+    },
+    "accessibility": {
+      "kicker": "05 · Comfortable on every screen",
+      "title": "Small details make it easier.",
+      "items": [
+        "Readable text and generous tap targets.",
+        "Labels beside icons, not mystery buttons.",
+        "Search and filter before endless scrolling.",
+        "Clear errors next to the action that failed.",
+        "Keyboard focus, contrast, and reduced motion.",
+        "Confirmation for replacing or deleting records."
+      ],
+      "plainLanguage": "Plain language first.",
+      "jargon": {
+        "cost": "Cost basis",
+        "liquidity": "Liquidity",
+        "score": "Portfolio health score"
+      },
+      "plain": {
+        "cost": "What you paid",
+        "liquidity": "How quickly you can access it",
+        "score": "What needs your attention"
+      }
+    },
+    "rollout": {
+      "kicker": "06 · Safe rollout",
+      "title": "Trust is a release requirement.",
+      "items": [
+        { "title": "Build & check", "text": "Working guided entry, honest summaries, local history, and exports. Existing data preserved." },
+        { "title": "Configure & verify", "text": "Supabase accounts, reviewed migration, private access tests, backup and restore. Required before cloud launch." },
+        { "title": "Learn & expand", "text": "Invited user testing first. Then household permissions, documents, Arabic, and selected price feeds." }
+      ],
+      "disclaimer": "This infographic describes the experience and release plan—not a claim that every future feature is live. Cloud setup, external services, and public release require separate verification."
+    }
+  },
+  "navigation": [
+    { "title": "Overview", "note": "My financial picture" },
+    { "title": "My assets", "note": "Everything I own" },
+    { "title": "My debts", "note": "What I still owe" },
+    { "title": "Activity", "note": "Changes and payments" }
+  ],
+  "steps": [
+    { "title": "Tell us what it is", "detail": "Gold, cash, stocks, an IPO, a private investment, or a debt." },
+    { "title": "Add what you know", "detail": "Skip unknown values. Record currency, source, and date." },
+    { "title": "Review the meaning", "detail": "Ownership, a loan, or a gift? Available money or restricted?" },
+    { "title": "See one clear picture", "detail": "Understand your recorded position without mistaking estimates for cash." }
+  ],
+  "footer": {
+    "brand": "FalconEye · Everyday finances, explained simply.",
+    "label": "Product & UI improvement blueprint"
+  }
+}

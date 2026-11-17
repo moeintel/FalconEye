@@ -31,6 +31,8 @@
   "storageHeading": "Your browser storage needs attention",
   "storageBackup": "Download a backup from Reports before closing this page.",
   "close": "Close",
+  "notification": "Notification",
+  "notifications": "Notifications",
   "errors": {
     "checkDetails": "This request could not be completed. Check the fields, amounts, dates, and connection, then try again."
   },
