@@ -4,7 +4,7 @@
 .fe-dialog-language { padding-inline-end:32px; }
 .fe-dialog-language .fe-language-switch { margin-block:0; }
 .finance-app ~ .falc-launch { display:none; }
-body:has([role=dialog][aria-modal=true][data-state=open]) :is(.falc-launch,.falc-panel) { visibility:hidden; pointer-events:none; }
+body:has([data-falcon-dialog][data-state=open]) :is(.falc-launch,.falc-panel) { visibility:hidden; pointer-events:none; }
 .fe-mobile-header .fe-language-switch { margin-inline-start:auto; margin-block:0; }
 .fe-mobile-header .fe-language-switch select { min-width:92px; }
 .fe-mobile-header .fe-language-switch > svg { display:none; }
