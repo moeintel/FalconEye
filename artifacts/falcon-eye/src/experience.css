@@ -141,6 +141,7 @@
   .finance-app .fe-header-preferences select { max-width: 120px; }
   .finance-app .fe-header-preferences .fe-language-switch>svg,
   .fe-currency-control>svg { display: none; }
+  .fe-preference-feedback { position: fixed; inset-inline: 16px; top: 64px; width: auto; }
   .finance-app .fe-content { padding: 16px 16px 32px; }
   .finance-app .fe-home-language>span { display: none; }
   .finance-app .fe-home-language .fe-language-options { width: 100%; }
