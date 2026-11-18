@@ -18,7 +18,7 @@ function AssetMapTile({ x = 0, y = 0, width = 0, height = 0, depth = 0, name = '
   const maxCharacters = Math.floor((width - 16) / 7);
   const label = Array.from(name).length > maxCharacters ? `${Array.from(name).slice(0, maxCharacters).join('')}…` : name;
   return <g><rect x={x + 2} y={y + 2} width={Math.max(0, width - 4)} height={Math.max(0, height - 4)} rx={8} fill={fill} />
-    {width > 110 && height > 45 && <text x={x + width / 2} y={y + height / 2} textAnchor="middle" dominantBaseline="middle" fill="#102c40" fontSize={11} fontWeight={600}>{label}</text>}
+    {width > 110 && height > 45 && <text x={x + width / 2} y={y + height / 2} textAnchor="middle" dominantBaseline="middle" fill="#102c40" stroke="none" fontSize={11} fontWeight={600}>{label}</text>}
   </g>;
 }
 
