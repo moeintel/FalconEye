@@ -4,7 +4,6 @@ import { ArrowRight, ArrowUpRight, Plus, Sparkles, WalletCards } from 'lucide-re
 import { Button } from '@/components/ui/button';
 import { FinanceEditor } from '@/components/finance-editor';
 import { FinanceShell } from '@/components/finance-shell';
-import { LanguageSwitcher } from '@/components/language-switcher';
 import { FinanceReview } from '@/components/finance-review';
 import { CATEGORIES, summarizeFinance } from '@/lib/finance-model';
 import { formatMoney, formatNumber, formatDate } from '@/lib/locale';
@@ -99,7 +98,6 @@ export default function FinanceOverview({ accountStatus }: { accountStatus?: Rea
   );
 
   return <FinanceShell accountStatus={accountStatus}>
-    <LanguageSwitcher expanded />
     {doc.isSample && <div className="fe-sample-start"><span>{ux('sampleShort')}</span><button onClick={() => setEditorOpen(true)}>{ux('startOwn')} <ArrowRight size={15} /></button></div>}
     {content}
     <div className="fe-overview-bottom"><span>{t('disclaimer')}</span><Link href="/settings">{t('manage')} <ArrowRight /></Link></div>

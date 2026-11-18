@@ -4,6 +4,7 @@
   "dataNote":"A note about your data","allSet":"All set","dismiss":"Dismiss",
   "currency":"Currency","currencyHelp":"Values in other currencies need a rate you enter. We never refresh or guess them.",
   "base":"Base currency","baseHelp":"Your totals and reports are shown in this currency.","saveBase":"Save base currency",
+  "headerRateNeeded":"To use {{currency}}, first add a manual exchange rate in Settings. Your base currency has not changed.",
   "switchHelp":"To switch to {{currency}}, first add a rate below. It must be stated as {{base}} per 1 {{currency}}.",
   "rates":"Manual exchange rates","ratesHelp":"Use a statement or your own rate. Rates are shown as base currency per 1 unit of foreign currency.",
   "yourEntries":"YOUR ENTRIES","rateEquals":"1 {{currency}} equals ({{base}})","ratePlaceholder":"e.g. 0.85",

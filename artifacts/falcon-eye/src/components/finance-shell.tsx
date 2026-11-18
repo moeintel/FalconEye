@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { localizedError } from '@/lib/i18n';
 import { LanguageSwitcher } from './language-switcher';
+import { CurrencySwitcher } from './currency-switcher';
 
 const NAV = [
   { href: '/', label: 'navigation.home', icon: House },
@@ -56,15 +57,14 @@ export function FinanceShell({ children, accountStatus }: { children: ReactNode;
             <span className="fe-falc-dot" aria-hidden="true">F</span> {t('askFalc')} <span className="fe-falc-arrow" aria-hidden="true">↗</span>
           </button>
           <Link href="/settings" className={cn('fe-settings-link', loc.startsWith('/settings') && 'is-active')}><Settings2 />{t('navigation.settings')}</Link>
-          {loc !== '/' && <LanguageSwitcher />}
           {accountStatus}
         </div>
       </aside>
 
       <div className="fe-main-column">
-        <header className="fe-mobile-header">
+        <header className="fe-mobile-header fe-app-header no-print">
           <Link href="/" className="fe-brand" aria-label={t('navigation.homeLabel')}><Logo className="fe-brand-mark" /><b>{t('brand')}</b></Link>
-          {loc !== '/' && <LanguageSwitcher />}
+          <div className="fe-header-preferences"><LanguageSwitcher /><CurrencySwitcher /></div>
           <button className="fe-menu-button" aria-label={t(menuOpen ? 'navigation.close' : 'navigation.open')} aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? <X /> : <Menu />}
           </button>
