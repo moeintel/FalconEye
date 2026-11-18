@@ -5,11 +5,11 @@ import { Button } from '@/components/ui/button';
 import { FinanceEditor } from '@/components/finance-editor';
 import { FinanceShell } from '@/components/finance-shell';
 import { FinanceReview } from '@/components/finance-review';
+import { AssetInfographic } from '@/components/asset-infographic';
 import { CATEGORIES, summarizeFinance } from '@/lib/finance-model';
 import { formatMoney, formatNumber, formatDate } from '@/lib/locale';
 import { useTranslation } from 'react-i18next';
 import { useFinance } from '@/lib/finance-store';
-import { cn } from '@/lib/utils';
 
 const compactMoney = (value: number, currency: string) => formatNumber(value, { style: 'currency', currency, notation: Math.abs(value) >= 100_000 ? 'compact' : 'standard', maximumFractionDigits: 1 });
 
@@ -50,30 +50,15 @@ export default function FinanceOverview({ accountStatus }: { accountStatus?: Rea
           {(summary.missingValues > 0 || summary.missingRates > 0) && <span className="fe-worth-warning">{ux('partialTotal')}</span>}
           <Button className="fe-worth-add" onClick={() => setEditorOpen(true)}><Plus />{t('add')}</Button>
           <div className="fe-worth-breakdown">
-            <div><span><i className="fe-asset-dot" />{common('navigation.assets')}</span><b>{compactMoney(summary.assets, doc.baseCurrency)}</b></div>
-            <div><span><i className="fe-debt-dot" />{common('navigation.debts')}</span><b>{compactMoney(summary.debts, doc.baseCurrency)}</b></div>
+            <div><span><i className="fe-asset-dot" />{t('assetsPlain')}</span><b>{compactMoney(summary.assets, doc.baseCurrency)}</b></div>
+            <div><span><i className="fe-debt-dot" />{t('debtsPlain')}</span><b>{compactMoney(summary.debts, doc.baseCurrency)}</b></div>
           </div>
           <Link href="/reports" className="fe-worth-link">{t('calculation')} <ArrowUpRight /></Link>
         </div>
       </section>
 
       <div className="fe-dashboard-grid">
-        <section className="fe-panel fe-category-panel">
-          <div className="fe-section-heading"><div><div className="fe-eyebrow">{t('breakdown')}</div><h2>{t('whereHeld')}</h2></div><Link href="/assets" className="fe-inline-link">{t('allAssets')} <ArrowRight /></Link></div>
-          {summary.byCategory.filter((entry) => entry.category !== 'debt').length > 0 ? <div className="fe-category-list">
-            {summary.byCategory.filter((entry) => entry.category !== 'debt').slice(0, 8).map((entry, index) => {
-              const displayValue = entry.value;
-              const share = summary.assets > 0 ? Math.max(0, displayValue) / summary.assets * 100 : 0;
-              return <Link href="/assets" className="fe-category-row" key={entry.category}>
-                <span className={cn('fe-category-mark', `tone-${index % 5}`)} />
-                <span className="fe-category-label">{common(`categories.${entry.category}`)}<small>{common('records', { count: entry.count })}</small></span>
-                <span className="fe-category-meter"><i style={{ width: `${Math.min(100, share)}%` }} /></span>
-                <span className="fe-category-value">{compactMoney(displayValue, doc.baseCurrency)}</span>
-              </Link>;
-            })}
-          </div> : <p className="fe-muted-copy">{t('noValues')}</p>}
-          <div className="fe-panel-footnote">{t('estimatedFromEntries', { currency: doc.baseCurrency })}</div>
-        </section>
+        <AssetInfographic document={doc} />
 
         <section className="fe-panel fe-recent-panel">
           <div className="fe-section-heading"><div><div className="fe-eyebrow">{t('paperTrail')}</div><h2>{t('recentActivity')}</h2></div><Link href="/activity" className="fe-inline-link">{t('seeAll')} <ArrowRight /></Link></div>

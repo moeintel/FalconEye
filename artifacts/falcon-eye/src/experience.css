@@ -46,6 +46,36 @@
 .finance-app .fe-dashboard-hero h1 { font-size: clamp(30px,3vw,42px); line-height: 1.12; letter-spacing: -.04em; margin-block: 12px; }
 .finance-app .fe-dashboard-hero .fe-welcome-copy>p { font-size: 15px; }
 .finance-app .fe-dashboard-hero + .fe-dashboard-grid { margin-top: 20px; }
+.fe-dashboard-grid:has(.fe-asset-infographic) { align-items: start; }
+.finance-app .fe-asset-infographic { background: linear-gradient(150deg,#fffefa,#f5f3ec); }
+.fe-asset-infographic .fe-section-heading { gap: 12px; flex-wrap: wrap; }
+.fe-asset-infographic h2 { font-size: 23px; letter-spacing: -.025em; }
+.fe-asset-visual { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); align-items: center; gap: 18px; padding-block: 14px 20px; }
+.fe-asset-visual-summary { min-width: 0; }
+.fe-asset-total-label { display: block; font-size: 11px; font-weight: 700; letter-spacing: .07em; color: #65767d; }
+.fe-asset-visual-summary>strong { display: block; margin-block: 10px 6px; font-size: clamp(23px,2.2vw,32px); line-height: 1.2; font-weight: 750; color: #172c42; overflow-wrap: anywhere; }
+.fe-asset-total-context { font-size: 12px; line-height: 1.6; color: #52616a; }
+.fe-asset-visual-counts { display: flex; gap: 22px; margin-top: 20px; }
+.fe-asset-visual-counts>span { display: flex; flex-direction: column; gap: 3px; font-size: 12px; color: #65767d; }
+.fe-asset-visual-counts b { font-size: 20px; color: #172c42; }
+.fe-asset-chart { height: 190px; min-width: 0; }
+.fe-asset-chart .recharts-surface { overflow: visible; }
+.fe-asset-chart text { font-family: inherit; }
+.fe-asset-chart-tooltip { display: grid; gap: 4px; padding: 10px 14px; border: 1px solid #ded7c8; border-radius: 10px; background: #fffefa; box-shadow: 0 6px 20px #172c421a; color: #172c42; font-size: 13px; }
+.fe-asset-chart-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; height: 100%; padding: 12px; border: 1px dashed #c6c8be; border-radius: 18px; background: #efeee6; color: #65767d; text-align: center; font-size: 13px; }
+.fe-asset-coverage { display: flex; align-items: start; gap: 8px; margin-block: 0 16px; padding: 10px 12px; border-radius: 10px; background: #f2ead5; color: #695627; font-size: 12px; line-height: 1.6; }
+.fe-asset-coverage svg { flex-shrink: 0; margin-top: 3px; }
+.fe-asset-tiles { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; padding: 0; margin: 0; list-style: none; }
+.fe-asset-tile { display: grid; grid-template-columns: 34px minmax(0,1fr); gap: 8px 10px; padding: 14px; border: 1px solid #e1e1d7; border-radius: 14px; background: #fffefa; }
+.fe-asset-tile-icon { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: #eef0e9; color: #425e6d; }
+.fe-asset-tile-name { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.fe-asset-tile-name b { font-size: 13px; line-height: 1.5; color: #203d50; overflow-wrap: anywhere; }
+.finance-app .fe-asset-tile-name small { font-size: 11px; color: #64747c; }
+.fe-asset-tile>strong { grid-column: 1 / -1; font-size: 17px; color: #172c42; line-height: 1.4; overflow-wrap: anywhere; }
+.fe-asset-tile-share { grid-column: 1 / -1; display: flex; align-items: start; gap: 6px; font-size: 11px; line-height: 1.5; color: #52616a; }
+.fe-asset-tile-share i { flex-shrink: 0; width: 7px; height: 7px; margin-top: 5px; border-radius: 50%; }
+.finance-app .fe-asset-tile-partial { grid-column: 1 / -1; font-size: 11px; color: #785e25; }
+.fe-asset-infographic .fe-panel-footnote { margin-top: 16px; }
 .finance-app .fe-worth-card { grid-column: 2; grid-row: 1; }
 .finance-app .fe-worth-card>strong { white-space: normal; overflow-wrap: anywhere; letter-spacing: normal; }
 .finance-app .fe-worth-add { display: none; }
@@ -181,6 +211,13 @@
   .fe-category-choices button>span { grid-row: auto; }
 }
 @media(max-width:480px) {
+  .fe-asset-tiles { grid-template-columns: 1fr; }
+  .fe-asset-tile { grid-template-columns: 34px minmax(0,1fr) minmax(0,1fr); padding: 12px; }
+  .fe-asset-tile>strong { grid-column: 3; grid-row: 1; align-self: center; text-align: end; font-size: 15px; }
+  .fe-asset-tile-share,.finance-app .fe-asset-tile-partial { grid-column: 2 / -1; }
+  .fe-asset-visual { gap: 10px; }
+  .fe-asset-chart { height: 170px; }
+  .fe-asset-visual-summary>strong { font-size: 24px; }
   .finance-app .fe-app-header>.fe-brand b { display: none; }
   .finance-app .fe-header-preferences select { max-width: 114px; padding-inline: 4px; }
 }
