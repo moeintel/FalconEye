@@ -16,7 +16,7 @@ const SCATTER = [
 
 export default function Onboarding() {
   const { t, i18n } = useTranslation('legacy');
-  const rtl = i18n.resolvedLanguage === 'ar';
+  const rtl = i18n.resolvedLanguage?.startsWith('ar');
   const [, navigate] = useLocation();
   const { holdings } = usePortfolio();
   const { toast } = useToast();

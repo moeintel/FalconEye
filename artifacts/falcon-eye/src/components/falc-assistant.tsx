@@ -26,7 +26,7 @@ type Recognition = {
 
 export function FalcAssistant() {
   const { t, i18n } = useTranslation('assistant');
-  const language = i18n.resolvedLanguage?.startsWith('ar') ? 'ar' : 'en';
+  const language = i18n.resolvedLanguage === 'ar-simple' ? 'ar-simple' : i18n.resolvedLanguage?.startsWith('ar') ? 'ar' : 'en';
   const doc = useFinance();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -96,7 +96,7 @@ export function FalcAssistant() {
       if (useAI) {
         const response = await fetch('/api/assistant', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ messages: next.slice(-12), currency: doc.baseCurrency, language }),
+          body: JSON.stringify({ messages: next.slice(-12), currency: doc.baseCurrency, language: language === 'en' ? 'en' : 'ar' }),
         });
         const data = await response.json();
         if (!response.ok) throw new Error('assistant-unavailable');
@@ -120,7 +120,7 @@ export function FalcAssistant() {
     if (!Ctor) { setError({ key: 'unsupportedVoice' }); return; }
     if (listening) { recognition.current?.stop(); return; }
     if (!window.confirm(t('errors.voiceConsent'))) return;
-    const r = new Ctor(); recognition.current = r; r.lang = language === 'ar' ? 'ar-AE' : 'en-US'; r.interimResults = false;
+    const r = new Ctor(); recognition.current = r; r.lang = language.startsWith('ar') ? 'ar-AE' : 'en-US'; r.interimResults = false;
     r.onresult = (e) => { setInput((previous) => `${previous} ${e.results[0][0].transcript}`.trim()); };
     r.onerror = () => { setError({ key: 'microphone' }); setListening(false); };
     r.onend = () => setListening(false);

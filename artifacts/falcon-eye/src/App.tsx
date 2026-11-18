@@ -72,7 +72,7 @@ function RoutedErrorBoundary({ children }: { children: ReactNode }) {
 
 function App() {
   const { t, i18n } = useTranslation('common');
-  const dir = i18n.resolvedLanguage === 'ar' ? 'rtl' : 'ltr';
+  const dir = i18n.resolvedLanguage?.startsWith('ar') ? 'rtl' : 'ltr';
   useEffect(() => {
     document.title = t('documentTitle');
     document.querySelector('meta[name="description"]')?.setAttribute('content', t('documentDescription'));

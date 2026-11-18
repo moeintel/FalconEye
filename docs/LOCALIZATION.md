@@ -4,6 +4,14 @@
 
 Use one application and one financial model. Arabic is Modern Standard Arabic, not a translated fork. English remains available everywhere. Do not merge or publish until the user approves the completed PR.
 
+### Simple Arabic option
+
+The separate `ar-simple` display preference is labelled «عربي مبسّط». Existing `ar` remains «العربية الفصحى», with its catalogs unchanged. English remains available. Browser Arabic defaults to formal Arabic; simple Arabic is an explicit choice, persisted in the same independent language preference, and can be linked with `?lang=ar-simple`.
+
+Simple Arabic uses small, reviewed override catalogs in `locales/ar-simple/`. Unchanged financial terminology, warnings, consent, confirmation commands and technical/admin copy fall back to formal Arabic, then English. Do not copy the entire formal catalog or automatically rewrite it. Tests require every override to reference an existing key and preserve interpolation and rich-text slots.
+
+Both Arabic options use document `lang="ar"`, RTL/Radix direction, the bundled Arabic font and identical Arabic number/date formatting. Changing tone never changes stored records, calculations, user text, Falc parser vocabulary, or confirmation permissions. The local Falc guide uses the simple reply overrides; exact save/start phrases stay formal and identical. Optional provider-backed AI still requests Arabic, not a guaranteed dialect or tone.
+
 The completed implementation must include the everyday-finance workspace, record/activity editors, account controls, Falc, early-access registration, prototype outreach administration, design guide, legacy portfolio routes, navigation, accessible names, dialogs, notices, and human-readable reports. User-entered names, notes, imported data, institution names, tickers, and currency codes are not translated or rewritten.
 
 ## Current implementation checkpoint
