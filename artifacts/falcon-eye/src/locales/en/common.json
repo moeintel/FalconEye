@@ -37,9 +37,9 @@
     "checkDetails": "This request could not be completed. Check the fields, amounts, dates, and connection, then try again."
   },
   "categories": {
-    "cash": "Cash", "gold": "Gold", "stocks": "Stocks", "funds": "Funds", "crypto": "Crypto",
-    "ipo": "IPO", "private": "Private investment", "lent": "Money lent", "bonds": "Bonds",
-    "property": "Property", "debt": "Debt"
+    "cash": "Cash & savings", "gold": "Gold", "stocks": "Shares", "funds": "Funds", "crypto": "Crypto",
+    "ipo": "IPO", "private": "Private investment", "lent": "Money owed to me", "bonds": "Bonds & sukuk",
+    "property": "Property", "debt": "Money I owe"
   },
   "categoryDescriptions": {
     "cash": "Cash, savings, and deposit accounts.",
@@ -48,11 +48,11 @@
     "funds": "Mutual funds and exchange-traded funds.",
     "crypto": "Cryptocurrency and digital assets.",
     "ipo": "IPO applications or allocated shares; record one exposure only.",
-    "private": "Private equity, loans, or gifts.",
+    "private": "Money in a business or with a relative: ownership, a loan, or a gift.",
     "lent": "Outstanding principal owed to you.",
     "bonds": "Government and corporate bonds.",
     "property": "Your ownership share of real estate.",
-    "debt": "Outstanding liabilities, stored as a positive balance."
+    "debt": "What you still need to repay, such as a loan or credit card."
   },
   "activityTypes": {
     "contribution": "Contribution", "withdrawal": "Withdrawal", "income": "Income",

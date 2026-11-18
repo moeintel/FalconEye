@@ -1,14 +1,15 @@
 import { type ReactNode, useMemo, useState } from 'react';
 import { Link } from 'wouter';
-import { ArrowRight, ArrowUpRight, CircleAlert, Plus, Sparkles, WalletCards } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Plus, Sparkles, WalletCards } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { FinanceEditor } from '@/components/finance-editor';
 import { FinanceShell } from '@/components/finance-shell';
 import { LanguageSwitcher } from '@/components/language-switcher';
+import { FinanceReview } from '@/components/finance-review';
 import { CATEGORIES, summarizeFinance } from '@/lib/finance-model';
 import { formatMoney, formatNumber, formatDate } from '@/lib/locale';
 import { useTranslation } from 'react-i18next';
-import { financeStore, useFinance } from '@/lib/finance-store';
+import { useFinance } from '@/lib/finance-store';
 import { cn } from '@/lib/utils';
 
 const compactMoney = (value: number, currency: string) => formatNumber(value, { style: 'currency', currency, notation: Math.abs(value) >= 100_000 ? 'compact' : 'standard', maximumFractionDigits: 1 });
@@ -16,15 +17,13 @@ const compactMoney = (value: number, currency: string) => formatNumber(value, { 
 export default function FinanceOverview({ accountStatus }: { accountStatus?: ReactNode }) {
   const { t } = useTranslation('overview');
   const { t: common } = useTranslation('common');
+  const { t: ux } = useTranslation('ux');
   const doc = useFinance();
   const summary = useMemo(() => summarizeFinance(doc), [doc]);
   const [editorOpen, setEditorOpen] = useState(false);
   const latest = [...doc.activities].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 4);
-  const maxCategory = Math.max(1, ...summary.byCategory.filter((item) => item.value > 0).map((item) => item.value));
   const categoryCount = CATEGORIES.filter(({ id }) => summary.byCategory.some((item) => item.category === id)).length;
 
-  const unresolved = summary.missingValues + summary.missingRates;
-  const warning = summary.staleValues > 0 || unresolved > 0;
   const content = doc.records.length === 0 ? (
     <section className="fe-welcome-card">
       <div className="fe-welcome-copy">
@@ -32,7 +31,7 @@ export default function FinanceOverview({ accountStatus }: { accountStatus?: Rea
         <h1>{t('emptyTitle')}<br /><span>{t('emptyTitleEnd')}</span></h1>
         <p>{t('emptyDescription')}</p>
         <div className="fe-welcome-actions"><Button onClick={() => setEditorOpen(true)}><Plus />{t('addFirst')}</Button><button className="fe-text-action" onClick={() => window.dispatchEvent(new CustomEvent('falconeye:open-assistant'))}>{t('askWhereToStart')} <ArrowRight /></button></div>
-        <div className="fe-privacy-note"><span className="fe-lock-dot" />{t('privacy')}</div>
+        <div className="fe-privacy-note"><span className="fe-lock-dot" />{ux('localOnly')}</div>
       </div>
       <div className="fe-orbit-illustration" aria-hidden="true"><div className="fe-orbit fe-orbit-one" /><div className="fe-orbit fe-orbit-two" /><div className="fe-orbit-center"><WalletCards /><span>{t('yourMoney')}</span></div><span className="fe-orbit-tag tag-cash">{common('categories.cash')}</span><span className="fe-orbit-tag tag-home">{t('home')}</span><span className="fe-orbit-tag tag-invest">{t('investments')}</span><span className="fe-orbit-tag tag-debt">{common('navigation.debts')}</span></div>
     </section>
@@ -57,16 +56,12 @@ export default function FinanceOverview({ accountStatus }: { accountStatus?: Rea
         </div>
       </section>
 
-      {warning && <div className="fe-data-alert"><CircleAlert /><div><b>{t('reviewHeading')}</b><span>{[
-        summary.missingValues ? t('missingValues', { count: summary.missingValues }) : '',
-        summary.missingRates ? t('missingRates', { count: summary.missingRates }) : '',
-        summary.staleValues ? t('staleValues', { count: summary.staleValues }) : '',
-      ].filter(Boolean).join(' · ')}. {t('incomplete')}</span></div><Link href="/settings">{t('review')} <ArrowRight /></Link></div>}
+      <FinanceReview compact />
 
       <section className="fe-summary-strip">
-        <div className="fe-summary-item"><span>{t('accessible')}</span><b>{compactMoney(summary.available, doc.baseCurrency)}</b><small>{t('accessibleExplanation')}</small></div>
+        <div className="fe-summary-item"><span>{t('accessible')}</span><b>{compactMoney(summary.available, doc.baseCurrency)}</b><small>{ux('accessibleHelp')}</small></div>
         <div className="fe-summary-item"><span>{t('tracked')}</span><b>{formatNumber(doc.records.length)}</b><small>{t('categoryCount', { count: categoryCount })}</small></div>
-        <div className="fe-summary-item"><span>{t('savedIn')}</span><b>{t('thisBrowser')}</b><small>{t('updates')}</small></div>
+        <div className="fe-summary-item"><span>{t('savedIn')}</span><b>{t('thisBrowser')}</b><small><Link href="/settings#backup">{ux('backup')} <ArrowRight size={14} /></Link></small></div>
       </section>
 
       <div className="fe-dashboard-grid">
@@ -103,8 +98,7 @@ export default function FinanceOverview({ accountStatus }: { accountStatus?: Rea
 
   return <FinanceShell accountStatus={accountStatus}>
     <LanguageSwitcher expanded />
-    <div className="fe-page-intro"><div><div className="fe-breadcrumb">{t('breadcrumb')} <span>/</span> {t('overview')}</div></div>{doc.isSample && <span className="fe-sample-badge">{t('sampleBadge')}</span>}</div>
-    {doc.isSample && <div className="fe-sample-start"><span>{t('sampleSeparation')}</span><button onClick={() => { if (window.confirm(t('startConfirmation'))) financeStore.startEmpty(); }}>{t('startOwn')} <ArrowRight size={15} /></button></div>}
+    {doc.isSample && <div className="fe-sample-start"><span>{ux('sampleShort')}</span><button onClick={() => setEditorOpen(true)}>{ux('startOwn')} <ArrowRight size={15} /></button></div>}
     {content}
     <div className="fe-overview-bottom"><span>{t('disclaimer')}</span><Link href="/settings">{t('manage')} <ArrowRight /></Link></div>
     <FinanceEditor open={editorOpen} onOpenChange={setEditorOpen} />
