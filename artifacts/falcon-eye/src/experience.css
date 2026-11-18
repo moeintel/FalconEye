@@ -114,7 +114,34 @@
 .finance-app .fe-language-options button { font-size: 13px; padding: 6px 10px; }
 .finance-app .fe-sample-start { margin-bottom: 14px; padding-block: 6px; }
 [id=backup],[id=currency] { scroll-margin-top: 24px; }
+.finance-app .fe-app-header { display: flex; align-items: center; justify-content: flex-end; min-height: 56px; padding: 6px 44px; color: #59666b; }
+.finance-app .fe-app-header>.fe-brand,
+.finance-app .fe-app-header>.fe-menu-button { display: none; }
+.fe-header-preferences { display: flex; align-items: center; gap: 10px; margin-inline-start: auto; }
+.finance-app .fe-header-preferences .fe-language-switch { margin: 0; gap: 6px; min-height: 44px; }
+.finance-app .fe-header-preferences .fe-language-switch>svg { display: block; }
+.fe-currency-switch { position: relative; }
+.fe-currency-control { display: flex; align-items: center; gap: 4px; }
+.finance-app .fe-header-preferences select { min-width: 0; min-height: 44px; max-width: 150px; padding: 6px; border: 1px solid transparent; border-radius: 8px; background: transparent; color: inherit; font: inherit; font-size: 13px; cursor: pointer; }
+.finance-app .fe-header-preferences select:hover { border-color: #c8c0b0; background: #ffffff30; }
+.finance-app .fe-header-preferences select:focus-visible { outline: 2px solid #a67e23; outline-offset: 2px; }
+.fe-currency-control option { color: #172c42; background: #fffefa; }
+.fe-preference-feedback { position: absolute; z-index: 60; inset-inline-end: 0; top: calc(100% + 8px); width: min(300px,calc(100vw - 32px)); padding: 16px; padding-inline-end: 42px; border: 1px solid #d4c5a3; border-radius: 12px; background: #fffefa; box-shadow: 0 8px 28px #172c4220; color: #172c42; font-size: 14px; line-height: 1.6; }
+.fe-preference-feedback p { margin: 0 0 8px; }
+.fe-preference-feedback a { text-decoration: underline; text-underline-offset: 3px; }
+.fe-preference-dismiss { position: absolute; inset-inline-end: 2px; top: 2px; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 8px; }
+@media(max-width:1024px) and (min-width:741px) {
+  .finance-app .fe-app-header { padding-inline: 22px; }
+}
 @media(max-width:740px) {
+  .finance-app .fe-app-header { justify-content: space-between; min-height: 57px; height: auto; padding: 4px 12px; gap: 8px; color: #e3e8e8; }
+  .finance-app .fe-app-header>.fe-brand,
+  .finance-app .fe-app-header>.fe-menu-button { display: flex; }
+  .fe-header-preferences { gap: 4px; }
+  .finance-app .fe-header-preferences select { max-width: 120px; }
+  .finance-app .fe-header-preferences .fe-language-switch>svg,
+  .fe-currency-control>svg { display: none; }
+  .fe-preference-feedback { position: fixed; inset-inline: 16px; top: 64px; width: auto; }
   .finance-app .fe-content { padding: 16px 16px 32px; }
   .finance-app .fe-home-language>span { display: none; }
   .finance-app .fe-home-language .fe-language-options { width: 100%; }
@@ -151,6 +178,10 @@
   .fe-category-choices small { display: none; }
   .fe-category-choices button { align-items: center; }
   .fe-category-choices button>span { grid-row: auto; }
+}
+@media(max-width:480px) {
+  .finance-app .fe-app-header>.fe-brand b { display: none; }
+  .finance-app .fe-header-preferences select { max-width: 114px; padding-inline: 4px; }
 }
 @media print {
   .fe-review-panel :is(button,a),.fe-local-reminder { display: none; }

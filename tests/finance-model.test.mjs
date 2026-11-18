@@ -389,14 +389,25 @@ test('base currency accepts AED/SAR and converts dated user rates without invent
   try {
     const { financeStore } = await import(`../artifacts/falcon-eye/src/lib/finance-store.ts?currency=${Date.now()}`);
     financeStore.replace(doc([makeRecord({ id: 'usd', currency: 'USD', value: 100, cost: 80 })]));
+    const before = JSON.stringify(financeStore.getSnapshot());
+    const records = JSON.stringify(financeStore.getSnapshot().records);
     assert.throws(() => financeStore.setBaseCurrency('AED'), /exchange rate for AED/);
+    assert.equal(JSON.stringify(financeStore.getSnapshot()), before);
     financeStore.setRate('AED', 0.27, '2025-01-02');
     financeStore.setBaseCurrency('AED');
     assert.equal(financeStore.getSnapshot().baseCurrency, 'AED');
     assert.equal(summarizeFinance(financeStore.getSnapshot()).assets, 370.37);
+    assert.equal(JSON.stringify(financeStore.getSnapshot().records), records);
     financeStore.setRate('SAR', 0.266, '2025-01-03');
     financeStore.setBaseCurrency('SAR');
     assert.equal(financeStore.getSnapshot().baseCurrency, 'SAR');
+    assert.equal(JSON.stringify(financeStore.getSnapshot().records), records);
+    financeStore.replace(sampleDocument());
+    const sampleRecords = JSON.stringify(financeStore.getSnapshot().records);
+    financeStore.setRate('AED', 0.27, '2025-01-02');
+    financeStore.setBaseCurrency('AED');
+    assert.equal(financeStore.getSnapshot().isSample, true);
+    assert.equal(JSON.stringify(financeStore.getSnapshot().records), sampleRecords);
   } finally {
     if (previous) Object.defineProperty(globalThis, 'localStorage', previous);
     else delete globalThis.localStorage;
