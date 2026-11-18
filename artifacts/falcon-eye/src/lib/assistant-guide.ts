@@ -142,13 +142,13 @@ export function guideMessage(text: string, previous: AssistantDraft | null, base
   }
   if (!d.notes) d.notes = guideCatalogs[language].draftNotes;
   const missing: ('name' | 'value' | 'valuationDate' | 'agreementType')[] = [];
+  if (d.category === 'private' && !d.details?.agreementType) missing.push('agreementType');
   if (!d.name) missing.push('name');
   if (d.value === undefined) missing.push('value');
   if (!d.valuationDate && d.value != null) missing.push('valuationDate');
-  if (d.category === 'private' && !d.details?.agreementType) missing.push('agreementType');
   return {
     reply: missing.length
-        ? guideReply(language, 'missing', missing)
+        ? guideReply(language, 'missing', missing.slice(0, 1))
       : guideReply(language, 'ready'),
     draft: d,
   };

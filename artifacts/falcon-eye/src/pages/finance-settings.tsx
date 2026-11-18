@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { localizedError } from '@/lib/i18n';
 import { formatDate, formatNumber } from '@/lib/locale';
 import { LanguageSwitcher } from '@/components/language-switcher';
+import { Link } from 'wouter';
 
 const CURRENCIES = SUPPORTED_CURRENCIES;
 function saveJson() {
@@ -21,6 +22,7 @@ function saveJson() {
 export default function FinanceSettings({ accountPanel }: { accountPanel?: ReactNode }) {
   const { t } = useTranslation('settings');
   const { t: common } = useTranslation('common');
+  const { t: ux } = useTranslation('ux');
   const doc = useFinance();
   const fileRef = useRef<HTMLInputElement>(null);
   const [base, setBase] = useState(doc.baseCurrency);
@@ -91,7 +93,7 @@ export default function FinanceSettings({ accountPanel }: { accountPanel?: React
     <section className="fe-settings-section">
       <div className="fe-settings-card"><h2>{common('language')}</h2><p>{common('languageHelp')}</p><LanguageSwitcher /></div>
     </section>
-    <section className="fe-settings-section">
+    <section className="fe-settings-section" id="currency">
       <div className="fe-settings-section-head"><span className="fe-settings-icon"><ArrowRightLeft /></span><div><h2>{t('currency')}</h2><p>{t('currencyHelp')}</p></div></div>
       <div className="fe-settings-card">
         <div className="fe-settings-card-title"><div><b>{t('base')}</b><span>{t('baseHelp')}</span></div></div>
@@ -117,7 +119,7 @@ export default function FinanceSettings({ accountPanel }: { accountPanel?: React
       <div className="fe-settings-section-head"><span className="fe-settings-icon"><ShieldCheck /></span><div><h2>{t('dataYours')}</h2><p>{t('localHelp')}</p></div></div>
       <div className="fe-settings-card fe-storage-status"><span className="fe-storage-status-icon"><HardDrive /></span><div><b>{t('savedLocally')}</b><span>{t('recordCounts', { records: doc.records.length, activities: doc.activities.length })}</span></div><span className="fe-settings-tag"><i />{t('localStorage')}</span></div>
       {accountPanel}
-      <div className="fe-settings-card fe-data-actions">
+      <div className="fe-settings-card fe-data-actions" id="backup">
         <div className="fe-settings-card-title"><div><b>{t('backup')}</b><span>{t('backupHelp')}</span></div></div>
         <div className="fe-data-action-buttons"><Button variant="outline" onClick={saveJson}><ArrowDownToLine />{t('downloadBackup')}</Button><Button variant="outline" onClick={() => fileRef.current?.click()}><FileUp />{t('restoreBackup')}</Button><input ref={fileRef} type="file" accept=".json,application/json" hidden onChange={readFile} /></div>
       </div>
@@ -126,6 +128,11 @@ export default function FinanceSettings({ accountPanel }: { accountPanel?: React
         <div className="fe-data-action-buttons"><Button variant="outline" onClick={importLegacy} disabled={doc.legacyImported || doc.records.length > 0}><Database />{t(doc.legacyImported ? 'alreadyImported' : doc.records.length ? 'emptyOnly' : 'importOlder')}</Button><span className="fe-settings-help">{t('originalPreserved')}</span></div>
       </div>
     </section>
+    <details className="fe-team-tools"><summary>{ux('teamTools')}</summary><p>{ux('teamWarning')}</p><nav aria-label={ux('teamTools')}>
+      <Link href="/welcome">{common('navigation.earlyAccess')}</Link>
+      <Link href="/admin/outreach">{common('navigation.admin')}</Link>
+      <Link href="/design-guide">{common('navigation.design')}</Link>
+    </nav></details>
 
     <section className="fe-settings-section fe-settings-prototype">
       <div className="fe-settings-section-head"><span className="fe-settings-icon"><RotateCcw /></span><div><h2>{t('trySample')}</h2><p>{t('sampleWarning')}</p></div></div>

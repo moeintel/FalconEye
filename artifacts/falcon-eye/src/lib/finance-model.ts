@@ -69,7 +69,7 @@ export const SUPPORTED_CURRENCIES = Array.from(new Set([
 const MAX_AMOUNT = 1_000_000_000_000;
 const MAX_TEXT = 500;
 const DAY = 86_400_000;
-const STALE_AFTER_DAYS = 90;
+export const STALE_AFTER_DAYS = 90;
 const DETAIL_KEYS: Record<Category, readonly string[]> = {
   cash: ['institution', 'accountType'],
   gold: ['weightGrams', 'purity'],

@@ -36,11 +36,13 @@ function useAccount() {
 export function AccountStatus() {
   const account = useAccount();
   const { t } = useTranslation('account');
-  return <span className="inline-flex items-center gap-2"><LockKeyhole size={13} />{account.user ? t('statusSignedIn') : t('statusPrivate')}</span>;
+  const { t: ux } = useTranslation('ux');
+  return <span className="inline-flex items-center gap-2 text-xs"><LockKeyhole size={13} />{account.user ? t('statusSignedIn') : ux('localOnly')}</span>;
 }
 
 export function FinanceAccount() {
   const { t } = useTranslation('account');
+  const { t: ux } = useTranslation('ux');
   const account = useAccount();
   const doc = useFinance();
   const [mode, setMode] = useState<'signin' | 'signup' | 'recover'>('signin');
@@ -152,7 +154,7 @@ export function FinanceAccount() {
   }
   return <section className="rounded-2xl border bg-card p-5 md:p-7">
     <div className="mb-4 flex items-center gap-3"><span className="rounded-xl bg-teal-50 p-3 text-teal-900"><ShieldCheck size={23} /></span><div><h2 className="text-xl font-bold">{t('title')}</h2><p className="text-sm text-muted-foreground">{t('subtitle')}</p></div></div>
-    {!account.configured && <div className="mb-5 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950"><b>{t('notConfiguredTitle')}</b> {t('notConfigured')}</div>}
+    {!account.configured && <div className="mb-5 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950"><b>{ux('localOnly')}</b><p className="mt-2">{ux('accountsUnavailable')}</p><p className="mt-2">{ux('localRisk')}</p></div>}
     {account.user ? <>
       <p className="mb-4 text-sm">{t('signedInPrefix')}{account.user.email && <> <bdi dir="ltr">{account.user.email}</bdi></>}{t('signedInSuffix')}</p>
       <div className="flex flex-wrap gap-3">
@@ -179,7 +181,7 @@ export function FinanceAccount() {
           <button className="finance-button" disabled={busy}>{t('deleteAccountButton')}</button>
         </form>}
       </details>
-    </> : <form onSubmit={(e) => { e.preventDefault(); void auth(); }} className="max-w-lg space-y-4">
+    </> : account.configured && <form onSubmit={(e) => { e.preventDefault(); void auth(); }} className="max-w-lg space-y-4">
       <div className="flex flex-wrap gap-2">{(['signin', 'signup', 'recover'] as const).map((item) => <button type="button" key={item} onClick={() => { setMode(item); setError(''); setNotice(''); }} className={`rounded-full px-4 py-2 text-sm ${mode === item ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}>{item === 'signin' ? t('signIn') : item === 'signup' ? t('createAccount') : t('resetPassword')}</button>)}</div>
       {mode !== 'signin' && !account.emailFlowsConfigured && <p role="status" className="rounded-xl bg-amber-50 p-3 text-sm text-amber-950">{t('emailFlowsUnavailable')}</p>}
       <label className="block text-sm font-medium">{t('email')}<input className="mt-2 w-full rounded-xl border bg-background p-3" type="email" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" required maxLength={254} /></label>

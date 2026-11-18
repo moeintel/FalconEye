@@ -1,7 +1,7 @@
-import { type ReactNode, useState } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import {
-  ArrowLeftRight, BarChart3, BookOpen, ChartNoAxesCombined, ChevronRight, CircleHelp, Compass, House,
+  ArrowLeftRight, ChartNoAxesCombined, ChevronRight, CircleHelp, House,
   Landmark, Menu, MessageCircle, Settings2, WalletCards, X,
 } from 'lucide-react';
 import { Logo } from '@/components/shell';
@@ -25,6 +25,12 @@ export function FinanceShell({ children, accountStatus }: { children: ReactNode;
   const [menuOpen, setMenuOpen] = useState(false);
   const { isSample } = useFinance();
   const storageError = financeStore.getStorageError();
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      if (window.location.hash) document.getElementById(window.location.hash.slice(1))?.scrollIntoView();
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [loc]);
   const nav = (mobile = false) => NAV.map(({ href, label, icon: Icon }) => {
     const active = href === '/' ? loc === '/' : loc.startsWith(href);
     return (
@@ -50,12 +56,7 @@ export function FinanceShell({ children, accountStatus }: { children: ReactNode;
             <span className="fe-falc-dot" aria-hidden="true">F</span> {t('askFalc')} <span className="fe-falc-arrow" aria-hidden="true">↗</span>
           </button>
           <Link href="/settings" className={cn('fe-settings-link', loc.startsWith('/settings') && 'is-active')}><Settings2 />{t('navigation.settings')}</Link>
-          <LanguageSwitcher />
-          <div className="fe-secondary-links" aria-label={t('navigation.more')}>
-            <Link href="/welcome">{t('navigation.earlyAccess')}</Link>
-            <Link href="/admin/outreach">{t('navigation.admin')} <BarChart3 /></Link>
-            <Link href="/design-guide">{t('navigation.design')} <BookOpen /></Link>
-          </div>
+          {loc !== '/' && <LanguageSwitcher />}
           {accountStatus}
         </div>
       </aside>
@@ -63,7 +64,7 @@ export function FinanceShell({ children, accountStatus }: { children: ReactNode;
       <div className="fe-main-column">
         <header className="fe-mobile-header">
           <Link href="/" className="fe-brand" aria-label={t('navigation.homeLabel')}><Logo className="fe-brand-mark" /><b>{t('brand')}</b></Link>
-          <LanguageSwitcher />
+          {loc !== '/' && <LanguageSwitcher />}
           <button className="fe-menu-button" aria-label={t(menuOpen ? 'navigation.close' : 'navigation.open')} aria-expanded={menuOpen} onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? <X /> : <Menu />}
           </button>
@@ -71,17 +72,12 @@ export function FinanceShell({ children, accountStatus }: { children: ReactNode;
         {menuOpen && <div className="fe-mobile-drawer">
           <nav aria-label={t('navigation.main')} className="fe-nav">{nav(true)}</nav>
           <Link href="/settings" onClick={() => setMenuOpen(false)} className="fe-mobile-settings"><Settings2 /> {t('navigation.settings')}</Link>
-          <div className="fe-secondary-links fe-mobile-secondary">
-            <Link href="/welcome" onClick={() => setMenuOpen(false)}><Compass />{t('navigation.earlyAccess')}</Link>
-            <Link href="/admin/outreach" onClick={() => setMenuOpen(false)}><BarChart3 />{t('navigation.admin')}</Link>
-            <Link href="/design-guide" onClick={() => setMenuOpen(false)}><BookOpen />{t('navigation.design')}</Link>
-          </div>
         </div>}
-        <div className="fe-top-note"><span className="fe-note-marker" />{t(isSample ? 'sampleNote' : 'personalNote')}<span className="fe-top-note-right">{t('localNote')}</span></div>
+        {loc !== '/' && <div className="fe-top-note"><span className="fe-note-marker" />{t(isSample ? 'sampleNote' : 'personalNote')}<span className="fe-top-note-right">{t('localNote')}</span></div>}
         <main className="fe-content">{storageError && <div className="fe-data-alert is-error" role="alert"><div><b>{t('storageHeading')}</b><span>{localizedError(storageError)} {t('storageBackup')}</span></div></div>}{children}</main>
         <footer className="fe-footer">{t('footer')}</footer>
       </div>
-      <nav className="fe-bottom-nav" aria-label={t('navigation.quick')}>{NAV.slice(0, 4).map(({ href, label, icon: Icon }) => {
+      <nav className="fe-bottom-nav" aria-label={t('navigation.quick')}>{NAV.filter((item) => item.href !== '/activity').map(({ href, label, icon: Icon }) => {
         const active = href === '/' ? loc === '/' : loc.startsWith(href);
         return <Link key={href} href={href} aria-current={active ? 'page' : undefined} className={cn('fe-bottom-link', active && 'is-active')}><Icon /><span>{t(label)}</span></Link>;
       })}<button className="fe-bottom-link" onClick={() => window.dispatchEvent(new CustomEvent('falconeye:open-assistant'))}><MessageCircle /><span>{t('askFalc')}</span></button></nav>

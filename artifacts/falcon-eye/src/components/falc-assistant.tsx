@@ -26,6 +26,7 @@ type Recognition = {
 
 export function FalcAssistant() {
   const { t, i18n } = useTranslation('assistant');
+  const { t: ux } = useTranslation('ux');
   const language = i18n.resolvedLanguage === 'ar-simple' ? 'ar-simple' : i18n.resolvedLanguage?.startsWith('ar') ? 'ar' : 'en';
   const doc = useFinance();
   const [open, setOpen] = useState(false);
@@ -139,6 +140,7 @@ export function FalcAssistant() {
       </header>
       <div className="falc-conversation">
         {messages.length === 0 && <div className="falc-message">{t('welcome')}</div>}
+        {messages.length === 0 && <p className="mb-3 text-sm text-muted-foreground">{ux('falcGuidance')}</p>}
         {messages.map((m, i) => <div className={`falc-message ${m.role === 'user' ? 'falc-user' : ''}`} key={i}>{m.content}</div>)}
         {busy && <p className="text-sm text-muted-foreground" role="status">{t('preparing')}</p>}
         {draft && <DraftCard draft={draft} setDraft={setDraft} onSaved={() => { setDraft(null); setMessages((m) => [...m, { role: 'assistant', content: savedReply() }]); }} />}
@@ -179,6 +181,7 @@ function commitDraft(draft: AssistantDraft, isSample: boolean, baseCurrency: str
 function DraftCard({ draft, setDraft, onSaved }: { draft: AssistantDraft; setDraft: (d: AssistantDraft | null) => void; onSaved: () => void }) {
   const { t } = useTranslation('assistant');
   const { t: common } = useTranslation('common');
+  const { t: ux } = useTranslation('ux');
   const doc = useFinance();
   const [error, setError] = useState<AssistantError | null>(null);
   const patch = (field: keyof AssistantDraft, value: unknown) => setDraft({ ...draft, [field]: value });
@@ -193,9 +196,17 @@ function DraftCard({ draft, setDraft, onSaved }: { draft: AssistantDraft; setDra
     }
   }
   const inputClass = 'mt-1 w-full rounded-lg border bg-background px-3 py-2 text-sm';
+  const question = !draft.category ? 'chooseType' : draft.category === 'private' && !draft.details?.agreementType ? 'falcAgreement'
+    : !draft.name?.trim() ? 'falcName'
+    : draft.category === 'gold' && (draft.details?.weightGrams == null || draft.details?.purity == null) ? 'falcGold'
+    : draft.category === 'ipo' && !draft.details?.status ? 'falcIpo'
+    : draft.value === undefined ? 'falcValue'
+    : draft.value != null && !draft.valuationDate ? 'falcDate' : null;
   return <div className="rounded-xl border-2 border-amber-300 bg-amber-50/50 p-4">
     <p className="mb-1 text-xs font-bold uppercase tracking-wider text-amber-900">{t('reviewTitle')}</p>
     <p className="mb-3 text-xs text-muted-foreground">{t('reviewHelp', { saveCommand: t('commands.save') })}</p>
+    <p className="mb-3 text-sm font-medium" aria-live="polite">{question ? ux('falcNext', { question: ux(question) }) : ux('falcReady')}</p>
+    {draft.value !== null && <button type="button" className="mb-3 min-h-11 rounded-lg border px-3 py-2 text-sm" onClick={() => patch('value', null)}>{ux('falcUnknown')}</button>}
     <div className="grid grid-cols-2 gap-3">
       <label className="col-span-2 text-xs">{t('fields.name')}<input aria-label={t('fields.name')} className={inputClass} value={draft.name ?? ''} onChange={(e) => patch('name', e.target.value)} maxLength={100} /></label>
       <label className="text-xs">{t('fields.category')}<select aria-label={t('fields.category')} className={inputClass} value={draft.category ?? ''} onChange={(e) => patch('category', e.target.value)}><option value="">{t('choose')}</option>{CATEGORIES.map((c) => <option key={c.id} value={c.id}>{common(`categories.${c.id}`)}</option>)}</select></label>
@@ -212,6 +223,7 @@ function DraftCard({ draft, setDraft, onSaved }: { draft: AssistantDraft; setDra
       {draft.category === 'ipo' && <label className="col-span-2 text-xs">{t('fields.ipoStatus')}<select aria-label={t('fields.ipoStatus')} className={inputClass} value={String(draft.details?.status ?? '')} onChange={(e) => patch('details', { ...draft.details, status: e.target.value })}><option value="">{t('choose')}</option><option value="applied">{t('ipoStatuses.applied')}</option><option value="allocated">{t('ipoStatuses.allocated')}</option></select></label>}
     </div>
     {error && <p className="mt-3 text-xs text-red-800" role="alert">{error.key === 'sampleRecords' ? t('errors.sampleRecords', { startCommand: t('commands.start') }) : t(`errors.${error.key}`)}</p>}
-    <div className="mt-4 flex flex-wrap gap-2"><button onClick={save} className="rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground">{t('confirmSave')}</button><button onClick={() => setDraft(null)} className="rounded-lg border px-3 py-3 text-sm">{t('discard')}</button></div>
+    {doc.isSample && <p className="mt-3 text-sm">{ux('falcSample')}</p>}
+    <div className="mt-4 flex flex-wrap gap-2">{doc.isSample ? <button className="finance-button" onClick={() => { if (window.confirm(ux('sampleConfirm'))) financeStore.startEmpty(); }}>{ux('startOwn')}</button> : <button onClick={save} className="rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground">{t('confirmSave')}</button>}<button onClick={() => setDraft(null)} className="rounded-lg border px-3 py-3 text-sm">{t('discard')}</button></div>
   </div>;
 }

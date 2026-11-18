@@ -28,6 +28,7 @@ import { FalcAssistant } from '@/components/falc-assistant';
 import './finance.css';
 import './assistant.css';
 import './localization.css';
+import './experience.css';
 
 const queryClient = new QueryClient();
 
