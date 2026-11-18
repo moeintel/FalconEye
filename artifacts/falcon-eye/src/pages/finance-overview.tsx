@@ -57,14 +57,6 @@ export default function FinanceOverview({ accountStatus }: { accountStatus?: Rea
         </div>
       </section>
 
-      <FinanceReview compact />
-
-      <section className="fe-summary-strip">
-        <div className="fe-summary-item"><span>{t('accessible')}</span><b>{compactMoney(summary.available, doc.baseCurrency)}</b><small>{ux('accessibleHelp')}</small></div>
-        <div className="fe-summary-item"><span>{t('tracked')}</span><b>{formatNumber(doc.records.length)}</b><small>{t('categoryCount', { count: categoryCount })}</small></div>
-        <div className="fe-summary-item"><span>{t('savedIn')}</span><b>{t('thisBrowser')}</b><small><Link href="/settings#backup">{ux('backup')} <ArrowRight size={14} /></Link></small></div>
-      </section>
-
       <div className="fe-dashboard-grid">
         <section className="fe-panel fe-category-panel">
           <div className="fe-section-heading"><div><div className="fe-eyebrow">{t('breakdown')}</div><h2>{t('whereHeld')}</h2></div><Link href="/assets" className="fe-inline-link">{t('allAssets')} <ArrowRight /></Link></div>
@@ -94,6 +86,14 @@ export default function FinanceOverview({ accountStatus }: { accountStatus?: Rea
           <Link href="/activity" className="fe-add-activity"><Plus />{t('recordActivity')}</Link>
         </section>
       </div>
+
+      <FinanceReview compact />
+
+      <section className="fe-summary-strip">
+        <div className="fe-summary-item"><span>{t('accessible')}</span><b>{compactMoney(summary.available, doc.baseCurrency)}</b><small>{ux('accessibleHelp')}</small></div>
+        <div className="fe-summary-item"><span>{t('tracked')}</span><b>{formatNumber(doc.records.length)}</b><small>{t('categoryCount', { count: categoryCount })}</small></div>
+        <div className="fe-summary-item"><span>{t('savedIn')}</span><b>{t('thisBrowser')}</b><small><Link href="/settings#backup">{ux('backup')} <ArrowRight size={14} /></Link></small></div>
+      </section>
     </>
   );
 
