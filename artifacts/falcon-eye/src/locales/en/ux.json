@@ -15,6 +15,7 @@
   "pictureMeaning": "Your picture, explained",
   "pictureSummary": "Known assets minus known debts: {{amount}}. This is an estimate of your recorded position, not cash available to spend.",
   "pictureIncomplete": "Some items are excluded below. The total is incomplete, not a full measure of everything you own and owe.",
+  "partialTotal": "Partial total · some values are not included",
   "pictureKnown": "Only recorded values with a known conversion rate are included. Values are entered by you, not live prices.",
   "download": "Download",
   "downloadHelp": "PDF for reading, CSV for a spreadsheet, JSON for restoring your full picture. Keep backups somewhere private.",

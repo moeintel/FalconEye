@@ -196,8 +196,8 @@ function DraftCard({ draft, setDraft, onSaved }: { draft: AssistantDraft; setDra
     }
   }
   const inputClass = 'mt-1 w-full rounded-lg border bg-background px-3 py-2 text-sm';
-  const question = !draft.category ? 'chooseType' : !draft.name?.trim() ? 'falcName'
-    : draft.category === 'private' && !draft.details?.agreementType ? 'falcAgreement'
+  const question = !draft.category ? 'chooseType' : draft.category === 'private' && !draft.details?.agreementType ? 'falcAgreement'
+    : !draft.name?.trim() ? 'falcName'
     : draft.category === 'gold' && (draft.details?.weightGrams == null || draft.details?.purity == null) ? 'falcGold'
     : draft.category === 'ipo' && !draft.details?.status ? 'falcIpo'
     : draft.value === undefined ? 'falcValue'

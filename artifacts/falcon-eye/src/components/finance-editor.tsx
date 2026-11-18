@@ -169,7 +169,6 @@ export function FinanceEditor({ open, onOpenChange, record, initialCategory }: {
                 {draft.category === 'property' && <>
                   <label className="fe-field"><span>{t('record.yourOwnership')}</span><input className="fe-input" type="number" min="0" max="100" step="any" value={String(draft.details.ownershipPct ?? '')} onChange={(e) => setDetail('ownershipPct', e.target.value)} placeholder={t('record.ownershipExample')} /></label>
                   <label className="fe-field"><span>{t('record.address')} <em>{t('record.optional')}</em></span><input className="fe-input" value={String(draft.details.address ?? '')} onChange={(e) => setDetail('address', e.target.value)} placeholder={t('record.optionalPlaceholder')} /></label>
-                  <p className="fe-detail-note fe-field-wide">{t('record.propertyShareHelp')}</p>
                 </>}
                 {draft.category === 'debt' && <>
                   <label className="fe-field"><span>{t('record.creditor')} <em>{t('record.optional')}</em></span><input className="fe-input" value={String(draft.details.creditor ?? '')} onChange={(e) => setDetail('creditor', e.target.value)} placeholder={t('record.lenderCompany')} /></label>
@@ -180,6 +179,7 @@ export function FinanceEditor({ open, onOpenChange, record, initialCategory }: {
             </DetailSection>
           )}
 
+          {draft.category === 'property' && <div className="fe-activity-explain"><CircleHelp /><span>{t('record.propertyShareHelp')}</span></div>}
           <div className="fe-form-section">
               <div className="fe-form-section-title"><span>03</span> {t('record.valueToday')} <CircleHelp className="fe-help-icon" /></div>
             <div className="fe-form-grid">
@@ -210,12 +210,13 @@ export function FinanceEditor({ open, onOpenChange, record, initialCategory }: {
               <dt>{t('record.currency')}</dt><dd><bdi>{draft.currency}</bdi></dd>
               <dt>{isDebt ? t('record.outstanding') : t('record.worthNow')}</dt><dd>{unknownValue || draft.value === null ? ux('noValue') : formatMoney(draft.value, draft.currency)}</dd>
               <dt>{t('record.asOf')}</dt><dd><bdi>{draft.valuationDate === '1970-01-01' ? ux('notEntered') : draft.valuationDate}</bdi></dd>
-              <dt>{t('record.invested')}</dt><dd>{draft.cost === null ? ux('notEntered') : formatMoney(draft.cost, draft.currency)}</dd>
+              <dt>{isDebt ? t('record.originalAmount') : t('record.invested')}</dt><dd>{draft.cost === null ? ux('notEntered') : formatMoney(draft.cost, draft.currency)}</dd>
               <dt>{t('record.valueSource')}</dt><dd>{t(`record.${draft.valuationSource}`)}</dd>
               {draft.category !== 'debt' && <><dt>{t('record.access')}</dt><dd>{t(`record.${draft.access === 'unknown' ? 'unsure' : draft.access}`)}</dd></>}
               {Object.entries(draft.details).filter(([, value]) => value !== '' && value !== null).map(([key, value]) => {
                 const labels: Record<string, string> = { weightGrams: 'weight', purity: 'purity', agreementType: 'investmentType', ownershipPct: 'ownership', status: 'applicationStatus', refundedAmount: 'refunded', symbol: 'symbol', stockunits: 'shares', units: 'units', network: 'network', accountType: 'accountType', institution: 'location', issuer: 'issuer', maturityDate: 'maturity', couponRate: 'coupon', borrower: 'borrower', dueDate: 'repayment', creditor: 'creditor', interestRate: 'interestRate', address: 'address' };
-                const display = key === 'agreementType' ? ux(value === 'equity' ? 'equity' : value === 'loan' ? 'loan' : 'gift') : key === 'status' ? ux(value === 'applied' ? 'ipoPending' : 'ipoAllocated') : key === 'purity' ? t('record.customPurity', { percent: Number(value) * 100 }) : String(value);
+                const standardPurity = purityOptions.find((option) => option.value === String(value));
+                const display = key === 'agreementType' ? ux(value === 'equity' ? 'equity' : value === 'loan' ? 'loan' : 'gift') : key === 'status' ? ux(value === 'applied' ? 'ipoPending' : 'ipoAllocated') : key === 'purity' ? standardPurity?.label ?? t('record.customPurity', { percent: Number((Number(value) * 100).toFixed(2)) }) : String(value);
                 return <div className="fe-review-detail" key={key}><dt>{t(`record.${labels[key]}`)}</dt><dd><bdi>{display}</bdi></dd></div>;
               })}
               {draft.location && <><dt>{t('record.location')}</dt><dd><bdi>{draft.location}</bdi></dd></>}

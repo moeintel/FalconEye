@@ -48,6 +48,8 @@ export default function FinanceOverview({ accountStatus }: { accountStatus?: Rea
           <span className="fe-worth-label">{t('netWorth')}</span>
           <strong>{compactMoney(summary.netWorth, doc.baseCurrency)}</strong>
           <span className="fe-worth-caption">{t('netWorthExplanation', { currency: doc.baseCurrency })}</span>
+          {(summary.missingValues > 0 || summary.missingRates > 0) && <span className="fe-worth-warning">{ux('partialTotal')}</span>}
+          <Button className="fe-worth-add" onClick={() => setEditorOpen(true)}><Plus />{t('add')}</Button>
           <div className="fe-worth-breakdown">
             <div><span><i className="fe-asset-dot" />{common('navigation.assets')}</span><b>{compactMoney(summary.assets, doc.baseCurrency)}</b></div>
             <div><span><i className="fe-debt-dot" />{common('navigation.debts')}</span><b>{compactMoney(summary.debts, doc.baseCurrency)}</b></div>
