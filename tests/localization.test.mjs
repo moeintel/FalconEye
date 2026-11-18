@@ -7,6 +7,7 @@ import {
   direction, formatDate, formatMoney, getLocale, normalizeArabicNumbers, resolveLanguage, setActiveLanguage,
 } from '../artifacts/falcon-eye/src/lib/locale.ts';
 import { CATEGORIES, sampleDocument, summarizeFinance } from '../artifacts/falcon-eye/src/lib/finance-model.ts';
+import { assistantCommand, guideMessage } from '../artifacts/falcon-eye/src/lib/assistant-guide.ts';
 
 const root = new URL('../artifacts/falcon-eye/src/locales/', import.meta.url);
 function flatten(value, prefix = '', result = {}) {
@@ -52,7 +53,59 @@ test('language selection is predictable and independent of financial currency', 
   assert.equal(resolveLanguage(null, null, 'ar-EG'), 'ar');
   assert.equal(resolveLanguage('fr', 'broken', 'fr-FR'), 'en');
   assert.equal(direction('ar'), 'rtl');
+  assert.equal(resolveLanguage('ar-simple', 'en', 'en-US'), 'ar-simple');
+  assert.equal(resolveLanguage(null, 'ar-simple', 'en-US'), 'ar-simple');
+  assert.equal(resolveLanguage(null, null, 'ar-AE'), 'ar');
+  assert.equal(direction('ar-simple'), 'rtl');
   assert.equal(direction('en'), 'ltr');
+});
+
+test('simple Arabic overrides preserve formal keys, placeholders and protected copy', async () => {
+  const resources = { ar: {}, 'ar-simple': {} };
+  for (const name of readdirSync(new URL('ar/', root))) {
+    resources.ar[name.replace(/\.json$/, '')] = JSON.parse(readFileSync(new URL(`ar/${name}`, root), 'utf8'));
+  }
+  for (const name of readdirSync(new URL('ar-simple/', root))) {
+    const overrides = JSON.parse(readFileSync(new URL(`ar-simple/${name}`, root), 'utf8'));
+    const namespace = name.replace(/\.json$/, '');
+    resources['ar-simple'][namespace] = overrides;
+    const formal = flatten(resources.ar[namespace]);
+    for (const [key, value] of Object.entries(flatten(overrides))) {
+      assert.ok(key in formal, `Unknown simple Arabic key ${name}:${key}`);
+      assert.ok(typeof value === 'string' && value.trim());
+      assert.deepEqual(parameters(value), parameters(formal[key]), `${name}:${key}`);
+      assert.deepEqual(slots(value), slots(formal[key]), `${name}:${key}`);
+      assert.ok(!/^(commands\.|consent$|confirm|.*Confirmation$)/.test(key), `Keep protected copy formal: ${name}:${key}`);
+    }
+  }
+  const require = createRequire(new URL('../artifacts/falcon-eye/package.json', import.meta.url));
+  const instance = require('i18next').createInstance();
+  await instance.init({ lng: 'ar-simple', supportedLngs: ['en', 'ar', 'ar-simple'],
+    fallbackLng: { 'ar-simple': ['ar', 'en'], default: ['en'] }, resources,
+    ns: Object.keys(resources.ar), defaultNS: 'common' });
+  assert.equal(instance.resolvedLanguage, 'ar-simple');
+  assert.equal(instance.t('overview:title'), 'اعرف');
+  assert.equal(instance.t('overview:title', { lng: 'ar' }), 'تعرّف على');
+  assert.equal(instance.t('assistant:commands.save'), resources.ar.assistant.commands.save);
+  assert.equal(instance.t('public:registration.consent'), resources.ar.public.registration.consent);
+  const raw = JSON.stringify(sampleDocument());
+  setActiveLanguage('ar-simple');
+  try {
+    assert.equal(getLocale(), 'ar-AE-u-nu-latn');
+    assert.equal(JSON.stringify(sampleDocument()), raw);
+  } finally { setActiveLanguage('en'); }
+});
+
+test('simple Arabic Falc replies keep the same draft extraction and exact save permissions', () => {
+  const text = 'اشتريت ٢٠ جرام ذهب عيار ٢٢ مقابل ٥٬٠٠٠ درهم';
+  const formal = guideMessage(text, null, 'AED', 'ar');
+  const simple = guideMessage(text, null, 'AED', 'ar-simple');
+  assert.deepEqual(simple.draft, formal.draft);
+  assert.match(simple.reply, /باقي/);
+  assert.equal(assistantCommand('نعم', 'ar-simple'), null);
+  assert.equal(assistantCommand('yes, save it', 'ar-simple'), null);
+  assert.equal(assistantCommand('أؤكد حفظ هذا السجل', 'ar-simple'), 'save');
+  assert.equal(assistantCommand('أؤكد بدء سجلاتي الشخصية', 'ar-simple'), 'confirmStart');
 });
 
 test('every financial category has translated metadata without changing its stored identifier', () => {
@@ -132,7 +185,7 @@ test('translated screens have valid message keys and no uncatalogued literal UI 
     function visitCalls(node) {
       if (aliases.size && ts.isJsxText(node)) {
         const text = node.getText(source).trim();
-        const endonym = file.pathname.endsWith('/components/language-switcher.tsx') && ['English', 'العربية'].includes(text);
+        const endonym = file.pathname.endsWith('/components/language-switcher.tsx') && ['English', 'العربية الفصحى', 'عربي مبسّط'].includes(text);
         const brandMark = file.pathname.endsWith('/components/finance-shell.tsx') && text === 'F';
         assert.ok(!/\p{L}/u.test(text) || endonym || brandMark || isVerbatim(node),
           `${file.pathname}: literal UI copy must use a message ID: ${text}`);

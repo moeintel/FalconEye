@@ -8,6 +8,12 @@
 .fe-language-options button[aria-pressed=true] { background:#172c42; color:#fffdf7; }
 .fe-language-options button:hover { border-color:#8d7547; }
 .fe-language-options button:focus-visible { outline:3px solid #8d7547; outline-offset:2px; }
+@media(max-width:500px) {
+  .fe-home-language .fe-language-options { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); width:100%; }
+  .fe-home-language .fe-language-options button { min-width:0; padding-inline:4px; font-size:12px; }
+  .fe-mobile-header .fe-brand b { font-size:12px; }
+  html[lang=ar] .fe-mobile-header .fe-brand b { font-size:13px; }
+}
 .fe-dialog-language { padding-inline-end:32px; }
 .fe-dialog-language .fe-language-switch { margin-block:0; }
 .finance-app ~ .falc-launch { display:none; }

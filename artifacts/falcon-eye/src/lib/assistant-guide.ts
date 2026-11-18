@@ -1,9 +1,10 @@
 import { normalizeArabicNumbers } from './locale.ts';
 import enAssistant from '../locales/en/assistant.json' with { type: 'json' };
 import arAssistant from '../locales/ar/assistant.json' with { type: 'json' };
+import simpleAssistant from '../locales/ar-simple/assistant.json' with { type: 'json' };
 
 export type AssistantCategory = 'cash' | 'gold' | 'stocks' | 'funds' | 'crypto' | 'ipo' | 'private' | 'lent' | 'bonds' | 'property' | 'debt';
-export type AssistantLanguage = 'en' | 'ar';
+export type AssistantLanguage = 'en' | 'ar' | 'ar-simple';
 export type AssistantCommand = 'save' | 'start' | 'confirmStart';
 
 export interface AssistantDraft {
@@ -38,13 +39,15 @@ const categoryPatterns: [AssistantCategory, RegExp][] = [
 const arabicSaveCommand = 'أؤكد حفظ هذا السجل';
 const arabicStartCommand = 'ابدأ سجلاتي الشخصية';
 const arabicConfirmStartCommand = 'أؤكد بدء سجلاتي الشخصية';
-const guideCatalogs = { en: enAssistant, ar: arAssistant };
+const guideCatalogs = { en: enAssistant, ar: arAssistant, 'ar-simple': {
+  ...arAssistant, guide: { ...arAssistant.guide, ...simpleAssistant.guide },
+} };
 const debtByAmount = /(?:^|[^\p{L}])علي(?=\s*(?:\d|مبلغ|رصيد|دين|ديون|قرض|بطاقة))/iu;
 
 /** Only exact, explicit Arabic phrases authorize an action; a generic yes never does. */
 export function assistantCommand(text: string, language: AssistantLanguage): AssistantCommand | null {
   const command = text.trim();
-  if (language === 'ar') {
+  if (language.startsWith('ar')) {
     if (command === arabicSaveCommand) return 'save';
     if (command === arabicStartCommand) return 'start';
     if (command === arabicConfirmStartCommand) return 'confirmStart';

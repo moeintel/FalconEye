@@ -1,10 +1,11 @@
 import { formatMoney as modelFormatMoney } from './finance-model.ts';
 
-export type Language = 'en' | 'ar';
+export type Language = 'en' | 'ar' | 'ar-simple';
 export const LANGUAGE_STORAGE_KEY = 'falcon-eye:language:v1';
 let activeLanguage: Language = 'en';
 
 export function supportedLanguage(value: string | null | undefined): Language | null {
+  if (value?.toLowerCase() === 'ar-simple') return 'ar-simple';
   const base = value?.toLowerCase().split('-')[0];
   return base === 'en' || base === 'ar' ? base : null;
 }
@@ -15,8 +16,8 @@ export function resolveLanguage(query: string | null, stored: string | null, bro
 
 export function setActiveLanguage(language: Language) { activeLanguage = language; }
 export function getLanguage(): Language { return activeLanguage; }
-export function getLocale(): string { return activeLanguage === 'ar' ? 'ar-AE-u-nu-latn' : 'en-US'; }
-export function direction(language: Language): 'rtl' | 'ltr' { return language === 'ar' ? 'rtl' : 'ltr'; }
+export function getLocale(): string { return activeLanguage.startsWith('ar') ? 'ar-AE-u-nu-latn' : 'en-US'; }
+export function direction(language: Language): 'rtl' | 'ltr' { return language.startsWith('ar') ? 'rtl' : 'ltr'; }
 
 export function formatMoney(value: number, currency: string): string {
   return modelFormatMoney(value, currency, getLocale());

@@ -2,15 +2,16 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import enAssistant from '../locales/en/assistant.json' with { type: 'json' };
 import arAssistant from '../locales/ar/assistant.json' with { type: 'json' };
+import simpleAssistant from '../locales/ar-simple/assistant.json' with { type: 'json' };
 import {
   direction, LANGUAGE_STORAGE_KEY, resolveLanguage, setActiveLanguage, supportedLanguage, type Language,
 } from './locale';
 
 // The Node-tested guide imports these same catalogs with JSON attributes.
 const files = import.meta.glob(['../locales/*/*.json', '!../locales/*/assistant.json'], { eager: true, import: 'default' });
-const resources: Record<string, Record<string, object>> = { en: { assistant: enAssistant }, ar: { assistant: arAssistant } };
+const resources: Record<string, Record<string, object>> = { en: { assistant: enAssistant }, ar: { assistant: arAssistant }, 'ar-simple': { assistant: simpleAssistant } };
 for (const [path, messages] of Object.entries(files)) {
-  const [, language, namespace] = path.match(/\/locales\/(en|ar)\/([^/]+)\.json$/) ?? [];
+  const [, language, namespace] = path.match(/\/locales\/(en|ar|ar-simple)\/([^/]+)\.json$/) ?? [];
   if (language && namespace) resources[language][namespace] = messages as object;
 }
 
@@ -20,7 +21,7 @@ const language = resolveLanguage(new URLSearchParams(location.search).get('lang'
 
 function applyLanguage(language: Language) {
   setActiveLanguage(language);
-  document.documentElement.lang = language;
+  document.documentElement.lang = language.startsWith('ar') ? 'ar' : 'en';
   document.documentElement.dir = direction(language);
 }
 applyLanguage(language);
@@ -32,8 +33,8 @@ i18n.on('languageChanged', (next) => {
 i18n.use(initReactI18next).init({
   resources,
   lng: language,
-  fallbackLng: 'en',
-  supportedLngs: ['en', 'ar'],
+  fallbackLng: { 'ar-simple': ['ar', 'en'], default: ['en'] },
+  supportedLngs: ['en', 'ar', 'ar-simple'],
   defaultNS: 'common',
   interpolation: { escapeValue: false },
   returnNull: false,
@@ -52,7 +53,7 @@ export async function changeLanguage(language: Language) {
 export function localizedError(error: unknown): string {
   const message = error instanceof Error ? error.message : typeof error === 'string' ? error : '';
   const current = i18n.resolvedLanguage ?? 'en';
-  if (current === 'ar') {
+  if (current.startsWith('ar')) {
     if (/^Saved financial data (?:could not be read and was preserved:|is corrupt and was preserved\.)/.test(message)) return String(i18n.t('errors:corruptStorage'));
     if (/^(Could not read the older portfolio|Older portfolio data was preserved but could not be imported)/.test(message)) return String(i18n.t('errors:legacyStorage'));
     if (message.startsWith('Could not read financial data from this browser:')) return String(i18n.t('errors:readStorage'));
