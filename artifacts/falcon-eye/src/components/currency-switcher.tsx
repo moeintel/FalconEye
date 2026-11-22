@@ -3,7 +3,7 @@ import { ArrowLeftRight, X } from 'lucide-react';
 import { Link } from 'wouter';
 import { useTranslation } from 'react-i18next';
 import { financeStore, useFinance } from '@/lib/finance-store';
-import { SUPPORTED_CURRENCIES } from '@/lib/finance-model';
+import { currencyChoices } from '@/lib/finance-model';
 import { localizedError } from '@/lib/i18n';
 
 export function CurrencySwitcher() {
@@ -28,7 +28,7 @@ export function CurrencySwitcher() {
       <span className="sr-only">{t('base')}</span>
       <select aria-label={t('base')} title={t('baseHelp')} value={doc.baseCurrency} dir="ltr"
         onChange={(event) => changeCurrency(event.target.value)}>
-        {Array.from(new Set([...SUPPORTED_CURRENCIES, doc.baseCurrency])).sort().map((code) => <option key={code}>{code}</option>)}
+        {currencyChoices(doc.baseCurrency).map((code) => <option key={code}>{code}</option>)}
       </select>
     </label>
     {(rateNeeded || error) && <div className="fe-preference-feedback" role="alert">

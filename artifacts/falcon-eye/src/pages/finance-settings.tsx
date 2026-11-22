@@ -3,7 +3,7 @@ import { ArrowDownToLine, ArrowRightLeft, Check, CircleAlert, Cloud, Database, F
 import { Button } from '@/components/ui/button';
 import { FinanceShell } from '@/components/finance-shell';
 import { financeStore, useFinance } from '@/lib/finance-store';
-import { SUPPORTED_CURRENCIES } from '@/lib/finance-model';
+import { currencyChoices } from '@/lib/finance-model';
 import { useTranslation } from 'react-i18next';
 import { localizedError } from '@/lib/i18n';
 import { formatDate, formatNumber } from '@/lib/locale';
@@ -11,7 +11,6 @@ import { LanguageSwitcher } from '@/components/language-switcher';
 import { Link } from 'wouter';
 import { downloadFinanceBackup } from '@/lib/finance-backup';
 
-const CURRENCIES = SUPPORTED_CURRENCIES;
 function saveJson() {
   downloadFinanceBackup(financeStore.getSnapshot());
 }
@@ -23,7 +22,7 @@ export default function FinanceSettings({ accountPanel }: { accountPanel?: React
   const doc = useFinance();
   const fileRef = useRef<HTMLInputElement>(null);
   const [base, setBase] = useState(doc.baseCurrency);
-  const [rateCurrency, setRateCurrency] = useState(CURRENCIES.find((code) => code !== doc.baseCurrency) || 'USD');
+  const [rateCurrency, setRateCurrency] = useState(currencyChoices().find((code) => code !== doc.baseCurrency) || 'USD');
   const [rate, setRate] = useState('');
   const [rateDate, setRateDate] = useState(new Date().toISOString().slice(0, 10));
   const [message, setMessage] = useState<{ key: string; values?: Record<string, string | number> } | null>(null);
@@ -95,7 +94,7 @@ export default function FinanceSettings({ accountPanel }: { accountPanel?: React
       <div className="fe-settings-card">
         <div className="fe-settings-card-title"><div><b>{t('base')}</b><span>{t('baseHelp')}</span></div></div>
         <div className="fe-settings-inline-form">
-          <select className="fe-select fe-settings-select" aria-label={t('base')} value={base} onChange={(e) => setBase(e.target.value)}>{Array.from(new Set([...CURRENCIES, doc.baseCurrency])).sort().map((code) => <option key={code}>{code}</option>)}</select>
+          <select className="fe-select fe-settings-select" aria-label={t('base')} value={base} onChange={(e) => setBase(e.target.value)}>{currencyChoices(doc.baseCurrency).map((code) => <option key={code}>{code}</option>)}</select>
           <Button onClick={changeBase} disabled={base === doc.baseCurrency}>{t('saveBase')}</Button>
         </div>
         {base !== doc.baseCurrency && !doc.rates[base] && doc.records.length > 0 && <p className="fe-field-note">{t('switchHelp', { currency: base, base: doc.baseCurrency })}</p>}
@@ -103,7 +102,7 @@ export default function FinanceSettings({ accountPanel }: { accountPanel?: React
       <div className="fe-settings-card">
         <div className="fe-settings-card-title"><div><b>{t('rates')}</b><span>{t('ratesHelp')}</span></div><span className="fe-settings-tag">{t('yourEntries')}</span></div>
         <form onSubmit={saveRate} className="fe-rate-form">
-          <label className="fe-field"><span>{t('currency')}</span><select className="fe-select" value={rateCurrency} onChange={(e) => setRateCurrency(e.target.value)}>{Array.from(new Set([...CURRENCIES, ...Object.keys(doc.rates)])).filter((code) => code !== doc.baseCurrency).sort().map((code) => <option key={code}>{code}</option>)}</select></label>
+          <label className="fe-field"><span>{t('currency')}</span><select className="fe-select" value={rateCurrency} onChange={(e) => setRateCurrency(e.target.value)}>{currencyChoices(...Object.keys(doc.rates), ...doc.records.map((record) => record.currency), ...doc.activities.map((activity) => activity.currency)).filter((code) => code !== doc.baseCurrency).map((code) => <option key={code}>{code}</option>)}</select></label>
           <label className="fe-field"><span>{t('rateEquals', { currency: rateCurrency, base: doc.baseCurrency })}</span><input className="fe-input" inputMode="decimal" type="number" min="0.00000001" step="any" required value={rate} onChange={(e) => setRate(e.target.value)} placeholder={t('ratePlaceholder')} /></label>
           <label className="fe-field"><span>{t('rateDate')}</span><input className="fe-input" type="date" required value={rateDate} onChange={(e) => setRateDate(e.target.value)} /></label>
           <Button type="submit"><Check />{t('saveRate')}</Button>
