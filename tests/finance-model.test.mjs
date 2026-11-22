@@ -5,6 +5,7 @@ import {
   addMoney,
   appendActivity,
   currencyMinorUnits,
+  currencyChoices,
   emptyDocument,
   formatMoney,
   goldFineWeightGrams,
@@ -17,6 +18,13 @@ import {
 } from '../artifacts/falcon-eye/src/lib/finance-model.ts';
 
 const date = () => new Date().toISOString().slice(0, 10);
+test('currency menus prioritize the Gulf, dollar and euro without restricting saved currencies', () => {
+  assert.deepEqual(currencyChoices(), ['AED', 'SAR', 'QAR', 'KWD', 'BHD', 'OMR', 'USD', 'EUR']);
+  assert.deepEqual(currencyChoices('GBP', 'USD', 'JPY', 'GBP'), [...currencyChoices(), 'GBP', 'JPY']);
+  assert.ok(SUPPORTED_CURRENCIES.includes('GBP'));
+  const original = doc([makeRecord({ currency: 'JPY', value: 1234 })], { baseCurrency: 'GBP' });
+  assert.deepEqual(validateDocument(original), original);
+});
 function makeRecord(overrides = {}) {
   return {
     id: 'r1',

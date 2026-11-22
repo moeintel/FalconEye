@@ -66,6 +66,12 @@ export const SUPPORTED_CURRENCIES = Array.from(new Set([
   'SAR',
 ])).sort();
 
+export const DEFAULT_CURRENCY_CHOICES = ['AED', 'SAR', 'QAR', 'KWD', 'BHD', 'OMR', 'USD', 'EUR'];
+
+export function currencyChoices(...existing: string[]) {
+  return Array.from(new Set([...DEFAULT_CURRENCY_CHOICES, ...existing]));
+}
+
 const MAX_AMOUNT = 1_000_000_000_000;
 const MAX_TEXT = 500;
 const DAY = 86_400_000;

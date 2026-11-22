@@ -1,7 +1,7 @@
 import { type FormEvent, useEffect, useRef, useState } from 'react';
 import { AlertCircle, ArrowDownLeft, ArrowUpRight, Check, CircleHelp, Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { CATEGORIES, SUPPORTED_CURRENCIES, currencyMinorUnits, type FinanceRecord } from '@/lib/finance-model';
+import { CATEGORIES, currencyChoices, currencyMinorUnits, type FinanceRecord } from '@/lib/finance-model';
 import { financeStore, useFinance } from '@/lib/finance-store';
 import { localizedError } from '@/lib/i18n';
 import { formatMoney } from '@/lib/locale';
@@ -12,7 +12,6 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 type CategoryId = FinanceRecord['category'];
 type RecordDraft = Omit<FinanceRecord, 'id'>;
 const TODAY = () => new Date().toISOString().slice(0, 10);
-const CURRENCY_CHOICES = SUPPORTED_CURRENCIES;
 function preserveSampleFlag(wasSample: boolean) {
   if (wasSample) financeStore.replace({ ...financeStore.getSnapshot(), isSample: true });
 }
@@ -97,7 +96,7 @@ export function FinanceEditor({ open, onOpenChange, record, initialCategory }: {
         </DialogHeader>
         {doc.isSample && !record ? <div className="fe-sample-gate">
           <h3>{ux('sampleTitle')}</h3><p>{ux('sampleHelp')}</p>
-          <label className="fe-field"><span>{ux('personalCurrency')}</span><select className="fe-select" value={personalCurrency} onChange={(e) => setPersonalCurrency(e.target.value)}>{CURRENCY_CHOICES.map((currency) => <option key={currency}>{currency}</option>)}</select></label>
+          <label className="fe-field"><span>{ux('personalCurrency')}</span><select className="fe-select" value={personalCurrency} onChange={(e) => setPersonalCurrency(e.target.value)}>{currencyChoices(doc.baseCurrency).map((currency) => <option key={currency}>{currency}</option>)}</select></label>
           {error && <p role="alert">{localizedError(error)}</p>}
           <Button onClick={() => {
             if (!window.confirm(ux('sampleConfirm'))) return;
@@ -122,7 +121,7 @@ export function FinanceEditor({ open, onOpenChange, record, initialCategory }: {
               </label>
               <label className="fe-field fe-field-wide"><span>{t('record.currency')} <em>{ux('required')}</em></span>
                 <select className="fe-select" value={draft.currency} onChange={(e) => set('currency', e.target.value)}>
-                  {Array.from(new Set([doc.baseCurrency, ...CURRENCY_CHOICES])).map((currency) => <option key={currency}>{currency}</option>)}
+                  {currencyChoices(doc.baseCurrency, draft.currency).map((currency) => <option key={currency}>{currency}</option>)}
                 </select>
               </label>
             </div>
