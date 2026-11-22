@@ -1,4 +1,27 @@
 .finance-app { font-size: 16px; --fe-muted: #52616a; }
+.finance-app .fe-quick-adds { margin-top: 20px; }
+.finance-app .fe-quick-label { display: block; margin-bottom: 8px; font-size: 13px; color: #52616a; }
+.finance-app .fe-quick-adds>div { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
+.finance-app .fe-quick-adds button { display: flex; gap: 8px; align-items: center; text-align: start; padding: 9px 12px; border: 1px solid #d8d9ce; border-radius: 12px; background: #fffefa; font-size: 13px; color: #183043; line-height: 1.5; }
+.finance-app .fe-quick-adds button svg { flex-shrink: 0; color: #7d6b20; }
+.finance-app .fe-quick-adds button:hover { border-color: #9c8a43; background: #fff9e8; }
+.finance-app .fe-home-storage { display: flex; align-items: start; gap: 16px; justify-content: space-between; background: #fffefa; border: 1px solid #dfdfd5; border-radius: 12px; padding: 8px 14px; margin-bottom: 16px; font-size: 13px; color: #334c58; }
+.finance-app .fe-home-storage details { min-width: 0; flex: 1; }
+.finance-app .fe-home-storage summary { min-height: 44px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.finance-app .fe-home-storage summary svg { flex-shrink: 0; }
+.finance-app .fe-home-storage summary::after { content: '+'; margin-inline-start: 4px; }
+.finance-app .fe-home-storage details[open] summary::after { content: '−'; }
+.finance-app .fe-home-storage p { margin: 0 0 8px; max-width: 560px; line-height: 1.65; }
+.finance-app .fe-home-storage>button { display: flex; align-items: center; gap: 7px; color: #183043; font-weight: 600; text-align: start; max-width: 48%; }
+.finance-app .fe-home-storage>button svg { flex-shrink: 0; }
+.finance-app .fe-value-age { display: block; margin-top: 5px; font-size: 12px; }
+.finance-app .fe-value-age.needs-review { color: #846117; }
+.finance-app .fe-record-date { min-width: 0; max-width: 210px; overflow-wrap: anywhere; }
+.finance-app .fe-review-value { display: inline-flex; gap: 6px; align-items: center; color: #244e5c; font-size: 13px; text-align: start; }
+@media (max-width: 700px) {
+  .finance-app .fe-record-row .fe-record-date { display: block; grid-column: 2 / -1; grid-row: 3; max-width: none; }
+  .finance-app .fe-home-storage { gap: 10px; padding: 6px 10px; font-size: 12px; }
+}
 .finance-app :is(.fe-eyebrow,.fe-breadcrumb,.fe-nav-label,.fe-dialog-eyebrow,.fe-worth-label,
   .fe-summary-item>span,.fe-report-kpis>div>span,.fe-rate-table>div:first-child) {
   font-size: 12px; letter-spacing: .06em;

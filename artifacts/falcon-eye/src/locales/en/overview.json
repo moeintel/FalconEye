@@ -64,5 +64,16 @@
   "startConfirmation": "Start your own empty financial records in this browser? This replaces the current labelled sample picture.",
   "startOwn": "Start my own records",
   "disclaimer": "For planning, not advice.",
-  "manage": "Manage your picture"
+  "manage": "Manage your picture",
+  "quickAddTitle": "What would you like to record?",
+  "quickGold": "Bought gold",
+  "quickLent": "Someone owes me",
+  "quickDebt": "I borrowed money",
+  "quickStocks": "Bought shares",
+  "storageLocal": "Saved on this browser",
+  "storageHelp": "This browser copy is not an automatic cloud backup. Clearing browser data can erase it. Download a backup and keep the file private.",
+  "storageUnconfirmed": "Browser save not confirmed",
+  "storageErrorHelp": "This download contains the current in-memory view, not any unreadable saved data. Keep the file private. See the storage warning for recovery guidance.",
+  "backupNow": "Download backup",
+  "backupCurrent": "Download this view"
 }
