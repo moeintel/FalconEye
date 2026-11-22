@@ -10,6 +10,7 @@ import { localizedError } from '@/lib/i18n';
 import { financeStore, useFinance } from '@/lib/finance-store';
 import { cn } from '@/lib/utils';
 import { FinanceAssetIcon } from '@/components/finance-asset-icon';
+import { valuationAge } from '@/lib/finance-review';
 
 export default function FinanceAssets({ debtOnly = false, accountStatus }: { debtOnly?: boolean; accountStatus?: ReactNode }) {
   const { t } = useTranslation('assets');
@@ -64,11 +65,17 @@ export default function FinanceAssets({ debtOnly = false, accountStatus }: { deb
       {records.length ? <div className="fe-record-list">
         <div className="fe-record-list-head"><span>{t('item')}</span><span>{t('recordedValue')}</span><span>{t('valueDate')}</span><span className="sr-only">{t('actions')}</span></div>
         {records.map((item, index) => {
+          const age = valuationAge(item);
+          const when = age ? new Intl.RelativeTimeFormat(getLocale(), { numeric: 'auto' }).format(-age.days, 'day') : '';
           return <article className="fe-record-row" key={item.id}>
             <span className={cn('fe-record-symbol', `tone-${index % 5}`)}><FinanceAssetIcon record={item} /></span>
             <div className="fe-record-main"><button className="fe-record-name" onClick={() => edit(item)}><bdi>{item.name}</bdi></button><span>{common(`categories.${item.category}`)}{item.location && <> · <bdi>{item.location}</bdi></>}{item.access === 'restricted' && <i className="fe-locked-chip">{t('restricted')}</i>}{item.category === 'private' && item.details.agreementType === 'gift' && <i className="fe-locked-chip">{t('gift')}</i>}{item.category === 'ipo' && item.details.status === 'applied' && <i className="fe-locked-chip">{t('application')}</i>}</span></div>
             <div className="fe-record-value">{item.value === null ? <span className="fe-value-unknown">{t('notEntered')}</span> : formatMoney(item.value, item.currency)}<small><bdi>{item.currency}</bdi>{item.value !== null && item.currency !== doc.baseCurrency ? t('localValue') : ''}</small></div>
-            <div className="fe-record-date">{item.valuationDate === '1970-01-01' ? t('unknownImported') : formatDate(item.valuationDate, { day: 'numeric', month: 'short', year: 'numeric' })}<small>{t(`valuation.${item.valuationSource}`)}</small></div>
+            <div className="fe-record-date">{item.valuationDate === '1970-01-01' ? t('unknownImported') : formatDate(item.valuationDate, { day: 'numeric', month: 'short', year: 'numeric' })}<small>{t(`valuation.${item.valuationSource}`)}</small>
+              <span className={cn('fe-value-age', (age?.stale || age && age.days < 0) && 'needs-review')}>{item.value === null ? t('noDatedValue') : !age ? t('unknownValueAge') : age.days < 0 ? t('futureValueDate') : t('valueAge', { when })}</span>
+              {age?.stale && <small>{t('oldValueHelp')}</small>}
+              <button className="fe-review-value" onClick={() => edit(item)} aria-label={t('reviewValueFor', { name: item.name })}>{t('reviewValue')} <ArrowRight size={13} /></button>
+            </div>
             <details className="fe-record-menu"><summary aria-label={t('actionsFor', { name: item.name })}><MoreHorizontal /></summary><div><button onClick={() => edit(item)}><Check /> {t('edit')}</button><button className="danger" onClick={() => remove(item)}><Trash2 /> {t('remove')}</button></div></details>
           </article>;
         })}

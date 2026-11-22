@@ -42,7 +42,7 @@ export function FinanceEditor({ open, onOpenChange, record, initialCategory }: {
     setDraft(record ? { ...record, details: { ...record.details } } : blankRecord(initialCategory || 'cash', doc.baseCurrency));
     setUnknownValue(record?.value === null);
     setError('');
-    setStep(record ? 1 : 0);
+    setStep(record || initialCategory ? 1 : 0);
     setPersonalCurrency(doc.baseCurrency);
   }, [open, record, initialCategory, doc.baseCurrency]);
   useEffect(() => { if (open) heading.current?.focus(); }, [open, step]);

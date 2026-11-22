@@ -9,14 +9,11 @@ import { localizedError } from '@/lib/i18n';
 import { formatDate, formatNumber } from '@/lib/locale';
 import { LanguageSwitcher } from '@/components/language-switcher';
 import { Link } from 'wouter';
+import { downloadFinanceBackup } from '@/lib/finance-backup';
 
 const CURRENCIES = SUPPORTED_CURRENCIES;
 function saveJson() {
-  const data = JSON.stringify(financeStore.getSnapshot(), null, 2);
-  const blob = new Blob([data], { type: 'application/json' });
-  const href = URL.createObjectURL(blob);
-  const anchor = document.createElement('a'); anchor.href = href; anchor.download = 'falcon-eye-backup.json'; anchor.click();
-  URL.revokeObjectURL(href);
+  downloadFinanceBackup(financeStore.getSnapshot());
 }
 
 export default function FinanceSettings({ accountPanel }: { accountPanel?: ReactNode }) {

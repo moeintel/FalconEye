@@ -1,15 +1,16 @@
 import { type ReactNode, useMemo, useState } from 'react';
 import { Link } from 'wouter';
-import { ArrowRight, ArrowUpRight, Plus, Sparkles, WalletCards } from 'lucide-react';
+import { ArrowDownToLine, ArrowRight, ArrowUpRight, ChartNoAxesCombined, Coins, HandCoins, HardDrive, Landmark, Plus, Sparkles, WalletCards } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { FinanceEditor } from '@/components/finance-editor';
 import { FinanceShell } from '@/components/finance-shell';
 import { FinanceReview } from '@/components/finance-review';
 import { AssetInfographic } from '@/components/asset-infographic';
-import { CATEGORIES, summarizeFinance } from '@/lib/finance-model';
+import { CATEGORIES, summarizeFinance, type Category } from '@/lib/finance-model';
 import { formatMoney, formatNumber, formatDate } from '@/lib/locale';
 import { useTranslation } from 'react-i18next';
-import { useFinance } from '@/lib/finance-store';
+import { financeStore, useFinance } from '@/lib/finance-store';
+import { downloadFinanceBackup } from '@/lib/finance-backup';
 
 const compactMoney = (value: number, currency: string) => formatNumber(value, { style: 'currency', currency, notation: Math.abs(value) >= 100_000 ? 'compact' : 'standard', maximumFractionDigits: 1 });
 
@@ -20,6 +21,24 @@ export default function FinanceOverview({ accountStatus }: { accountStatus?: Rea
   const doc = useFinance();
   const summary = useMemo(() => summarizeFinance(doc), [doc]);
   const [editorOpen, setEditorOpen] = useState(false);
+  const [initialCategory, setInitialCategory] = useState<Category>();
+  function add(category?: Category) { setInitialCategory(category); setEditorOpen(true); }
+  const quickAdds = <div className="fe-quick-adds">
+    <span className="fe-quick-label">{t('quickAddTitle')}</span>
+    <div>{([
+      { category: 'gold', label: 'quickGold', icon: Coins },
+      { category: 'lent', label: 'quickLent', icon: HandCoins },
+      { category: 'debt', label: 'quickDebt', icon: Landmark },
+      { category: 'stocks', label: 'quickStocks', icon: ChartNoAxesCombined },
+    ] as const).map(({ category, label, icon: Icon }) => <button key={category} onClick={() => add(category)}><Icon size={17} aria-hidden="true" />{t(label)}</button>)}</div>
+  </div>;
+  const storageError = financeStore.getStorageError();
+  const storage = <div className="fe-home-storage">
+    <details open={!!storageError}><summary><HardDrive size={17} aria-hidden="true" /><b>{t(storageError ? 'storageUnconfirmed' : 'storageLocal')}</b></summary>
+      <p>{t(storageError ? 'storageErrorHelp' : 'storageHelp')}</p>
+    </details>
+    <button onClick={() => downloadFinanceBackup(financeStore.getSnapshot())}><ArrowDownToLine size={16} aria-hidden="true" />{t(storageError ? 'backupCurrent' : 'backupNow')}</button>
+  </div>;
   const latest = [...doc.activities].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 4);
   const categoryCount = CATEGORIES.filter(({ id }) => summary.byCategory.some((item) => item.category === id)).length;
 
@@ -29,8 +48,8 @@ export default function FinanceOverview({ accountStatus }: { accountStatus?: Rea
         <div className="fe-eyebrow"><span className="fe-eyebrow-line" />{t('eyebrow')}</div>
         <h1>{t('emptyTitle')}<br /><span>{t('emptyTitleEnd')}</span></h1>
         <p>{t('emptyDescription')}</p>
-        <div className="fe-welcome-actions"><Button onClick={() => setEditorOpen(true)}><Plus />{t('addFirst')}</Button><button className="fe-text-action" onClick={() => window.dispatchEvent(new CustomEvent('falconeye:open-assistant'))}>{t('askWhereToStart')} <ArrowRight /></button></div>
-        <div className="fe-privacy-note"><span className="fe-lock-dot" />{ux('localOnly')}</div>
+        <div className="fe-welcome-actions"><Button onClick={() => add()}><Plus />{t('addFirst')}</Button><button className="fe-text-action" onClick={() => window.dispatchEvent(new CustomEvent('falconeye:open-assistant'))}>{t('askWhereToStart')} <ArrowRight /></button></div>
+        {quickAdds}
       </div>
       <div className="fe-orbit-illustration" aria-hidden="true"><div className="fe-orbit fe-orbit-one" /><div className="fe-orbit fe-orbit-two" /><div className="fe-orbit-center"><WalletCards /><span>{t('yourMoney')}</span></div><span className="fe-orbit-tag tag-cash">{common('categories.cash')}</span><span className="fe-orbit-tag tag-home">{t('home')}</span><span className="fe-orbit-tag tag-invest">{t('investments')}</span><span className="fe-orbit-tag tag-debt">{common('navigation.debts')}</span></div>
     </section>
@@ -41,14 +60,15 @@ export default function FinanceOverview({ accountStatus }: { accountStatus?: Rea
           <div className="fe-eyebrow"><span className="fe-eyebrow-line" />{t(doc.isSample ? 'sampleEyebrow' : 'personalEyebrow')}</div>
           <h1>{t('title')}<br /><span>{t('titleEnd')}</span></h1>
           <p>{t(doc.isSample ? 'sampleDescription' : 'personalDescription')}</p>
-          <div className="fe-welcome-actions"><Button onClick={() => setEditorOpen(true)}><Plus />{t('add')}</Button><button className="fe-text-action" onClick={() => window.dispatchEvent(new CustomEvent('falconeye:open-assistant'))}><Sparkles />{common('askFalc')} <ArrowRight /></button></div>
+          <div className="fe-welcome-actions"><Button onClick={() => add()}><Plus />{t('add')}</Button><button className="fe-text-action" onClick={() => window.dispatchEvent(new CustomEvent('falconeye:open-assistant'))}><Sparkles />{common('askFalc')} <ArrowRight /></button></div>
+          {quickAdds}
         </div>
         <div className="fe-worth-card">
           <span className="fe-worth-label">{t('netWorth')}</span>
           <strong>{compactMoney(summary.netWorth, doc.baseCurrency)}</strong>
           <span className="fe-worth-caption">{t('netWorthExplanation', { currency: doc.baseCurrency })}</span>
           {(summary.missingValues > 0 || summary.missingRates > 0) && <span className="fe-worth-warning">{ux('partialTotal')}</span>}
-          <Button className="fe-worth-add" onClick={() => setEditorOpen(true)}><Plus />{t('add')}</Button>
+          <Button className="fe-worth-add" onClick={() => add()}><Plus />{t('add')}</Button>
           <div className="fe-worth-breakdown">
             <div><span><i className="fe-asset-dot" />{t('assetsPlain')}</span><b>{compactMoney(summary.assets, doc.baseCurrency)}</b></div>
             <div><span><i className="fe-debt-dot" />{t('debtsPlain')}</span><b>{compactMoney(summary.debts, doc.baseCurrency)}</b></div>
@@ -83,9 +103,10 @@ export default function FinanceOverview({ accountStatus }: { accountStatus?: Rea
   );
 
   return <FinanceShell accountStatus={accountStatus}>
-    {doc.isSample && <div className="fe-sample-start"><span>{ux('sampleShort')}</span><button onClick={() => setEditorOpen(true)}>{ux('startOwn')} <ArrowRight size={15} /></button></div>}
+    {doc.isSample && <div className="fe-sample-start"><span>{ux('sampleShort')}</span><button onClick={() => add()}>{ux('startOwn')} <ArrowRight size={15} /></button></div>}
+    {storage}
     {content}
     <div className="fe-overview-bottom"><span>{t('disclaimer')}</span><Link href="/settings">{t('manage')} <ArrowRight /></Link></div>
-    <FinanceEditor open={editorOpen} onOpenChange={setEditorOpen} />
+    <FinanceEditor open={editorOpen} onOpenChange={setEditorOpen} initialCategory={initialCategory} />
   </FinanceShell>;
 }

@@ -43,5 +43,12 @@
   "estimates": "Personal estimates—not connected to banks, brokers, or live market prices.",
   "addAnother": "Add another",
   "unsure": "Not sure if something counts?",
-  "askExplanation": "Ask Falc for a plain-language explanation"
+  "askExplanation": "Ask Falc for a plain-language explanation",
+  "valueAge": "Value as of {{when}}",
+  "noDatedValue": "No value entered yet",
+  "unknownValueAge": "Value date unknown",
+  "futureValueDate": "Future value date — check the date",
+  "oldValueHelp": "Over 90 days old — review your estimate",
+  "reviewValue": "Review value",
+  "reviewValueFor": "Review value for {{name}}"
 }
